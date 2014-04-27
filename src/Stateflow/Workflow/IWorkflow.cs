@@ -29,5 +29,12 @@ namespace Stateflow.Workflow
         /// The state of the workflow.
         /// </value>
         string WorkflowState { get; set; }
+
+        /// <summary>
+        /// Determines whether this workflow can change its state based on the trigger.
+        /// </summary>
+        /// <param name="trigger">The trigger.</param>
+        /// <returns></returns>
+        bool CanChangeState(string trigger);
     }
 }

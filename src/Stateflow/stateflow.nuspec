@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+  For more info on this file format visit http://docs.nuget.org/docs/reference/nuspec-reference.
+-->
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">  
+  <metadata>
+    <id>stateflow</id>
+    <version>0.1.0</version>
+    <authors>Michiel van Oudheusden</authors>
+    <description>A wrapper for the stateless library to add conditions, persistency and actions to classes.</description>
+    <language>en-US</language>
+    <projectUrl>http://mivano.github.io/stateflow/</projectUrl>
+    <licenseUrl>https://raw.githubusercontent.com/mivano/stateflow/master/LICENSE</licenseUrl>
+
+    <dependencies>
+      <dependency id="Newtonsoft.Json" />
+      <dependency id="Stateless"/>
+    </dependencies>
+
+    
+    <files>
+      <file src="src\Stateflow\bin\Release\Stateflow.dll" target="lib\net40" />
+      <file src="src\Stateflow\bin\Release\Stateflow.xml" target="lib\net40" />
+      <file src="src\Stateflow\bin\Release\Stateflow.pdb" target="lib\net40" />
+    </files>
+    
+  </metadata>
+</package>

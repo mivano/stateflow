@@ -121,18 +121,23 @@ namespace LeadSample
 
             var ser = wd.Serialize();
 
-            var lead = new Lead(wd, "Created");
-
-            lead.Fields = new List<Field>{ new Field
+            var lead = new Lead(wd, "Created")
             {
-                Name = "price", Value = 100000
-            }};
+                Fields = new List<Field>
+                {
+                    new Field
+                    {
+                        Name = "price",
+                        Value = 100000
+                    }
+                }
+            };
 
             while (lead.PermittedTriggers.Any())
             {
 
                 Console.WriteLine("Current workflow state: {0}", lead.WorkflowState);
-                Console.WriteLine("  next steps: {0}", String.Join(", ", lead.PermittedTriggers.ToArray()));
+                Console.WriteLine("  next available steps: {0}", String.Join(", ", lead.PermittedTriggers.ToArray()));
 
                 Console.WriteLine("Enter the new state name:");
                 var nextStep = Console.ReadLine();
@@ -144,7 +149,7 @@ namespace LeadSample
 
             }
 
-            Console.WriteLine("No further steps, press a key to continue");
+            Console.WriteLine("No further steps, press a key to quit");
             Console.ReadKey(true);
 
         }

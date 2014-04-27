@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Stateflow.Utils;
 using Stateless;
 
 namespace Stateflow.Workflow
@@ -13,6 +14,11 @@ namespace Stateflow.Workflow
     {
         private StateMachine<string, string> _stateMachine;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WorkflowEntity"/> class.
+        /// </summary>
+        /// <param name="workflowDefinition">The workflow definition.</param>
+        /// <param name="currentState">Current state of the workflow. If null, it will be first state found in the workflow definition.</param>
         protected WorkflowEntity(WorkflowDefinition workflowDefinition, string currentState)
         {
             ToStateMachine(workflowDefinition, currentState);
@@ -20,6 +26,8 @@ namespace Stateflow.Workflow
 
         private void ToStateMachine(WorkflowDefinition workflowDefinition, string currentState)
         {
+            Enforce.ArgumentNotNull(workflowDefinition, "workflowDefinition");
+
             WorkflowState = currentState ?? workflowDefinition.Transitions.First().FromState;
             _stateMachine = new StateMachine<string, string>(() => WorkflowState, s => WorkflowState = s);
 
@@ -63,7 +71,9 @@ namespace Stateflow.Workflow
 
             });
 
+            // For all the state transitions
             _stateMachine.OnTransitioned(OnTransitionAction);
+          
         }
 
         private void OnTransitionAction(StateMachine<string, string>.Transition transition)
@@ -102,7 +112,21 @@ namespace Stateflow.Workflow
         /// <param name="newState">The new state.</param>
         public virtual void ChangeState(string newState)
         {
+            Enforce.ArgumentNotNull(newState, "newState");
+
             _stateMachine.Fire(newState);
+        }
+
+        /// <summary>
+        /// Determines whether this workflow can change its state based on the trigger.
+        /// </summary>
+        /// <param name="trigger">The trigger.</param>
+        /// <returns></returns>
+        public virtual bool CanChangeState(string trigger)
+        {
+            Enforce.ArgumentNotNull(trigger, "state");
+
+            return _stateMachine.CanFire(trigger);
         }
 
         /// <summary>
