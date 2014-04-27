@@ -3,13 +3,13 @@ using Stateflow.Workflow;
 
 namespace Stateflow.Expressions
 {
-    public class ExpressionCondition   : ICondition
+    public class ExpressionCondition : ICondition
     {
         public string Expression { get; set; }
 
         public ExpressionCondition()
         {
-            
+
         }
 
         public ExpressionCondition(string expression)
@@ -17,7 +17,7 @@ namespace Stateflow.Expressions
             Expression = expression;
         }
 
-        public virtual  bool IsAllowed(IWorkflow workflow)
+        public virtual bool IsAllowed(IWorkflow workflow)
         {
             var context = new ExpressionContext();
 
@@ -25,7 +25,7 @@ namespace Stateflow.Expressions
 
             var boundExpression = expression.Bind(context);
 
-            return (bool)boundExpression.Invoke(context); 
+            return (bool)boundExpression.Invoke(context);
         }
     }
 }

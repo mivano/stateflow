@@ -35,7 +35,7 @@
     <DocumentationFile>bin\Release\Stateflow.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>../../assets/Stateless.snk.pfx</AssemblyOriginatorKeyFile>
