@@ -5,15 +5,59 @@ using Stateflow.Utils;
 
 namespace Stateflow.Workflow
 {
+    /// <summary>
+    /// Defines a workflow.
+    /// </summary>
     public class WorkflowDefinition
     {
+
+        /// <summary>
+        /// Gets or sets the name of this workflow.
+        /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the description of this workflow
+        /// </summary>
+        /// <value>
+        /// The description.
+        /// </value>
         public string Description { get; set; }
 
+        /// <summary>
+        /// Gets or sets the states. States define the workflow. Like a Create state, an Assigned state etc.
+        /// Each state can have an entry and exit action(s).
+        /// </summary>
+        /// <value>
+        /// The states.
+        /// </value>
         public IList<State> States { get; set; }
+
+        /// <summary>
+        /// Gets or sets the triggers. A trigger can be used to move from state to state. Like Rejecting, Accepting, Closing.
+        /// </summary>
+        /// <value>
+        /// The triggers.
+        /// </value>
         public IList<Trigger> Triggers { get; set; }
+
+        /// <summary>
+        /// Gets or sets the transitions. A transition describes from which source state to destination state the workflow can move based on a certain trigger.
+        /// For example; from the state Review, using accept, to the state Accepted. 
+        /// Conditions can be used to guard the state transfer.
+        /// </summary>
+        /// <value>
+        /// The transitions.
+        /// </value>
         public IList<Transition> Transitions { get; set; }
 
+        /// <summary>
+        /// Serializes this instance to a json string value.
+        /// </summary>
+        /// <returns>A json serialization.</returns>
         public string Serialize()
         {
             return JsonConvert.SerializeObject(this, new JsonSerializerSettings
@@ -23,6 +67,11 @@ namespace Stateflow.Workflow
             });
         }
 
+        /// <summary>
+        /// Converts the json back into a workflow definition.
+        /// </summary>
+        /// <param name="json">The json representation.</param>
+        /// <returns>A workflow definition.</returns>
         public static WorkflowDefinition Deserialize(string json)
         {
             Enforce.ArgumentNotNull(json, "json");

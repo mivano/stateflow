@@ -62,7 +62,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Workflow\WorkflowEntity.cs" />
     <None Include="stateflow.nuspec" />
-    <None Include="Workflow\ExpressionCondition.cs" />
     <Compile Include="Workflow\IAction.cs" />
     <Compile Include="Workflow\ICondition.cs" />
     <Compile Include="Workflow\State.cs" />
