@@ -2,8 +2,23 @@
 
 language: c
 
+before_script:
+  - 'source build/SetBuildNumber.sh'
+  - 'if [[ $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_BRANCH == "master" ]]; then source build/PushBuildNumber.sh; fi'
+
 install:
-  - sudo add-apt-repository ppa:directhex/monoxide && sudo apt-get update
+  - sudo add-apt-repository ppa:directhex/monoxide -y && sudo apt-get update
   - sudo apt-get install mono-devel mono-gmcs nunit-console
+  - mozroots --import --sync
+  
 script:
-  - xbuild Stateflow.sln
+  - xbuild /p:Configuration=Release Stateflow.sln
+  
+after_success:
+  - 'if [[ $TRAVIS_PULL_REQUEST == "false" ]]; then bash build/PublishNuGetPackage.sh; fi'
+  
+env:
+  global:
+    - EnableNuGetPackageRestore=true
+    # NuGet
+    - secure: "D56eT4qfPN/lR/R/86eNs9Z5g3voV341hzAIvFhq4QdEEGQe8yeOZOzsiF2alfoZ90h5jBSZQzlbEzWgubfw8in+G71UlHuDZWA97jtLkP2hH6uKOwgPIdJARI12L6NFB/bibfHq3+bG4r9PYsIuvHCS6ZESJa+T0nhb6RRGlwY="
