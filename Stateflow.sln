@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{DFD1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeadSample", "sample\LeadSample\LeadSample.csproj", "{C64D10FA-DB94-47AF-9C55-6888105521C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stateflow.Expressions", "src\Stateflow.Expressions\Stateflow.Expressions.csproj", "{D893A947-7B82-42D0-8D12-34D678AC5314}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{C64D10FA-DB94-47AF-9C55-6888105521C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C64D10FA-DB94-47AF-9C55-6888105521C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C64D10FA-DB94-47AF-9C55-6888105521C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D893A947-7B82-42D0-8D12-34D678AC5314}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D893A947-7B82-42D0-8D12-34D678AC5314}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D893A947-7B82-42D0-8D12-34D678AC5314}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D893A947-7B82-42D0-8D12-34D678AC5314}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,5 +45,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{F0A6D231-7778-4921-9EF3-CD1CF8E90C3E} = {E61C5263-059D-4D03-B9DC-30044EF62417}
 		{C64D10FA-DB94-47AF-9C55-6888105521C1} = {DFD1F8FC-BB5B-40AE-8BF6-4802253F8DA3}
+		{D893A947-7B82-42D0-8D12-34D678AC5314} = {E61C5263-059D-4D03-B9DC-30044EF62417}
 	EndGlobalSection
 EndGlobal

@@ -11,12 +11,12 @@
     <language>en-US</language>
     <projectUrl>http://mivano.github.io/stateflow/</projectUrl>
     <licenseUrl>https://raw.githubusercontent.com/mivano/stateflow/master/LICENSE</licenseUrl>
-
+    <tags>workflow state trigger transition</tags>
+    
     <dependencies>
       <dependency id="Newtonsoft.Json" />
       <dependency id="Stateless"/>
     </dependencies>
-
     
     <files>
       <file src="src\Stateflow\bin\Release\Stateflow.dll" target="lib\net40" />
