@@ -4,7 +4,7 @@ using Stateflow.Workflow;
 
 namespace LeadSample
 {
-    public class Lead : WorkflowEntity
+    public class Lead : WorkflowEntity 
     {
         public Lead(WorkflowDefinition workflowDefinition, string currentState) : base(workflowDefinition, currentState)
         {
