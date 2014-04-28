@@ -19,8 +19,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="src\Stateflow\bin\Release\Stateflow.dll" target="lib\net40" />
-    <file src="src\Stateflow\bin\Release\Stateflow.xml" target="lib\net40" />
-    <file src="src\Stateflow\bin\Release\Stateflow.pdb" target="lib\net40" />
+    <file src="bin\Release\Stateflow.dll" target="lib\net40" />
+    <file src="bin\Release\Stateflow.xml" target="lib\net40" />
+    <file src="bin\Release\Stateflow.pdb" target="lib\net40" />
   </files>
 </package>
