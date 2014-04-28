@@ -4,4 +4,4 @@ if [ "$TRAVIS_BRANCH" != "master" ]; then
 fi
 sed -i "s/<version>.*<\/version>/<version>${NUGET_PACKAGE_NUM}<\/version>/g" src/Stateflow/Stateflow.nuspec
 mono --runtime=v4.0.30319 .nuget/NuGet.exe Pack src/Stateflow/Stateflow.nuspec -NonInteractive
-mono --runtime=v4.0.30319 .nuget/NuGet.exe Push src/Stateflow/Stateflow.${NUGET_PACKAGE_NUM}.nupkg $NUGET_APIKEY -NonInteractive
+mono --runtime=v4.0.30319 .nuget/NuGet.exe Push src/Stateflow/stateflow.${NUGET_PACKAGE_NUM}.nupkg $NUGET_APIKEY -NonInteractive
