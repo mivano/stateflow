@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Stateflow.Workflow;
+using Stateflow.Expressions;
 
 namespace LeadSample
 {
@@ -95,14 +96,14 @@ namespace LeadSample
                          FromState = "UnderReview",
                          ToState = "Approved",
                          TriggerBy = "Approve"   ,
-                       //  Conditions = new List<ICondition>{ new ExpressionCondition("price > 10000")}
+						Conditions = new List<ICondition>{ new LeadExpressionCondition("price > 10000")}
                     } ,
                       new Transition
                     {
                          FromState = "UnderReview",
                          ToState = "Closed",
                          TriggerBy = "Close"   ,
-                      //   Conditions = new List<ICondition>{ new ExpressionCondition("price <= 10000")}
+						Conditions = new List<ICondition>{ new LeadExpressionCondition("price <= 10000")}
                     } ,
                      new Transition
                     {
@@ -119,7 +120,7 @@ namespace LeadSample
                 }
             };
 
-            var ser = wd.Serialize();
+			//var ser = wd.Serialize();
 
             var lead = new Lead(wd, "Created")
             {
@@ -154,4 +155,23 @@ namespace LeadSample
 
         }
     }
+
+	public class LeadExpressionCondition: ExpressionCondition{
+
+		public LeadExpressionCondition (string expression): base(expression)
+		{
+			
+		}
+
+		public override bool IsAllowed (IWorkflow workflow)
+		{
+			var leadWorkflow = workflow as Lead;
+			Dictionary<string, object> fields = null;
+			if (leadWorkflow != null) {
+				fields = leadWorkflow.Fields.Select (a => new KeyValuePair<string, object> (a.Name, a.Value)).ToDictionary(a=>a.Key, b=>b.Value);
+			}
+			return base.Evaluate (fields);
+		}
+
+	}
 }
