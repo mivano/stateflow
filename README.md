@@ -2,3 +2,6 @@ stateflow [![Build Status](https://travis-ci.org/mivano/stateflow.svg?branch=mas
 =========
 
 A wrapper for the stateless workflow library to add persistence, actions and conditions to the workflow engine. 
+
+
+Work in progress; more info and samples will follow.
