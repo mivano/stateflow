@@ -30,8 +30,20 @@
   <ItemGroup>
     <Compile Include="IField.cs" />
     <Compile Include="ICorrelateBy.cs" />
+    <Compile Include="FieldType.cs" />
+    <Compile Include="IFieldOptions.cs" />
+    <Compile Include="FieldCollection.cs" />
+    <Compile Include="GenericField.cs" />
+    <Compile Include="IFieldValidator.cs" />
+    <Compile Include="Validators\NotEmptyValidator.cs" />
+    <Compile Include="Validators\NotNullValidator.cs" />
+    <Compile Include="IFieldActions.cs" />
+    <Compile Include="Validators\MinimumItemsInCollectionValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Stateflow.Fields.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Validators\" />
   </ItemGroup>
 </Project>
