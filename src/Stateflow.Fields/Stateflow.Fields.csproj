@@ -31,4 +31,7 @@
     <Compile Include="IField.cs" />
     <Compile Include="ICorrelateBy.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Stateflow.Fields.nuspec" />
+  </ItemGroup>
 </Project>
