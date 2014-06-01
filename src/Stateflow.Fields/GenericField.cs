@@ -10,13 +10,42 @@ namespace Stateflow.Fields
 	/// </summary>
 	public class GenericField<TIdentifier> : IField<TIdentifier>, IFieldActions
 	{
+		private object _value;
+
 		public GenericField ()
 		{
 		}
 
 		#region IField implementation
 
-		public object Value { get; set; }
+		public object Value {
+			get {
+				return _value;
+			}
+			set { 
+				if (value != _value && OnBeforeValueChange (value)) {
+					_value = value;
+					OnAfterValueChange ();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Raised before the value is changed. This allows a subclasses to inspect and optionally reject by returning false.
+		/// </summary>
+		/// <param name="newValue">New value.</param>
+		public virtual bool OnBeforeValueChange(object newValue)
+		{
+			return true;
+		}
+
+		/// <summary>
+		/// Raised after the value changed.
+		/// </summary>
+		public virtual void OnAfterValueChange()
+		{
+		
+		}
 
 		public string Name{ get; set; }
 
@@ -38,7 +67,8 @@ namespace Stateflow.Fields
 
 		#endregion
 
-		public bool IsValid(){
+		public bool IsValid()
+		{
 			if (Validators == null || Validators.Any () == false)
 				return true;
 
