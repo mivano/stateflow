@@ -5,7 +5,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>stateflow</id>
-    <version>0.1.0</version>
+    <version>$version$</version>
     <authors>Michiel van Oudheusden</authors>
     <description>A wrapper for the stateless library to add conditions, persistency and actions to classes.</description>
     <language>en-US</language>
@@ -14,8 +14,8 @@
     <tags>workflow state trigger transition</tags>
 
     <dependencies>
-      <dependency id="Newtonsoft.Json" />
-      <dependency id="Stateless"/>
+      <dependency id="Newtonsoft.Json" version="6.0.3"  />
+      <dependency id="Stateless" version="2.4.0" />
     </dependencies>
   </metadata>
   <files>
