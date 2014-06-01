@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Stateflow.Workflow;
 using Stateflow.Expressions;
+using Stateflow.Fields;
 
 namespace LeadSample
 {
@@ -124,15 +125,17 @@ namespace LeadSample
 
             var lead = new Lead(wd, "Created")
             {
-                Fields = new List<Field>
-                {
-                    new Field
-                    {
-                        Name = "price",
-                        Value = 100000
-                    }
-                }
             };
+
+			lead.Fields.Add (new GenericField<string> {
+				Name = "price",
+				Value = 100000,
+				FieldType = FieldType.Amount
+			});
+
+			var assets = lead.Fields.AddCollection ("assets");
+		
+			assets.Add ("Name", "", FieldType.SingleLineText);
 
             while (lead.PermittedTriggers.Any())
             {
@@ -168,7 +171,7 @@ namespace LeadSample
 			var leadWorkflow = workflow as Lead;
 			Dictionary<string, object> fields = null;
 			if (leadWorkflow != null) {
-				fields = leadWorkflow.Fields.Select (a => new KeyValuePair<string, object> (a.Name, a.Value)).ToDictionary(a=>a.Key, b=>b.Value);
+				fields = leadWorkflow.Fields.Values.Select (a => new KeyValuePair<string, object> (a.Name, a.Value)).ToDictionary(a=>a.Key, b=>b.Value);
 			}
 			return base.Evaluate (fields);
 		}

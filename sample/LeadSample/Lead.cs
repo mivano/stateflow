@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Stateflow.Workflow;
+using Stateflow.Fields;
 
 namespace LeadSample
 {
@@ -8,7 +9,7 @@ namespace LeadSample
     {
         public Lead(WorkflowDefinition workflowDefinition, string currentState) : base(workflowDefinition, currentState)
         {
-            
+			Fields = new FieldCollection<string> ();
         }
 
         protected override void OnStateTransition(string fromState, string toState, string triggeredBy)
@@ -16,6 +17,6 @@ namespace LeadSample
             Console.WriteLine("State changed from {0} to {1} because of trigger {2}.", fromState, toState, triggeredBy);
         }
 
-        public List<Field> Fields { get; set; }
+		public FieldCollection<string> Fields { get; set; }
     }
 }
