@@ -11,7 +11,7 @@ namespace Stateflow.Fields
 			switch (field.FieldType) {
 			case FieldType.MultiLineText:
 			case FieldType.SingleLineText:
-			case FieldType.RichText:
+			case FieldType.HtmlText:
 				return field.Value != null && !string.IsNullOrEmpty ((string)field.Value);
 
 			default:

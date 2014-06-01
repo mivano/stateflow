@@ -39,6 +39,7 @@
     <Compile Include="Validators\NotNullValidator.cs" />
     <Compile Include="IFieldActions.cs" />
     <Compile Include="Validators\MinimumItemsInCollectionValidator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Stateflow.Fields.nuspec" />

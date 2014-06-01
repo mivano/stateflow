@@ -12,7 +12,7 @@ namespace Stateflow.Fields
 		Number,
 		SingleLineText,
 		MultiLineText,
-		RichText,
+		HtmlText,
 		Boolean,
 		SingleSelect,
 		MultiSelect,
