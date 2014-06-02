@@ -59,6 +59,15 @@ namespace Stateflow.Fields
 			}
 		}
 
+		public object DefaultValue {
+			get {
+				throw new NotImplementedException ();
+			}
+			set {
+				throw new NotImplementedException ();
+			}
+		}
+
 		public string Name {
 			get;
 			set;

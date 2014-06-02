@@ -30,6 +30,8 @@ namespace Stateflow.Fields
 			}
 		}
 
+		public object DefaultValue { get; set;		}
+
 		/// <summary>
 		/// Raised before the value is changed. This allows a subclasses to inspect and optionally reject by returning false.
 		/// </summary>

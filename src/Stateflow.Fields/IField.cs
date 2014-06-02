@@ -13,6 +13,12 @@ namespace Stateflow.Fields
 		object Value { get; set; }
 
 		/// <summary>
+		/// The default value used when creating this field.
+		/// </summary>
+		/// <value>The default value.</value>
+		object DefaultValue {get;set;}
+
+		/// <summary>
 		/// Name of the field.
 		/// </summary>
 		/// <value>The name.</value>
