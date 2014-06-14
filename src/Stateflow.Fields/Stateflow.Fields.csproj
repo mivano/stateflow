@@ -29,7 +29,6 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Compile Include="IField.cs" />
-    <Compile Include="ICorrelateBy.cs" />
     <Compile Include="FieldType.cs" />
     <Compile Include="IFieldOptions.cs" />
     <Compile Include="FieldCollection.cs" />
@@ -40,6 +39,12 @@
     <Compile Include="IFieldActions.cs" />
     <Compile Include="Validators\MinimumItemsInCollectionValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="IIdentifiableBy.cs" />
+    <Compile Include="FieldDefinitionCollection.cs" />
+    <Compile Include="IFieldDefinition.cs" />
+    <Compile Include="FieldStatus.cs" />
+    <Compile Include="GenericFieldDefinition.cs" />
+    <Compile Include="IRevision.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Stateflow.Fields.nuspec" />

@@ -4,45 +4,37 @@ using System.Collections.Generic;
 
 namespace Stateflow.Fields
 {
-	public interface IField<TIdentifier>: ICorrelateBy<TIdentifier>
+	public interface IField<TIdentifier>
 	{
 		/// <summary>
-		/// The actual value of the field.
+		/// Gets or sets the field definition.
 		/// </summary>
-		/// <value>The value.</value>
-		object Value { get; set; }
+		/// <value>The field definition.</value>
+		IFieldDefinition<TIdentifier> FieldDefinition {get;}
 
-		/// <summary>
-		/// The default value used when creating this field.
-		/// </summary>
-		/// <value>The default value.</value>
-		object DefaultValue {get;set;}
+		IEnumerable AllowedValues {get;}
+	
+		bool IsValid {get;}
+		bool IsDirty { get; }
+		bool IsEditable{ get; }
 
-		/// <summary>
-		/// Name of the field.
-		/// </summary>
-		/// <value>The name.</value>
-		string Name { get; set; }
-
-		/// <summary>
-		/// A description of this field.
-		/// </summary>
-		/// <value>The description.</value>
-		string Description { get; set; }
+		 TIdentifier Id { get; }
 
 
-		/// <summary>
-		/// The type of field to use.
-		/// </summary>
-		/// <value>The type of the field.</value>
-		FieldType FieldType{ get; set; }
+		string Name { get; }
+		string ReferenceName { get; }
 
-		IFieldOptions FieldOptions { get; set; }
+		Object OriginalValue { get; }
 
-		IEnumerable<IFieldValidator<TIdentifier>> Validators{ get; set; }
+		Object Value { get; set; }
+
+		Object DefaultValue { get; }
+
+		FieldStatus Status { get; }
 
 		int Sequence { get; set; }
 	}
+
 
 }
 

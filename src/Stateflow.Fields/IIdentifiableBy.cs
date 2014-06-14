@@ -3,7 +3,7 @@ using System;
 namespace Stateflow.Fields
 {
 
-	public interface ICorrelateBy<TIdentifier>
+	public interface IIdentifiableBy<TIdentifier>
 	{
 		        TIdentifier Id { get; set; }
 	}
