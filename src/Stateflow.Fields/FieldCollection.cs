@@ -4,111 +4,61 @@ using System.Collections.Generic;
 
 namespace Stateflow.Fields
 {
-
-	public class FieldCollection<TIdentifier> : Dictionary <TIdentifier, IField<TIdentifier>>, IField<TIdentifier>
+	/// <summary>
+	/// A collection of fields. Fields are based on field definitions.
+	/// </summary>
+	public class FieldCollection<TIdentifier> : Dictionary <TIdentifier, IField<TIdentifier>>
 	{
-		/// <Docs>The item to add to the current collection.</Docs>
-		/// <para>Adds an item to the current collection.</para>
-		/// <remarks>To be added.</remarks>
-		/// <exception cref="System.NotSupportedException">The current collection is read-only.</exception>
-		/// <summary>
-		/// Add a single field to the dictionary.
-		/// </summary>
-		/// <param name="field">Field.</param>
+
+		private readonly FieldDefinitionCollection<TIdentifier> _fieldDefinitions;
+
+		private readonly IRevision<TIdentifier> _revision;
+
+		public FieldCollection (IRevision<TIdentifier> revision, FieldDefinitionCollection<TIdentifier> fieldDefinitions)
+		{
+			_revision = revision;
+			_fieldDefinitions = fieldDefinitions;
+		}
+
 		public void Add(IField<TIdentifier> field){
-			if (field == null)
-				throw new ArgumentNullException ("field");
-
-			base.Add (field.Id, field);
+			this.Add (field.Id, field);
 		}
 
-		/// <summary>
-		/// Adds a generic field using the specified name, value and fieldType.
-		/// </summary>
-		/// <param name="name">Name.</param>
-		/// <param name="value">Value.</param>
-		/// <param name="fieldType">Field type.</param>
-		public void Add(string name, object value, FieldType fieldType){
-			Add(new GenericField<TIdentifier>{ 
-				Name = name, 
-				Value = value,
-				FieldType=fieldType}
-			);
-		}
-
-		/// <summary>
-		/// Adds a new collection to the field collection.
-		/// </summary>
-		/// <returns>The collection.</returns>
-		/// <param name="name">Name.</param>
-		public FieldCollection<TIdentifier> AddCollection(string name){
-			var c = new FieldCollection<TIdentifier> ();
-			c.Name = name;
-			Add (c);
-			return c;
-		}
-
-		#region IField implementation
-
-		public object Value {
+		public IField<TIdentifier> this [string name] {
 			get {
-				return this.Values;
-			}
-			set {
-				throw new NotImplementedException ();
+				if (name == null) {
+					throw new ArgumentNullException ("name");
+				}
+				var definition = _fieldDefinitions [name];
+				return this.GetById (definition.Id);
 			}
 		}
 
-		public object DefaultValue {
+		public IField<TIdentifier> this [int index] {
 			get {
-				throw new NotImplementedException ();
-			}
-			set {
-				throw new NotImplementedException ();
+				var definition = _fieldDefinitions [index];
+				return this.GetById (definition.Id);
 			}
 		}
 
-		public string Name {
-			get;
-			set;
-		}
-
-		public string Description {
-			get;
-			set;
-		}
-
-		public IEnumerable<IFieldValidator<TIdentifier>> Validators {get;set;}
-
-		public FieldType FieldType {
-			get {
-				return FieldType.FieldCollection;
+		public IField<TIdentifier> GetById(TIdentifier id)
+		{
+		
+			IField<TIdentifier> field;
+			if (!this.TryGetValue (id, out field)) {
+					
+				IFieldDefinition<TIdentifier> fd;
+				if (_fieldDefinitions.TryGetValue (id, out fd)) {
+						
+					field = new Field<TIdentifier> (_revision, fd);
+					this.Add (field);
+						
+				}
+					
 			}
-			set {
-				throw new ArgumentException("Cannot set the field type for a list.");
-			}
+			return field;
+
 		}
-
-		public IFieldOptions FieldOptions {
-			get;
-			set;
-		}
-
-		public int Sequence {
-			get;
-			set;
-		}
-
-		#endregion
-
-		#region ICorrelateBy implementation
-
-		public TIdentifier Id {
-			get;
-			set;
-		}
-
-		#endregion
 	}
 
 

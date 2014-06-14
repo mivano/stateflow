@@ -127,7 +127,7 @@ namespace LeadSample
             {
             };
 
-			lead.Fields.Add (new GenericField<string> {
+			lead.Fields.Add (new Field<string> {
 				Name = "price",
 				Value = 100000,
 				FieldType = FieldType.Amount

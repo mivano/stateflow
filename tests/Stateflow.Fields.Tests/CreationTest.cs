@@ -15,7 +15,7 @@ namespace Stateflow.Fields.Tests
 
 			Assert.IsNotNull (c);
 
-			c.Add (new GenericField<int>{ });
+			c.Add (new Field<int>{ });
 
 			Assert.IsTrue (c.Count == 1);
 		}

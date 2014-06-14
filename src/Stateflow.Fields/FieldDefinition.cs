@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Stateflow.Fields
 {
-	public class GenericFieldDefinition<TIdentifier>: IFieldDefinition<TIdentifier>
+	public class FieldDefinition<TIdentifier>: IFieldDefinition<TIdentifier>
 	{
 		#region IFieldDefinition implementation
 

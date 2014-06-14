@@ -6,11 +6,16 @@ using System.Linq;
 namespace Stateflow.Fields
 {
 	public interface IRevision<TIdentifier>{
+
+		IFieldsItemType<TIdentifier> FieldsItemType { get; }
+
 		object GetCurrentFieldValue(IFieldDefinition<TIdentifier> fieldDefinition);
 		object GetOriginalFieldValue(IFieldDefinition<TIdentifier> fieldDefinition);
+
 		void SetFieldValue(IFieldDefinition<TIdentifier> fieldDefinition, object value);
 
 		bool IsReadOnly { get; }
+		bool IsDraft { get; }
 
 		int Number { get; }
 	}

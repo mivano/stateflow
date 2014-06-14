@@ -11,7 +11,7 @@ namespace Stateflow.Fields.Tests
 
 		[Test()]
 		public void ValidateNotEmpty(){
-			var f = new GenericField<int> ();
+			var f = new Field<int> ();
 			f.FieldType = FieldType.SingleLineText;
 
 			f.Validators = new List<IFieldValidator<int>> {
@@ -28,7 +28,7 @@ namespace Stateflow.Fields.Tests
 
 		[Test()]
 		public void ValidateNotNull(){
-			var f = new GenericField<int> ();
+			var f = new Field<int> ();
 			f.FieldType = FieldType.SingleLineText;
 
 			f.Validators = new List<IFieldValidator<int>> {

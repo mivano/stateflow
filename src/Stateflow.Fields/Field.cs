@@ -9,13 +9,13 @@ namespace Stateflow.Fields
 	/// <summary>
 	/// A generic implementation of a field.
 	/// </summary>
-	public class GenericField<TIdentifier> : IField<TIdentifier>, IFieldActions
+	public class Field<TIdentifier> : IField<TIdentifier>, IFieldActions
 	{
 		private object _value;
 		private readonly IFieldDefinition<TIdentifier> _fieldDefinition;
 		private readonly IRevision<TIdentifier> _revision;
 
-		public GenericField (IRevision<TIdentifier> revision, IFieldDefinition<TIdentifier> fieldDefinition)
+		public Field (IRevision<TIdentifier> revision, IFieldDefinition<TIdentifier> fieldDefinition)
 		{
 
 			if (fieldDefinition == null)

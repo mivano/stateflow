@@ -32,7 +32,6 @@
     <Compile Include="FieldType.cs" />
     <Compile Include="IFieldOptions.cs" />
     <Compile Include="FieldCollection.cs" />
-    <Compile Include="GenericField.cs" />
     <Compile Include="IFieldValidator.cs" />
     <Compile Include="Validators\NotEmptyValidator.cs" />
     <Compile Include="Validators\NotNullValidator.cs" />
@@ -43,8 +42,16 @@
     <Compile Include="FieldDefinitionCollection.cs" />
     <Compile Include="IFieldDefinition.cs" />
     <Compile Include="FieldStatus.cs" />
-    <Compile Include="GenericFieldDefinition.cs" />
     <Compile Include="IRevision.cs" />
+    <Compile Include="Field.cs" />
+    <Compile Include="FieldDefinition.cs" />
+    <Compile Include="IFieldsItemType.cs" />
+    <Compile Include="FieldsItemType.cs" />
+    <Compile Include="IFieldsItemStore.cs" />
+    <Compile Include="FieldsRevision.cs" />
+    <Compile Include="IFieldsRevision.cs" />
+    <Compile Include="IFieldsItem.cs" />
+    <Compile Include="FieldsItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Stateflow.Fields.nuspec" />
