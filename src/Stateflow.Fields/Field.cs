@@ -11,7 +11,6 @@ namespace Stateflow.Fields
 	/// </summary>
 	public class Field<TIdentifier> : IField<TIdentifier>, IFieldActions
 	{
-		private object _value;
 		private readonly IFieldDefinition<TIdentifier> _fieldDefinition;
 		private readonly IRevision<TIdentifier> _revision;
 
@@ -81,7 +80,7 @@ namespace Stateflow.Fields
 				return _revision.GetCurrentFieldValue(_fieldDefinition);
 			}
 			set { 
-				if (value != _value && OnBeforeValueChange (value)) {
+				if (value != _revision.GetOriginalFieldValue(_fieldDefinition) && OnBeforeValueChange (value)) {
 					_revision.SetFieldValue (_fieldDefinition, value);
 					OnAfterValueChange ();
 				}

@@ -52,6 +52,7 @@
     <Compile Include="IFieldsRevision.cs" />
     <Compile Include="IFieldsItem.cs" />
     <Compile Include="FieldsItem.cs" />
+    <Compile Include="RevisionCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Stateflow.Fields.nuspec" />

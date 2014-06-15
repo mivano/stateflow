@@ -6,7 +6,7 @@ using System.Linq;
 namespace Stateflow.Fields
 {
 
-	public interface IFieldsItem<TIdentifier>: IRevision<TIdentifier>
+	public interface IFieldsItem<TIdentifier>: IRevision<TIdentifier>, IIdentifiableBy<TIdentifier>
 	{
 		FieldCollection<TIdentifier> Fields { get; }
 
@@ -15,7 +15,7 @@ namespace Stateflow.Fields
 
 		int RevisionNumber {get;}
 
-		object Revisions { get;}
+		RevisionCollection<TIdentifier> Revisions { get;}
 	}
 	
 }

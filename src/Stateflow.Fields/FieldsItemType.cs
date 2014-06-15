@@ -16,6 +16,7 @@ namespace Stateflow.Fields
 
 		IFieldsItemStore<TIdentifier> _store;
 		FieldDefinitionCollection<TIdentifier> _fieldDefinitions;
+		private Object _lock = new object();
 
 		public FieldsItemType (IFieldsItemStore<TIdentifier> store)
 		{
@@ -25,10 +26,14 @@ namespace Stateflow.Fields
 
 		#region IFieldsItemType implementation
 
+		public virtual IFieldsItem<TIdentifier> CreateNew(){
+			return new FieldsItem<TIdentifier> (this);
+		}
+
 		public FieldDefinitionCollection<TIdentifier> FieldDefinitions {
 			get {
 				if (_fieldDefinitions == null) {
-					lock (_fieldDefinitions) {
+					lock (_lock) {
 						if (_fieldDefinitions == null) {
 							_fieldDefinitions = new FieldDefinitionCollection<TIdentifier> (_store, this);
 						}

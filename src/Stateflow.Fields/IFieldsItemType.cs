@@ -17,6 +17,8 @@ namespace Stateflow.Fields
 		string Description { get; }
 
 		IFieldsItemStore<TIdentifier> Store {get;}
+
+		IFieldsItem<TIdentifier> CreateNew();
 	}
 
 

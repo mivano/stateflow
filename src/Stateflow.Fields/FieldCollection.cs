@@ -34,12 +34,7 @@ namespace Stateflow.Fields
 			}
 		}
 
-		public IField<TIdentifier> this [TIdentifier index] {
-			get {
-				var definition = _fieldDefinitions [index];
-				return this.GetById (definition.Id);
-			}
-		}
+
 
 		public IField<TIdentifier> GetById(TIdentifier id)
 		{
@@ -60,6 +55,5 @@ namespace Stateflow.Fields
 
 		}
 	}
-
 
 }
