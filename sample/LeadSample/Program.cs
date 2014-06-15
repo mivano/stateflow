@@ -127,16 +127,16 @@ namespace LeadSample
             {
             };
 
-			lead.Fields.Add (new Field<string> {
-				Name = "price",
-				Value = 100000,
-				FieldType = FieldType.Amount
-			});
-
-			var assets = lead.Fields.AddCollection ("assets");
-		
-			assets.Add ("Name", "", FieldType.SingleLineText);
-
+//			lead.Fields.Add (new Field<string> {
+//				Name = "price",
+//				Value = 100000,
+//				FieldType = FieldType.Amount
+//			});
+//
+//			var assets = lead.Fields.AddCollection ("assets");
+//		
+//			assets.Add ("Name", "", FieldType.SingleLineText);
+//
             while (lead.PermittedTriggers.Any())
             {
 

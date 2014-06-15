@@ -31,9 +31,14 @@ namespace Stateflow.Fields
 				if (name == null) {
 					throw new ArgumentNullException ("name");
 				}
-				return this.FirstOrDefault(a=>a.Value.Name.Equals(name));
+				var fd = this.FirstOrDefault(a=>a.Value.Name.Equals(name));
+				if (!fd.Equals(default(KeyValuePair<TIdentifier, IFieldDefinition<TIdentifier> >)))
+					return fd.Value;
+
+					return null;
 			}
 		}
+
 
 	}
 

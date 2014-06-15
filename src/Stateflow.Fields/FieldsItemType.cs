@@ -34,6 +34,7 @@ namespace Stateflow.Fields
 						}
 					}
 				}
+				return _fieldDefinitions;
 			}
 		}
 

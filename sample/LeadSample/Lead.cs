@@ -9,7 +9,7 @@ namespace LeadSample
     {
         public Lead(WorkflowDefinition workflowDefinition, string currentState) : base(workflowDefinition, currentState)
         {
-			Fields = new FieldCollection<string> ();
+			//Fields = new FieldCollection<string> ();
         }
 
         protected override void OnStateTransition(string fromState, string toState, string triggeredBy)

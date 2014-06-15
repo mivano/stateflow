@@ -8,7 +8,7 @@ namespace Stateflow.Fields
 
 		public bool IsValid(IField<TIdentifier> field)
 		{
-			switch (field.FieldType) {
+			switch (field.FieldDefinition.FieldType) {
 			case FieldType.MultiLineText:
 			case FieldType.SingleLineText:
 			case FieldType.HtmlText:

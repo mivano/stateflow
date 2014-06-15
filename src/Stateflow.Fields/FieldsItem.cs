@@ -57,6 +57,36 @@ namespace Stateflow.Fields
 			}
 		}
 		#endregion
+
+		public FieldCollection<TIdentifier> Fields {
+			get {
+				throw new NotImplementedException ();
+			}
+		}
+
+		public bool IsDirty {
+			get {
+				throw new NotImplementedException ();
+			}
+		}
+
+		public bool IsNew {
+			get {
+				throw new NotImplementedException ();
+			}
+		}
+
+		public int RevisionNumber {
+			get {
+				throw new NotImplementedException ();
+			}
+		}
+
+		public object Revisions {
+			get {
+				throw new NotImplementedException ();
+			}
+		}
 	}
 	
 }
