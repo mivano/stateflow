@@ -34,12 +34,11 @@ namespace Stateflow.Fields.Tests
 
 		[Test]
 		public void CanCreateAFieldsItemAndAssingValue(){
+
 			var fd = new FieldDefinition<int> ();
 			fd.Id = 1;
 
-	
-
-			var fit = new FieldsItemType<int> (null);
+			var fit = new FieldsItemType<int> (new InMemoryFieldsItemStore<int>());
 			fit.FieldDefinitions.Add (fd);
 
 			var fi = new FieldsItem<int> (fit);
@@ -48,11 +47,24 @@ namespace Stateflow.Fields.Tests
 
 			Assert.AreEqual (f.Id , fd.Id);
 
+			Assert.IsFalse (fi.IsDirty);
+
 			f.Value = "test";
 
 			Assert.AreEqual (f.Value, "test");
 
 			Assert.AreEqual (f.OriginalValue, null);
+
+			Assert.AreEqual (fi.Fields [f.Id].Value, "test");
+
+			Assert.IsTrue (fi.IsDirty);
+
+			fi.Save ();
+
+			var revisions = fi.Revisions;
+
+			Assert.IsNotNull (revisions);
+
 
 		}
 	}

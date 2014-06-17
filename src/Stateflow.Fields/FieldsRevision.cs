@@ -16,6 +16,7 @@ namespace Stateflow.Fields
 		private Dictionary<TIdentifier, object> _values;
 
 		private FieldCollection<TIdentifier> _fields;
+		private readonly IFieldsItem<TIdentifier> _fieldsItem;
 
 		public FieldsRevision (FieldDefinitionCollection<TIdentifier> fieldDefinitions, int revisionNumber)
 		{
@@ -25,13 +26,17 @@ namespace Stateflow.Fields
 			_values = new Dictionary<TIdentifier, object> ();
 		}
 
-		public FieldsRevision (IFieldsItemType<TIdentifier> fieldsItemType, int revisionNumber)
+	
+
+		public FieldsRevision (IFieldsItem<TIdentifier> fieldsItem, int revisionNumber)
 		{
-			if (fieldsItemType == null)
-				throw new ArgumentNullException ("fieldsItemType");
+			if (fieldsItem == null)
+				throw new ArgumentNullException ("fieldsItem");
+
+			_fieldsItem = fieldsItem;
 
 			_revisionNumber = revisionNumber;
-			_fieldDefinitions = fieldsItemType.FieldDefinitions;
+			_fieldDefinitions = fieldsItem.FieldsItemType.FieldDefinitions;
 
 			_values = new Dictionary<TIdentifier, object> ();
 		}
@@ -40,11 +45,16 @@ namespace Stateflow.Fields
 
 		public object GetCurrentFieldValue(IFieldDefinition<TIdentifier> fieldDefinition)
 		{
+			if (_fieldsItem != null)
+				return _fieldsItem.GetFieldValue (fieldDefinition.Id, _revisionNumber);
 			return _values [fieldDefinition.Id];
 		}
 
 		public object GetOriginalFieldValue(IFieldDefinition<TIdentifier> fieldDefinition)
 		{
+			if (_fieldsItem != null)
+				return _fieldsItem.GetFieldValue (fieldDefinition.Id, _revisionNumber-1);
+
 			return _values [fieldDefinition.Id];
 		}
 

@@ -18,6 +18,15 @@ namespace Stateflow.Fields
 		{
 			_revision = revision;
 			_fieldDefinitions = fieldDefinitions;
+
+			InitialLoad ();
+		}
+
+		internal void InitialLoad(){
+			foreach (var item in _fieldDefinitions) {
+				var field = new Field<TIdentifier> (_revision, item.Value);
+				this.Add (field);
+			}
 		}
 
 		public void Add(IField<TIdentifier> field){

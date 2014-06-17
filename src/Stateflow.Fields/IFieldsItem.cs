@@ -16,6 +16,11 @@ namespace Stateflow.Fields
 		int RevisionNumber {get;}
 
 		RevisionCollection<TIdentifier> Revisions { get;}
+		object GetFieldValue(TIdentifier id, int revision);
+
+		void Save();
+		void Load();
+		bool Validate();
 	}
 	
 }

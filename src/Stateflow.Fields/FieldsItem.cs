@@ -15,7 +15,8 @@ namespace Stateflow.Fields
 		private readonly IFieldsItemType<TIdentifier> _fieldsItemType;
 		private FieldCollection<TIdentifier> _fields;
 		private RevisionCollection<TIdentifier> _revisions;
-		private Dictionary<TIdentifier, object> _values;
+		private FieldData<TIdentifier> _fieldData;
+		private IFieldsItemStore<TIdentifier> _store;
 
 		public FieldsItem (IFieldsItemType<TIdentifier> fieldsItemType)
 		{
@@ -24,27 +25,51 @@ namespace Stateflow.Fields
 
 			_fieldsItemType = fieldsItemType;
 			Id = default(TIdentifier);
-			_values = new Dictionary<TIdentifier, object> ();
+			_fieldData = new FieldData<TIdentifier> (this);
+			_store = fieldsItemType.Store;
 		}
 
 		public TIdentifier Id { get; set;		}
 
 		#region IRevision implementation
 
-		public object GetCurrentFieldValue(IFieldDefinition<TIdentifier> fieldDefinition)
+		public virtual object GetCurrentFieldValue(IFieldDefinition<TIdentifier> fieldDefinition)
 		{
-			return _values [fieldDefinition.Id];
+			return GetFieldValue (fieldDefinition.Id, -1);
 		}
 
-		public object GetOriginalFieldValue(IFieldDefinition<TIdentifier> fieldDefinition)
+		public virtual object GetOriginalFieldValue(IFieldDefinition<TIdentifier> fieldDefinition)
 		{
-			return _values [fieldDefinition.Id];
+			return GetFieldValue (fieldDefinition.Id, -2);
 		}
 
-		public void SetFieldValue(IFieldDefinition<TIdentifier> fieldDefinition, object value)
+		public virtual void SetFieldValue(IFieldDefinition<TIdentifier> fieldDefinition, object value)
 		{
-			_values [fieldDefinition.Id] = value;
+			SetFieldValueInternal (fieldDefinition, value);
 		}
+
+		private void SetFieldValueInternal(IFieldDefinition<TIdentifier> fieldDefinition, object value){
+		
+			// get current value
+			var currentValue = _fieldData.GetFieldValue (fieldDefinition.Id, -1);
+
+			// Only change when actually different
+			if (!object.Equals(currentValue, value))
+			{
+				if (!fieldDefinition.IsEditable) {
+					throw new ValidationException (string.Format("The field '{0}' is readonly.", fieldDefinition.Name));
+				}
+
+				_fieldData.SetFieldValue (fieldDefinition.Id, value);
+			}
+
+
+		}
+
+		public object GetFieldValue(TIdentifier id, int revision){
+			return _fieldData.GetFieldValue (id, revision);
+		}
+
 
 		public IFieldsItemType<TIdentifier> FieldsItemType {
 			get {
@@ -70,6 +95,27 @@ namespace Stateflow.Fields
 			}
 		}
 
+		public void Save()
+		{
+			if (IsDirty) {
+
+				_store.SaveFieldsItems (new [] { this });
+
+			}
+
+		}
+
+		public void Load()
+		{
+			throw new NotImplementedException ();
+		}
+
+		public bool Validate()
+		{
+			throw new NotImplementedException ();
+		}
+
+
 		#endregion
 
 		public FieldCollection<TIdentifier> Fields {
@@ -85,7 +131,7 @@ namespace Stateflow.Fields
 
 		public bool IsDirty {
 			get {
-				throw new NotImplementedException ();
+				return _fieldData.IsDirty ();
 			}
 		}
 
@@ -112,5 +158,6 @@ namespace Stateflow.Fields
 			}
 		}
 	}
-	
+
+
 }

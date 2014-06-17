@@ -53,6 +53,9 @@
     <Compile Include="IFieldsItem.cs" />
     <Compile Include="FieldsItem.cs" />
     <Compile Include="RevisionCollection.cs" />
+    <Compile Include="ValidationException.cs" />
+    <Compile Include="FieldData.cs" />
+    <Compile Include="RevisionData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Stateflow.Fields.nuspec" />

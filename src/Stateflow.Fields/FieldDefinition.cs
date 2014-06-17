@@ -7,6 +7,12 @@ namespace Stateflow.Fields
 {
 	public class FieldDefinition<TIdentifier>: IFieldDefinition<TIdentifier>
 	{
+		public FieldDefinition ()
+		{
+			// Default value
+			IsEditable = true;
+		}
+
 		#region IFieldDefinition implementation
 
 		public FieldType FieldType { get; set;
