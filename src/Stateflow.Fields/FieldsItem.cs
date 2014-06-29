@@ -100,6 +100,8 @@ namespace Stateflow.Fields
 		{
 			if (IsDirty) {
 
+
+				_fieldData.CreateNewRevision ();
 				_store.SaveFieldsItems (new [] { this });
 
 			}
@@ -128,6 +130,18 @@ namespace Stateflow.Fields
 				return _fields;
 			}
 
+		}
+
+		public FieldData<TIdentifier> FieldData {
+			get {
+				return _fieldData;
+			}
+		}
+
+		public IFieldsTemplate<TIdentifier> FieldsTemplate {
+			get {
+				throw new NotImplementedException ();
+			}
 		}
 
 		public bool IsDirty {

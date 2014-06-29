@@ -9,7 +9,7 @@ namespace Stateflow.Fields
 	/// <summary>
 	/// Used for storing the actual data of the fields.
 	/// </summary>
-	internal class FieldData<TIdentifier>
+	public class FieldData<TIdentifier>
 	{
 		private readonly IFieldsItem<TIdentifier> _fieldsItem;
 		private Dictionary<TIdentifier, object> _values;
@@ -78,6 +78,25 @@ namespace Stateflow.Fields
 		public bool IsDirty()
 		{
 			return _changes != null && _changes.Any ();
+		}
+
+		public int Versions{
+			get{
+				return _revisions.Count;
+			}
+		}
+
+		// Stores the changed values into a new revision
+		public void CreateNewRevision(){
+			if (!IsDirty())
+				return;
+
+			var revisionData = new RevisionData<TIdentifier> (Versions + 1, _changes);
+		
+			_revisions.Add (revisionData.RevisionNumber , revisionData);
+
+			// Clear current stored changes
+			_changes.Clear ();
 		}
 	}
 

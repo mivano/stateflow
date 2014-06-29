@@ -36,12 +36,18 @@ namespace Stateflow.Fields
 			_fieldsItem = fieldsItem;
 
 			_revisionNumber = revisionNumber;
-			_fieldDefinitions = fieldsItem.FieldsItemType.FieldDefinitions;
+			_fieldDefinitions = fieldsItem.FieldsTemplate.FieldDefinitions;
 
 			_values = new Dictionary<TIdentifier, object> ();
 		}
 
 		#region IRevision implementation
+
+		public IFieldsTemplate<TIdentifier> FieldsTemplate {
+			get {
+				return _fieldsItem.FieldsTemplate;
+			}
+		}
 
 		public object GetCurrentFieldValue(IFieldDefinition<TIdentifier> fieldDefinition)
 		{

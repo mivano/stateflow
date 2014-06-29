@@ -7,7 +7,7 @@ namespace Stateflow.Fields
 {
 	public interface IRevision<TIdentifier>{
 
-		IFieldsTemplate<TIdentifier> FieldsItemType { get; }
+		IFieldsTemplate<TIdentifier> FieldsTemplate { get; }
 
 		object GetCurrentFieldValue(IFieldDefinition<TIdentifier> fieldDefinition);
 		object GetOriginalFieldValue(IFieldDefinition<TIdentifier> fieldDefinition);

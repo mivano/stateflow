@@ -69,11 +69,14 @@ namespace Stateflow.Fields.Tests
 			Assert.AreEqual (fi.Fields [f.Id].Value, "test");
 			Assert.IsTrue (fi.IsDirty);
 
-			// Save the data
+			// Save the data in the item
 			fi.Save ();
 
 			// Get the list of revisions.
 			var revisions = fi.Revisions;
+
+			// A new revision should be created
+			//Assert.IsTrue (revisions.Count > 0, "Since we did a save, there should be a new revision");
 
 			Assert.IsNotNull (revisions);
 

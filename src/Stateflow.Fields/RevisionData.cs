@@ -14,6 +14,12 @@ namespace Stateflow.Fields
 			_changes = new Dictionary<TIdentifier, object> ();
 		}
 
+		public RevisionData (int revisionNumber, Dictionary<TIdentifier, object> changes)
+		{
+			_changes = changes;
+			RevisionNumber = revisionNumber;
+		}
+
 		public Dictionary<TIdentifier, object> Changes {
 			get {
 				return _changes;
@@ -22,7 +28,7 @@ namespace Stateflow.Fields
 
 		public int RevisionNumber {
 			get;
-			set;
+			private set;
 		}
 	}
 
