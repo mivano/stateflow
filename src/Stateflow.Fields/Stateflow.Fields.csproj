@@ -45,8 +45,6 @@
     <Compile Include="IRevision.cs" />
     <Compile Include="Field.cs" />
     <Compile Include="FieldDefinition.cs" />
-    <Compile Include="IFieldsItemType.cs" />
-    <Compile Include="FieldsItemType.cs" />
     <Compile Include="IFieldsItemStore.cs" />
     <Compile Include="FieldsRevision.cs" />
     <Compile Include="IFieldsRevision.cs" />
@@ -56,6 +54,8 @@
     <Compile Include="ValidationException.cs" />
     <Compile Include="FieldData.cs" />
     <Compile Include="RevisionData.cs" />
+    <Compile Include="IFieldsTemplate.cs" />
+    <Compile Include="FieldsTemplate.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Stateflow.Fields.nuspec" />

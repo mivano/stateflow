@@ -8,14 +8,14 @@ namespace Stateflow.Fields
 	public class FieldDefinitionCollection<TIdentifier>: Dictionary<TIdentifier, IFieldDefinition<TIdentifier>>
 	{
 		IFieldsItemStore<TIdentifier> _store;
-		IFieldsItemType<TIdentifier> _type;
+		IFieldsTemplate<TIdentifier> _type;
 
 		public FieldDefinitionCollection ()
 		{
 			
 		}
 
-		public FieldDefinitionCollection (IFieldsItemStore<TIdentifier> store, IFieldsItemType<TIdentifier> type)
+		public FieldDefinitionCollection (IFieldsItemStore<TIdentifier> store, IFieldsTemplate<TIdentifier> type)
 		{
 			_store = store;
 			_type = type;

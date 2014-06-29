@@ -12,21 +12,21 @@ namespace Stateflow.Fields
 	public class FieldsItem<TIdentifier>: IFieldsItem<TIdentifier>
 	{
 
-		private readonly IFieldsItemType<TIdentifier> _fieldsItemType;
+		private readonly IFieldsTemplate<TIdentifier> _fieldsTemplate;
 		private FieldCollection<TIdentifier> _fields;
 		private RevisionCollection<TIdentifier> _revisions;
 		private FieldData<TIdentifier> _fieldData;
 		private IFieldsItemStore<TIdentifier> _store;
 
-		public FieldsItem (IFieldsItemType<TIdentifier> fieldsItemType)
+		public FieldsItem (IFieldsTemplate<TIdentifier> fieldsTemplate)
 		{
-			if (fieldsItemType == null)
-				throw new ArgumentNullException ("fieldsItemType");
+			if (fieldsTemplate == null)
+				throw new ArgumentNullException ("fieldsTemplate");
 
-			_fieldsItemType = fieldsItemType;
+			_fieldsTemplate = fieldsTemplate;
 			Id = default(TIdentifier);
 			_fieldData = new FieldData<TIdentifier> (this);
-			_store = fieldsItemType.Store;
+			_store = fieldsTemplate.Store;
 		}
 
 		public TIdentifier Id { get; set;		}
@@ -71,9 +71,9 @@ namespace Stateflow.Fields
 		}
 
 
-		public IFieldsItemType<TIdentifier> FieldsItemType {
+		public IFieldsTemplate<TIdentifier> FieldsItemType {
 			get {
-				return _fieldsItemType;
+				return _fieldsTemplate;
 			}
 		}
 
@@ -95,6 +95,7 @@ namespace Stateflow.Fields
 			}
 		}
 
+		// Save the item, this will create a new revision. 
 		public void Save()
 		{
 			if (IsDirty) {

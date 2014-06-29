@@ -63,7 +63,7 @@ namespace Stateflow.Fields
 			throw new InvalidOperationException("Unable to change the value for a revision item.");
 		}
 
-		public IFieldsItemType<TIdentifier> FieldsItemType {
+		public IFieldsTemplate<TIdentifier> FieldsItemType {
 			get {
 				throw new NotImplementedException ();
 			}

@@ -9,22 +9,22 @@ namespace Stateflow.Fields
 
 
 	/// <summary>
-	/// Describes a type containing fields.
+	/// Describes a template containing fields.
 	/// </summary>
-	public class FieldsItemType<TIdentifier>: IFieldsItemType<TIdentifier>
+	public class FieldsTemplate<TIdentifier>: IFieldsTemplate<TIdentifier>
 	{
 
 		IFieldsItemStore<TIdentifier> _store;
 		FieldDefinitionCollection<TIdentifier> _fieldDefinitions;
 		private Object _lock = new object();
 
-		public FieldsItemType (IFieldsItemStore<TIdentifier> store)
+		public FieldsTemplate (IFieldsItemStore<TIdentifier> store)
 		{
 			_store = store;
 			
 		}
 
-		#region IFieldsItemType implementation
+		#region IFieldsTemplate implementation
 
 		public virtual IFieldsItem<TIdentifier> CreateNew(){
 			return new FieldsItem<TIdentifier> (this);
@@ -65,14 +65,7 @@ namespace Stateflow.Fields
 
 		#region IIdentifiableBy implementation
 
-		public TIdentifier Id {
-			get {
-				throw new NotImplementedException ();
-			}
-			set {
-				throw new NotImplementedException ();
-			}
-		}
+		public TIdentifier Id{ get; set;}
 
 		#endregion
 	}

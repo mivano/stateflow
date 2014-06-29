@@ -9,7 +9,7 @@ namespace Stateflow.Fields
 	/// <summary>
 	/// Describes a fields item, managing a collection of fields and their revisions.
 	/// </summary>
-	public interface IFieldsItemType<TIdentifier>: IIdentifiableBy<TIdentifier>{
+	public interface IFieldsTemplate<TIdentifier>: IIdentifiableBy<TIdentifier>{
 
 		FieldDefinitionCollection<TIdentifier> FieldDefinitions { get; }
 
