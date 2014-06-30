@@ -87,9 +87,9 @@ namespace Stateflow.Fields
 		}
 
 		// Stores the changed values into a new revision
-		public void CreateNewRevision(){
+		public int CreateNewRevision(){
 			if (!IsDirty())
-				return;
+				return Versions;
 
 			var revisionData = new RevisionData<TIdentifier> (Versions + 1, _changes);
 		
@@ -97,6 +97,9 @@ namespace Stateflow.Fields
 
 			// Clear current stored changes
 			_changes.Clear ();
+
+			return Versions;
+
 		}
 	}
 

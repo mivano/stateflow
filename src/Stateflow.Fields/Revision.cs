@@ -7,7 +7,7 @@ namespace Stateflow.Fields
 	/// <summary>
 	/// Contains a collection of field definitions and values for a certain revision number.
 	/// </summary>
-	public class FieldsRevision<TIdentifier>: IFieldsRevision<TIdentifier>, IRevision<TIdentifier>
+	public class Revision<TIdentifier>: IFieldsRevision<TIdentifier>, IRevision<TIdentifier>
 	{
 		private readonly FieldDefinitionCollection<TIdentifier> _fieldDefinitions;
 
@@ -18,7 +18,7 @@ namespace Stateflow.Fields
 		private FieldCollection<TIdentifier> _fields;
 		private readonly IFieldsItem<TIdentifier> _fieldsItem;
 
-		public FieldsRevision (FieldDefinitionCollection<TIdentifier> fieldDefinitions, int revisionNumber)
+		public Revision (FieldDefinitionCollection<TIdentifier> fieldDefinitions, int revisionNumber)
 		{
 			_revisionNumber = revisionNumber;
 			_fieldDefinitions = fieldDefinitions;
@@ -26,9 +26,8 @@ namespace Stateflow.Fields
 			_values = new Dictionary<TIdentifier, object> ();
 		}
 
-	
 
-		public FieldsRevision (IFieldsItem<TIdentifier> fieldsItem, int revisionNumber)
+		public Revision (IFieldsItem<TIdentifier> fieldsItem, int revisionNumber)
 		{
 			if (fieldsItem == null)
 				throw new ArgumentNullException ("fieldsItem");
@@ -42,6 +41,7 @@ namespace Stateflow.Fields
 		}
 
 		#region IRevision implementation
+
 
 		public IFieldsTemplate<TIdentifier> FieldsTemplate {
 			get {
@@ -69,24 +69,13 @@ namespace Stateflow.Fields
 			throw new InvalidOperationException("Unable to change the value for a revision item.");
 		}
 
-		public IFieldsTemplate<TIdentifier> FieldsItemType {
-			get {
-				throw new NotImplementedException ();
-			}
-		}
-
+	
 		public bool IsReadOnly {
 			get {
 				return true;
 			}
 		}
-
-		public bool IsDraft {
-			get {
-				throw new NotImplementedException ();
-			}
-		}
-
+			
 		public int Number {
 			get {
 				return _revisionNumber;

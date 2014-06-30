@@ -20,7 +20,7 @@ namespace Stateflow.Fields
 		}
 
 		// Prepopulate the list of revisions.
-		protected void PrepareRevisions(){
+		public void PrepareRevisions(){
 		
 			if (_item.IsNew) {
 				// No revisions yet as it is a new item
@@ -30,7 +30,7 @@ namespace Stateflow.Fields
 			this.Clear ();
 
 			for (int i = 1; i <= _item.FieldData.Versions; i++) {
-				this.Add(i, new FieldsRevision<TIdentifier>(_item, i));
+				this.Add(i, new Revision<TIdentifier>(_item, i));
 			}
 
 		}

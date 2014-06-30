@@ -50,6 +50,7 @@ namespace Stateflow.Fields.Tests
 
 			// Create a fields item which is based on the template
 			var fi = new FieldsItem<int> (fit);
+			fi.Id = 1;
 
 			// Get the field using its id
 			var f = fi.Fields[1];
@@ -76,9 +77,14 @@ namespace Stateflow.Fields.Tests
 			var revisions = fi.Revisions;
 
 			// A new revision should be created
-			//Assert.IsTrue (revisions.Count > 0, "Since we did a save, there should be a new revision");
-
 			Assert.IsNotNull (revisions);
+			Assert.IsTrue (revisions.Count > 0, "Since we did a save, there should be a new revision");
+
+			Assert.IsNotNull (revisions [1]);
+
+			//foreach (var revision in revisions) {
+			//	Assert.IsNotNull (revision.Value.Fields [1].Value);
+			//}				
 
 
 		}

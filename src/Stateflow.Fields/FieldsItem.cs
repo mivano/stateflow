@@ -100,9 +100,14 @@ namespace Stateflow.Fields
 		{
 			if (IsDirty) {
 
-
+				// Create a new revision
 				_fieldData.CreateNewRevision ();
+
+				// Store the data, this should create a new identifier
 				_store.SaveFieldsItems (new [] { this });
+
+				// Refresh the revision list
+				Revisions.PrepareRevisions ();
 
 			}
 
@@ -140,7 +145,7 @@ namespace Stateflow.Fields
 
 		public IFieldsTemplate<TIdentifier> FieldsTemplate {
 			get {
-				throw new NotImplementedException ();
+				return _fieldsTemplate;
 			}
 		}
 

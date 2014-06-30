@@ -15,9 +15,9 @@ namespace Stateflow.Fields
 		void SetFieldValue(IFieldDefinition<TIdentifier> fieldDefinition, object value);
 
 		bool IsReadOnly { get; }
-		bool IsDraft { get; }
-
 		int Number { get; }
+
+		FieldCollection<TIdentifier> Fields { get; }
 	}
 
 }
