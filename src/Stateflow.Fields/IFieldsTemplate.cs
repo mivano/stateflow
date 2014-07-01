@@ -13,12 +13,14 @@ namespace Stateflow.Fields
 
 		FieldDefinitionCollection<TIdentifier> FieldDefinitions { get; }
 
-		string Name {get;}
-		string Description { get; }
+		string Name { get; set;}
+		string Description { get; set; }
+		Version Version { get; set; }
 
 		IFieldsItemStore<TIdentifier> Store {get;}
 
 		IFieldsItem<TIdentifier> CreateNew();
+
 	}
 
 

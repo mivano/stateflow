@@ -6,6 +6,8 @@ namespace Stateflow.Fields
 {
 	public interface IField<TIdentifier>
 	{
+		 event ValueChangedEventHandler ValueChanged;
+
 		/// <summary>
 		/// Gets or sets the field definition.
 		/// </summary>

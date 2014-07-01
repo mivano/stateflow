@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Stateflow.Utils;
+using System;
 
 namespace Stateflow.Workflow
 {
@@ -18,6 +19,15 @@ namespace Stateflow.Workflow
         /// The name.
         /// </value>
         public string Name { get; set; }
+
+		/// <summary>
+		///  The current version of this workflow definition
+		/// </summary>
+		/// <value>The version.</value>
+		public Version Version {
+			get;
+			set;
+		}
 
         /// <summary>
         /// Gets or sets the description of this workflow

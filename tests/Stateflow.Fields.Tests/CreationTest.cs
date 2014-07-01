@@ -8,7 +8,43 @@ namespace Stateflow.Fields.Tests
 	[TestFixture]
 	public class CreationTest
 	{
+		[Test]
+		public void SetupAFieldTemplate(){
+			var ft = new FieldsTemplate<int> (new InMemoryFieldsItemStore<int> (), "test");
+
+			Assert.IsNotNull (ft);
+			Assert.AreEqual (ft.Name, "test");
+
+			ft.FieldDefinitions.Add (new FieldDefinition<int> (){ Name = "test", FieldType = FieldType.Amount });
+
+			Assert.IsTrue (ft.FieldDefinitions.Count == 1);
+
+			var fi = ft.CreateNew ();
+
+			Assert.IsNotNull (fi);
+
+			Assert.IsTrue (fi.Fields.Count == 1);
+		}
 	
+		[Test]
+		public void ReactOnFieldChangesUsingEvent(){
+			var ft = new FieldsTemplate<int> (new InMemoryFieldsItemStore<int> (), "test");
+
+			var fd = new FieldDefinition<int> (){ Name = "test", FieldType = FieldType.Amount };
+
+			ft.FieldDefinitions.Add (fd);
+
+			var fi = ft.CreateNew ();
+
+			fi.Fields["test"].ValueChanged+= (sender, newValue) => {
+				Assert.AreEqual(newValue, "test");
+			};
+			fi.Fields["test"].Value = "test";
+
+			Assert.AreEqual (fi.Fields ["test"].Value, "test");
+
+		}
+
 		[Test]
 		public void CanCreateFieldDefinition(){
 			var fd = new FieldDefinition<int> ();

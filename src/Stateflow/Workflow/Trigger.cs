@@ -12,6 +12,7 @@ namespace Stateflow.Workflow
         /// The name.
         /// </value>
         public string Name { get; set; }
+
         /// <summary>
         /// Gets or sets the display name.
         /// </summary>

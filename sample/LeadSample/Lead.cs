@@ -14,7 +14,7 @@ namespace LeadSample
 
         protected override void OnStateTransition(string fromState, string toState, string triggeredBy)
         {
-            Console.WriteLine("State changed from {0} to {1} because of trigger {2}.", fromState, toState, triggeredBy);
+			Console.WriteLine("{0}: State changed from {1} to {2} because of trigger {3}.", DateTime.Now.ToShortTimeString(), fromState, toState, triggeredBy);
         }
 
 		public FieldCollection<string> Fields { get; set; }

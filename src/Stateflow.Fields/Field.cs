@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace Stateflow.Fields
 {
+	public delegate void ValueChangedEventHandler(object sender, Object newValue);
 
 	/// <summary>
 	/// A generic implementation of a field.
@@ -13,6 +14,7 @@ namespace Stateflow.Fields
 	{
 		private readonly IFieldDefinition<TIdentifier> _fieldDefinition;
 		private readonly IRevision<TIdentifier> _revision;
+		public event ValueChangedEventHandler ValueChanged;
 
 		public Field (IRevision<TIdentifier> revision, IFieldDefinition<TIdentifier> fieldDefinition)
 		{
@@ -43,17 +45,15 @@ namespace Stateflow.Fields
 
 		}
 
-	
-
 		public bool IsDirty {
 			get {
-				throw new NotImplementedException ();
+				return FieldDefinition.IsComputed;
 			}
 		}
 
 		public bool IsEditable {
 			get {
-				throw new NotImplementedException ();
+				return FieldDefinition.IsEditable;
 			}
 		}
 
@@ -83,6 +83,8 @@ namespace Stateflow.Fields
 				if (value != _revision.GetOriginalFieldValue(_fieldDefinition) && OnBeforeValueChange (value)) {
 					_revision.SetFieldValue (_fieldDefinition, value);
 					OnAfterValueChange ();
+					if (ValueChanged != null)
+						ValueChanged (this, value);
 				}
 			}
 		}

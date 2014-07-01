@@ -24,6 +24,12 @@ namespace Stateflow.Fields
 			
 		}
 
+		public FieldsTemplate (IFieldsItemStore<TIdentifier> store, string name)
+		{
+			_store = store;
+			Name = name;
+		}
+
 		#region IFieldsTemplate implementation
 
 		public virtual IFieldsItem<TIdentifier> CreateNew(){
@@ -44,16 +50,16 @@ namespace Stateflow.Fields
 		}
 
 		public string Name {
-			get {
-				throw new NotImplementedException ();
-			}
+			get ;
+			set;
 		}
 
 		public string Description {
-			get {
-				throw new NotImplementedException ();
-			}
+			get;
+			set;
 		}
+
+		public Version Version{ get; set; }
 
 		public IFieldsItemStore<TIdentifier> Store {
 			get {

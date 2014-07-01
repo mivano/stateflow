@@ -7,6 +7,8 @@ namespace Stateflow.Fields
 {
 	public class FieldDefinition<TIdentifier>: IFieldDefinition<TIdentifier>
 	{
+		private IDictionary<string, object> _metaData;
+
 		public FieldDefinition ()
 		{
 			// Default value
@@ -44,6 +46,23 @@ namespace Stateflow.Fields
 		public IFieldOptions FieldOptions { get; set;		}
 
 		public IEnumerable<IFieldValidator<TIdentifier>> Validators { get; set;		}
+
+		public IDictionary<string, object> MetaData {
+			get
+			{ 
+
+				if (_metaData == null) {
+					lock (_metaData) {
+						if (_metaData==null)
+							_metaData = new Dictionary<string, object> ();
+					}
+				} 
+				return _metaData;
+			}
+			set{ 
+				_metaData = value;
+			}	
+		}
 
 		#endregion
 

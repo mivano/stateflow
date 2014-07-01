@@ -52,5 +52,11 @@ namespace Stateflow.Fields
 		IFieldOptions FieldOptions { get; set; }
 
 		IEnumerable<IFieldValidator<TIdentifier>> Validators{ get; set; }
+
+		/// <summary>
+		/// Additional metadata to be used to decorate the field definition with more information.
+		/// </summary>
+		/// <value>The meta data.</value>
+		IDictionary<string, object> MetaData { get; set;}
 	}
 }
