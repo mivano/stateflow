@@ -45,7 +45,6 @@
     <Compile Include="IRevision.cs" />
     <Compile Include="Field.cs" />
     <Compile Include="FieldDefinition.cs" />
-    <Compile Include="IFieldsItemStore.cs" />
     <Compile Include="IFieldsRevision.cs" />
     <Compile Include="IFieldsItem.cs" />
     <Compile Include="FieldsItem.cs" />
@@ -53,14 +52,21 @@
     <Compile Include="ValidationException.cs" />
     <Compile Include="FieldData.cs" />
     <Compile Include="RevisionData.cs" />
-    <Compile Include="IFieldsTemplate.cs" />
-    <Compile Include="FieldsTemplate.cs" />
     <Compile Include="Revision.cs" />
+    <Compile Include="ITemplate.cs" />
+    <Compile Include="Template.cs" />
+    <Compile Include="DataStores\IDataStore.cs" />
+    <Compile Include="DataStores\IRepository.cs" />
+    <Compile Include="DataStores\InMemoryRepository.cs" />
+    <Compile Include="DataStores\InMemoryDataStore.cs" />
+    <Compile Include="Exceptions\TemplateNotFoundException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Stateflow.Fields.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Validators\" />
+    <Folder Include="DataStores\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
 </Project>

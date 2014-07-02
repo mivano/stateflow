@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Stateflow.Fields
+namespace Stateflow.Fields.DataStores
 {
 	public interface IRevision<TIdentifier>{
 
-		IFieldsTemplate<TIdentifier> FieldsTemplate { get; }
+		ITemplate<TIdentifier> Template { get; }
 
 		object GetCurrentFieldValue(IFieldDefinition<TIdentifier> fieldDefinition);
 		object GetOriginalFieldValue(IFieldDefinition<TIdentifier> fieldDefinition);

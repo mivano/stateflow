@@ -3,19 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Stateflow.Fields
+namespace Stateflow.Fields.DataStores
 {
 	public class FieldDefinitionCollection<TIdentifier>: Dictionary<TIdentifier, IFieldDefinition<TIdentifier>>
 	{
-		IFieldsItemStore<TIdentifier> _store;
-		IFieldsTemplate<TIdentifier> _type;
+		IDataStore<TIdentifier> _store;
+		ITemplate<TIdentifier> _type;
 
 		public FieldDefinitionCollection ()
 		{
 			
 		}
 
-		public FieldDefinitionCollection (IFieldsItemStore<TIdentifier> store, IFieldsTemplate<TIdentifier> type)
+		public FieldDefinitionCollection (IDataStore<TIdentifier> store, ITemplate<TIdentifier> type)
 		{
 			_store = store;
 			_type = type;

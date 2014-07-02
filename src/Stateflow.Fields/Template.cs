@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Stateflow.Fields
+namespace Stateflow.Fields.DataStores
 {
 
 
@@ -11,26 +11,27 @@ namespace Stateflow.Fields
 	/// <summary>
 	/// Describes a template containing fields.
 	/// </summary>
-	public class FieldsTemplate<TIdentifier>: IFieldsTemplate<TIdentifier>
+	public class Template<TIdentifier>: ITemplate<TIdentifier>
 	{
 
-		IFieldsItemStore<TIdentifier> _store;
+		IDataStore<TIdentifier> _store;
 		FieldDefinitionCollection<TIdentifier> _fieldDefinitions;
 		private Object _lock = new object();
 
-		public FieldsTemplate (IFieldsItemStore<TIdentifier> store)
+		public Template (IDataStore<TIdentifier> store)
 		{
 			_store = store;
 			
 		}
 
-		public FieldsTemplate (IFieldsItemStore<TIdentifier> store, string name)
+		public Template (IDataStore<TIdentifier> store, string name)
 		{
 			_store = store;
 			Name = name;
 		}
 
-		#region IFieldsTemplate implementation
+	
+		#region ITemplate implementation
 
 		public virtual IFieldsItem<TIdentifier> CreateNew(){
 			return new FieldsItem<TIdentifier> (this);
@@ -61,7 +62,7 @@ namespace Stateflow.Fields
 
 		public Version Version{ get; set; }
 
-		public IFieldsItemStore<TIdentifier> Store {
+		public IDataStore<TIdentifier> Store {
 			get {
 				return _store;
 			}

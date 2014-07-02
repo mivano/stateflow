@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Stateflow.Fields
+namespace Stateflow.Fields.DataStores
 {
 
 	public class NotNullValidator<TIdentifier>: IFieldValidator<TIdentifier>

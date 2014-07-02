@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Stateflow.Fields
+namespace Stateflow.Fields.DataStores
 {
 	/// <summary>
 	/// A collection of fields. Fields are based on field definitions.

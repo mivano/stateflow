@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Stateflow.Fields
+namespace Stateflow.Fields.DataStores
 {
 
 	public class MinimumItemsInCollectionValidator<TIdentifier> : IFieldValidator<TIdentifier>

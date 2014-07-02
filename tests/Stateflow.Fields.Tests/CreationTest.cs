@@ -3,14 +3,14 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Stateflow.Fields.Tests
+namespace Stateflow.Fields.DataStores
 {
 	[TestFixture]
 	public class CreationTest
 	{
 		[Test]
-		public void SetupAFieldTemplate(){
-			var ft = new FieldsTemplate<int> (new InMemoryFieldsItemStore<int> (), "test");
+		public void SetupATemplate(){
+			var ft = new Template<int> (new InMemoryDataStore<int> (), "test");
 
 			Assert.IsNotNull (ft);
 			Assert.AreEqual (ft.Name, "test");
@@ -28,7 +28,7 @@ namespace Stateflow.Fields.Tests
 	
 		[Test]
 		public void ReactOnFieldChangesUsingEvent(){
-			var ft = new FieldsTemplate<int> (new InMemoryFieldsItemStore<int> (), "test");
+			var ft = new Template<int> (new InMemoryDataStore<int> (), "test");
 
 			var fd = new FieldDefinition<int> (){ Name = "test", FieldType = FieldType.Amount };
 
@@ -71,8 +71,8 @@ namespace Stateflow.Fields.Tests
 		[Test]
 		public void CanCreateAFieldsItemAndAssingValue(){
 
-			// Create a fields item type, which is the template for the fields.
-			var fit = new FieldsTemplate<int> (new InMemoryFieldsItemStore<int>());
+			// Create a template instance which is the template for the fields.
+			var fit = new Template<int> (new InMemoryDataStore<int>());
 
 			// Create a new simple field definition
 			var fd = new FieldDefinition<int> ();

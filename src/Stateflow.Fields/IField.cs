@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Stateflow.Fields
+namespace Stateflow.Fields.DataStores
 {
 	public interface IField<TIdentifier>
 	{

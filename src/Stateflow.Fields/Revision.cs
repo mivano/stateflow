@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Stateflow.Fields
+namespace Stateflow.Fields.DataStores
 {
 	/// <summary>
 	/// Contains a collection of field definitions and values for a certain revision number.
@@ -35,7 +35,7 @@ namespace Stateflow.Fields
 			_fieldsItem = fieldsItem;
 
 			_revisionNumber = revisionNumber;
-			_fieldDefinitions = fieldsItem.FieldsTemplate.FieldDefinitions;
+			_fieldDefinitions = fieldsItem.Template.FieldDefinitions;
 
 			_values = new Dictionary<TIdentifier, object> ();
 		}
@@ -43,9 +43,9 @@ namespace Stateflow.Fields
 		#region IRevision implementation
 
 
-		public IFieldsTemplate<TIdentifier> FieldsTemplate {
+		public ITemplate<TIdentifier> Template {
 			get {
-				return _fieldsItem.FieldsTemplate;
+				return _fieldsItem.Template;
 			}
 		}
 

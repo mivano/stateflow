@@ -3,33 +3,33 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Stateflow.Fields
+namespace Stateflow.Fields.DataStores
 {
 
 	/// <summary>
-	/// A fields item contains field definitions and their values and is based on a FieldsItemType
+	/// A fields item contains field definitions and their values and is based on a Template
 	/// </summary>
 	public class FieldsItem<TIdentifier>: IFieldsItem<TIdentifier>
 	{
 
-		private readonly IFieldsTemplate<TIdentifier> _fieldsTemplate;
+		private readonly ITemplate<TIdentifier> _template;
 		private FieldCollection<TIdentifier> _fields;
 		private RevisionCollection<TIdentifier> _revisions;
 		private FieldData<TIdentifier> _fieldData;
-		private IFieldsItemStore<TIdentifier> _store;
+		private IDataStore<TIdentifier> _store;
 
-		public FieldsItem (IFieldsTemplate<TIdentifier> fieldsTemplate)
+		public FieldsItem (ITemplate<TIdentifier> template)
 		{
-			if (fieldsTemplate == null)
-				throw new ArgumentNullException ("fieldsTemplate");
+			if (template == null)
+				throw new ArgumentNullException ("template");
 
-			_fieldsTemplate = fieldsTemplate;
+			_template = template;
 			Id = default(TIdentifier);
 			_fieldData = new FieldData<TIdentifier> (this);
-			_store = fieldsTemplate.Store;
+			_store = template.Store;
 		}
 
-		public TIdentifier Id { get; set;		}
+		public TIdentifier Id { get; set; }
 
 		#region IRevision implementation
 
@@ -48,16 +48,16 @@ namespace Stateflow.Fields
 			SetFieldValueInternal (fieldDefinition, value);
 		}
 
-		private void SetFieldValueInternal(IFieldDefinition<TIdentifier> fieldDefinition, object value){
+		private void SetFieldValueInternal(IFieldDefinition<TIdentifier> fieldDefinition, object value)
+		{
 		
 			// get current value
 			var currentValue = _fieldData.GetFieldValue (fieldDefinition.Id, -1);
 
 			// Only change when actually different
-			if (!object.Equals(currentValue, value))
-			{
+			if (!object.Equals (currentValue, value)) {
 				if (!fieldDefinition.IsEditable) {
-					throw new ValidationException (string.Format("The field '{0}' is readonly.", fieldDefinition.Name));
+					throw new ValidationException (string.Format ("The field '{0}' is readonly.", fieldDefinition.Name));
 				}
 
 				_fieldData.SetFieldValue (fieldDefinition.Id, value);
@@ -66,14 +66,15 @@ namespace Stateflow.Fields
 
 		}
 
-		public object GetFieldValue(TIdentifier id, int revision){
+		public object GetFieldValue(TIdentifier id, int revision)
+		{
 			return _fieldData.GetFieldValue (id, revision);
 		}
 
 
-		public IFieldsTemplate<TIdentifier> FieldsItemType {
+		public ITemplate<TIdentifier> Template {
 			get {
-				return _fieldsTemplate;
+				return _template;
 			}
 		}
 
@@ -95,7 +96,7 @@ namespace Stateflow.Fields
 			}
 		}
 
-		// Save the item, this will create a new revision. 
+		// Save the item, this will create a new revision.
 		public void Save()
 		{
 			if (IsDirty) {
@@ -104,7 +105,7 @@ namespace Stateflow.Fields
 				_fieldData.CreateNewRevision ();
 
 				// Store the data, this should create a new identifier
-				_store.SaveFieldsItems (new [] { this });
+				_store.Items.Set (this);
 
 				// Refresh the revision list
 				Revisions.PrepareRevisions ();
@@ -130,7 +131,7 @@ namespace Stateflow.Fields
 
 			get {
 				if (_fields == null) {
-					_fields = new FieldCollection<TIdentifier> (this, FieldsItemType.FieldDefinitions);
+					_fields = new FieldCollection<TIdentifier> (this, Template.FieldDefinitions);
 				}
 				return _fields;
 			}
@@ -143,11 +144,7 @@ namespace Stateflow.Fields
 			}
 		}
 
-		public IFieldsTemplate<TIdentifier> FieldsTemplate {
-			get {
-				return _fieldsTemplate;
-			}
-		}
+
 
 		public bool IsDirty {
 			get {
@@ -157,22 +154,20 @@ namespace Stateflow.Fields
 
 		public bool IsNew {
 			get {
-				return Id.Equals( default(TIdentifier));
+				return Id.Equals (default(TIdentifier));
 			}
 		}
 
 		public int RevisionNumber {
 			get {
-				throw new NotImplementedException ();
+				return _fieldData.Versions;
 			}
 		}
 
 		public RevisionCollection<TIdentifier> Revisions {
-			get
-			{
-				if (_revisions == null)
-				{
-					_revisions = new RevisionCollection<TIdentifier>(this);
+			get {
+				if (_revisions == null) {
+					_revisions = new RevisionCollection<TIdentifier> (this);
 				}
 				return _revisions;
 			}

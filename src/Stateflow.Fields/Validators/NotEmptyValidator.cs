@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Stateflow.Fields
+namespace Stateflow.Fields.DataStores
 {
 	public class NotEmptyValidator<TIdentifier>: IFieldValidator<TIdentifier>
 	{

@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Stateflow.Fields
+namespace Stateflow.Fields.DataStores
 {
 
 	/// <summary>
 	/// Describes a fields item, managing a collection of fields and their revisions.
 	/// </summary>
-	public interface IFieldsTemplate<TIdentifier>: IIdentifiableBy<TIdentifier>{
+	public interface ITemplate<TIdentifier>: IIdentifiableBy<TIdentifier>{
 
 		FieldDefinitionCollection<TIdentifier> FieldDefinitions { get; }
 
@@ -17,7 +17,7 @@ namespace Stateflow.Fields
 		string Description { get; set; }
 		Version Version { get; set; }
 
-		IFieldsItemStore<TIdentifier> Store {get;}
+		IDataStore<TIdentifier> Store {get;}
 
 		IFieldsItem<TIdentifier> CreateNew();
 
