@@ -7,7 +7,7 @@ namespace Stateflow.Fields
     public class FieldDefinition<TIdentifier> : IFieldDefinition<TIdentifier>
     {
         private IDictionary<string, object> _metaData;
-                  private object _lock = new object();
+        private readonly object _lock = new object();
 
         public FieldDefinition()
         {

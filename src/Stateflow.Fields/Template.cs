@@ -16,12 +16,21 @@ namespace Stateflow.Fields
 		FieldDefinitionCollection<TIdentifier> _fieldDefinitions;
 		private Object _lock = new object();
 
+        /// <summary>
+        /// Creates a new Template.
+        /// </summary>
+        /// <param name="store"></param>
 		public Template (IDataStore<TIdentifier> store)
 		{
 			_store = store;
 			
 		}
 
+        /// <summary>
+        /// Creates a new template with a specific name.
+        /// </summary>
+        /// <param name="store"></param>
+        /// <param name="name"></param>
 		public Template (IDataStore<TIdentifier> store, string name)
 		{
 			_store = store;
@@ -73,6 +82,12 @@ namespace Stateflow.Fields
 		public TIdentifier Id{ get; set;}
 
 		#endregion
-	}
+
+
+        public void Save()
+        {
+           Id = _store.SaveTemplate(this);
+        }
+    }
 	
 }

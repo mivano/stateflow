@@ -19,6 +19,8 @@ namespace Stateflow.Fields
 
 		IFieldsItem<TIdentifier> CreateNew();
 
+	    void Save();
+
 	}
 
 

@@ -1,9 +1,6 @@
 using NUnit.Framework;
-using System;
-using System.Linq;
-using System.Collections.Generic;
 
-namespace Stateflow.Fields.DataStores
+namespace Stateflow.Fields.Tests
 {
 
 	[TestFixture]
