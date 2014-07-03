@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Stateflow.Fields.DataStores
+namespace Stateflow.Fields
 {
 	public delegate void ValueChangedEventHandler(object sender, Object newValue);
 

@@ -1,6 +1,4 @@
-using System;
-
-namespace Stateflow.Fields.DataStores
+namespace Stateflow.Fields
 {
 
 	public interface IIdentifiableBy<TIdentifier>

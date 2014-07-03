@@ -1,9 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Stateflow.Fields.DataStores;
 
-namespace Stateflow.Fields.DataStores
+namespace Stateflow.Fields
 {
 	public class FieldDefinitionCollection<TIdentifier>: Dictionary<TIdentifier, IFieldDefinition<TIdentifier>>
 	{

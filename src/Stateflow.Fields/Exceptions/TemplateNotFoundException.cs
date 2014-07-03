@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Stateflow.Fields
+namespace Stateflow.Fields.Exceptions
 {
 	
 	[Serializable]
