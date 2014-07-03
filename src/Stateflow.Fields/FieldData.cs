@@ -1,106 +1,114 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Stateflow.Fields.DataStores
+namespace Stateflow.Fields
 {
 
-	/// <summary>
-	/// Used for storing the actual data of the fields.
-	/// </summary>
-	public class FieldData<TIdentifier>
-	{
-		private readonly IFieldsItem<TIdentifier> _fieldsItem;
-		private Dictionary<TIdentifier, object> _values;
-		private Dictionary<TIdentifier, object> _oldValues;
-		private Dictionary<int, RevisionData<TIdentifier>> _revisions;
-		private Dictionary<TIdentifier, object> _changes;
+    /// <summary>
+    /// Used for storing the actual data of the fields.
+    /// </summary>
+    public class FieldData<TIdentifier>
+    {
+        private readonly IFieldsItem<TIdentifier> _fieldsItem;
+        private Dictionary<TIdentifier, object> _values;
+        private Dictionary<TIdentifier, object> _oldValues;
+        private Dictionary<int, RevisionData<TIdentifier>> _revisions;
+        private Dictionary<TIdentifier, object> _changes;
 
-		public FieldData (IFieldsItem<TIdentifier> fieldsItem)
-		{
-			if (fieldsItem == null)
-				throw new ArgumentNullException ("fieldsItem");
+        /// <summary>
+        /// Create a new data container for the field item.
+        /// </summary>
+        /// <param name="fieldsItem"></param>
+        public FieldData(IFieldsItem<TIdentifier> fieldsItem)
+        {
+            if (fieldsItem == null)
+                throw new ArgumentNullException("fieldsItem");
 
-			_fieldsItem=fieldsItem;
-			_values = new Dictionary<TIdentifier, object> ();
-			_changes = new Dictionary<TIdentifier, object> ();
-			_oldValues = new Dictionary<TIdentifier, object> ();
-			_revisions = new Dictionary<int, RevisionData<TIdentifier>> ();
-		}
+            _fieldsItem = fieldsItem;
+            _values = new Dictionary<TIdentifier, object>();
+            _changes = new Dictionary<TIdentifier, object>();
+            _oldValues = new Dictionary<TIdentifier, object>();
+            _revisions = new Dictionary<int, RevisionData<TIdentifier>>();
+        }
 
-		internal object GetFieldValue(TIdentifier id, int revision){
-			Object value = null;
-			switch (revision) {
-			case -2:  // Previous value
-				{
-					if (_oldValues.TryGetValue (id, out value))
-						return value;
-					else
-						return null;
+        internal object GetFieldValue(TIdentifier id, int revision)
+        {
+            Object value = null;
+            switch (revision)
+            {
+                case -2:  // Previous value
+                    {
+                        if (_oldValues.TryGetValue(id, out value))
+                            return value;
+                        else
+                            return null;
 
-				}
-			case -1: // Current value
-				{
-					if (_values.TryGetValue (id, out value))
-						return value;
-					else
-						return _fieldsItem.Fields [id].DefaultValue;
+                    }
+                case -1: // Current value
+                    {
+                        if (_values.TryGetValue(id, out value))
+                            return value;
+                        else
+                            return _fieldsItem.Fields[id].DefaultValue;
 
-				}
-			default: // From revision
-				{
+                    }
+                default: // From revision
+                    {
 
-					return null;
-				}
-				break;
-			}
+                        return null;
+                    }
+                    break;
+            }
 
-		}
+        }
 
-		internal bool SetFieldValue(TIdentifier id, object value)
-		{
-			// update the old values
-			Object oldValue = null;
-			if (_values.TryGetValue (id, out oldValue))
-			{
-				_oldValues [id] = oldValue;
-			}
+        internal bool SetFieldValue(TIdentifier id, object value)
+        {
+            // update the old values
+            Object oldValue = null;
+            if (_values.TryGetValue(id, out oldValue))
+            {
+                _oldValues[id] = oldValue;
+            }
 
-			_values [id] = value;
+            _values[id] = value;
 
-			// Mark the field as being changed
-			_changes[id] = value;
+            // Mark the field as being changed
+            _changes[id] = value;
 
-			return true;
-		}
+            return true;
+        }
 
-		public bool IsDirty()
-		{
-			return _changes != null && _changes.Any ();
-		}
+        public bool IsDirty()
+        {
+            return _changes != null && _changes.Any();
+        }
 
-		public int Versions{
-			get{
-				return _revisions.Count;
-			}
-		}
+        public int Versions
+        {
+            get
+            {
+                return _revisions.Count;
+            }
+        }
 
-		// Stores the changed values into a new revision
-		public int CreateNewRevision(){
-			if (!IsDirty())
-				return Versions;
+        // Stores the changed values into a new revision
+        public int CreateNewRevision()
+        {
+            if (!IsDirty())
+                return Versions;
 
-			var revisionData = new RevisionData<TIdentifier> (Versions + 1, _changes);
-		
-			_revisions.Add (revisionData.RevisionNumber , revisionData);
+            var revisionData = new RevisionData<TIdentifier>(Versions + 1, _changes);
 
-			// Clear current stored changes
-			_changes.Clear ();
+            _revisions.Add(revisionData.RevisionNumber, revisionData);
 
-			return Versions;
+            // Clear current stored changes
+            _changes.Clear();
 
-		}
-	}
+            return Versions;
+
+        }
+    }
 
 }

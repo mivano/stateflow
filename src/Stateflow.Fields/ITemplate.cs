@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+using Stateflow.Fields.DataStores;
 
-namespace Stateflow.Fields.DataStores
+namespace Stateflow.Fields
 {
 
 	/// <summary>
@@ -20,6 +18,8 @@ namespace Stateflow.Fields.DataStores
 		IDataStore<TIdentifier> Store {get;}
 
 		IFieldsItem<TIdentifier> CreateNew();
+
+	    void Save();
 
 	}
 

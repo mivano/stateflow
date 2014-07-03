@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+using Stateflow.Fields.DataStores;
 
-namespace Stateflow.Fields.DataStores
+namespace Stateflow.Fields
 {
 
 
@@ -18,12 +16,21 @@ namespace Stateflow.Fields.DataStores
 		FieldDefinitionCollection<TIdentifier> _fieldDefinitions;
 		private Object _lock = new object();
 
+        /// <summary>
+        /// Creates a new Template.
+        /// </summary>
+        /// <param name="store"></param>
 		public Template (IDataStore<TIdentifier> store)
 		{
 			_store = store;
 			
 		}
 
+        /// <summary>
+        /// Creates a new template with a specific name.
+        /// </summary>
+        /// <param name="store"></param>
+        /// <param name="name"></param>
 		public Template (IDataStore<TIdentifier> store, string name)
 		{
 			_store = store;
@@ -75,6 +82,12 @@ namespace Stateflow.Fields.DataStores
 		public TIdentifier Id{ get; set;}
 
 		#endregion
-	}
+
+
+        public void Save()
+        {
+           Id = _store.SaveTemplate(this);
+        }
+    }
 	
 }
