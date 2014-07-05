@@ -23,15 +23,23 @@ namespace Stateflow.Fields
 
 		}
 
-		public void Add(IFieldDefinition<TIdentifier> field)
+		public void Add(IFieldDefinition<TIdentifier> fieldDefinition)
 		{
-			if (field == null)
-				throw new ArgumentNullException ("field");
-
-			base.Add (field.Id, field);
+			if (fieldDefinition == null)
+				throw new ArgumentNullException ("fieldDefinition");
+                   
+			base.Add (fieldDefinition.Id, fieldDefinition);
 		}
 
-		public IFieldDefinition<TIdentifier> this [string name] {
+	    public void AddRange(IEnumerable<IFieldDefinition<TIdentifier>> fieldDefinitions)
+	    {
+	        foreach (var fieldDefinition in fieldDefinitions)
+	        {
+	           this.Add(fieldDefinition); 
+	        }
+	    }
+
+	    public IFieldDefinition<TIdentifier> this [string name] {
 			get {
 				if (name == null) {
 					throw new ArgumentNullException ("name");
