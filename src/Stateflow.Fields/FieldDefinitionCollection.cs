@@ -10,28 +10,31 @@ namespace Stateflow.Fields
 		IDataStore<TIdentifier> _store;
 		ITemplate<TIdentifier> _type;
 
-		public FieldDefinitionCollection ()
-		{
-			
-		}
 
 		public FieldDefinitionCollection (IDataStore<TIdentifier> store, ITemplate<TIdentifier> type)
 		{
 			_store = store;
 			_type = type;
 
-
 		}
 
-		public void Add(IFieldDefinition<TIdentifier> field)
+		public void Add(IFieldDefinition<TIdentifier> fieldDefinition)
 		{
-			if (field == null)
-				throw new ArgumentNullException ("field");
-
-			base.Add (field.Id, field);
+			if (fieldDefinition == null)
+				throw new ArgumentNullException ("fieldDefinition");
+                   
+			base.Add (fieldDefinition.Id, fieldDefinition);
 		}
 
-		public IFieldDefinition<TIdentifier> this [string name] {
+	    public void AddRange(IEnumerable<IFieldDefinition<TIdentifier>> fieldDefinitions)
+	    {
+	        foreach (var fieldDefinition in fieldDefinitions)
+	        {
+	           this.Add(fieldDefinition); 
+	        }
+	    }
+
+	    public IFieldDefinition<TIdentifier> this [string name] {
 			get {
 				if (name == null) {
 					throw new ArgumentNullException ("name");

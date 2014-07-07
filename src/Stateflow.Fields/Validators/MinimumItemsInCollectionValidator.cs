@@ -19,7 +19,7 @@ namespace Stateflow.Fields.Validators
 
 		public bool IsValid(IField<TIdentifier> field)
 		{
-			if (field.FieldDefinition.FieldType != FieldType.FieldCollection)
+			if (field.FieldDefinition.FieldType != FieldType.List)
 				throw new InvalidProgramException ("The minimum items in collection validator only works on fields of the type FieldCollection.");
 
 			var v = field.Value as Dictionary<TIdentifier, IField<TIdentifier>>.ValueCollection;

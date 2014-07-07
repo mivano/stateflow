@@ -3,6 +3,7 @@ namespace Stateflow.Fields
 
 	public enum FieldType
 	{
+		Object,
 		Amount,
 		Decimal,
 		Number,
@@ -16,7 +17,12 @@ namespace Stateflow.Fields
 		DateTime,
 		Time,
 		File,
-		FieldCollection
+        Label,
+        Color,
+        EmailAddress,
+        Password,
+        Url,
+		List
 	}
 	
 }

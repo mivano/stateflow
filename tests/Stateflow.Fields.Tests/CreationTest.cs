@@ -38,19 +38,21 @@ namespace Stateflow.Fields.Tests
             {
                 Id = 1
             };
-            ft.FieldDefinitions.Add(new FieldDefinition<int> { Name = "test", FieldType = FieldType.Amount });
+            ft.FieldDefinitions.Add(new FieldDefinition<int> {Id=1, Name = "test", FieldType = FieldType.Amount });
+            ft.FieldDefinitions.Add(new FieldDefinition<int> {Id=2, Name = "test2", FieldType = FieldType.SingleLineText, DefaultValue = "a"});
 
             var fi = ft.CreateNew();
 
             Assert.IsNotNull(fi);
 
-            Assert.IsTrue(fi.Fields.Count==1);
+            Assert.IsTrue(fi.Fields.Count==2);
 
             fi.Id = 1;
 
             // Make at least one change, non dirty items are not stored
             fi["test"] = "value";
 
+            fi["test2"] = "b";
             fi.Save();
 
             var fi2 = store.LoadItem(1);
@@ -113,7 +115,7 @@ namespace Stateflow.Fields.Tests
             var fd = new FieldDefinition<int>();
             fd.Id = 1;
 
-            var fdc = new FieldDefinitionCollection<int>();
+			var fdc = new FieldDefinitionCollection<int>(null, null);
             fdc.Add(fd);
 
             Assert.IsTrue(fdc.Count == 1);

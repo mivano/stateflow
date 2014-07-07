@@ -32,6 +32,18 @@ namespace Stateflow.Fields
             _revisions = new Dictionary<int, RevisionData<TIdentifier>>();
         }
 
+		public FieldData (IFieldsItem<TIdentifier> fieldsItem, Dictionary<TIdentifier, object> values,  Dictionary<int, RevisionData<TIdentifier>> revisions)
+		{
+			if (fieldsItem == null)
+				throw new ArgumentNullException("fieldsItem");
+
+			_fieldsItem = fieldsItem;
+			_values = values;
+			_changes = new Dictionary<TIdentifier, object>();
+			_oldValues = new Dictionary<TIdentifier, object>();
+			_revisions = revisions;
+		}
+
         internal object GetFieldValue(TIdentifier id, int revision)
         {
             Object value = null;
@@ -53,12 +65,16 @@ namespace Stateflow.Fields
                             return _fieldsItem.Fields[id].DefaultValue;
 
                     }
-                default: // From revision
-                    {
+			default: // From revision
+				{
+					if (!_revisions.ContainsKey (revision))
+						return null;
 
-                        return null;
-                    }
-                    break;
+					if (_revisions [revision].Changes.TryGetValue (id, out value))
+						return value;
+
+					return null;
+				}
             }
 
         }
