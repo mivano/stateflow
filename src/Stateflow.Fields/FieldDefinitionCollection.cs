@@ -10,16 +10,11 @@ namespace Stateflow.Fields
 		IDataStore<TIdentifier> _store;
 		ITemplate<TIdentifier> _type;
 
-		public FieldDefinitionCollection ()
-		{
-			
-		}
 
 		public FieldDefinitionCollection (IDataStore<TIdentifier> store, ITemplate<TIdentifier> type)
 		{
 			_store = store;
 			_type = type;
-
 
 		}
 

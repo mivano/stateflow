@@ -16,6 +16,10 @@ namespace Stateflow.Fields
         private FieldData<TIdentifier> _fieldData;
         private IDataStore<TIdentifier> _store;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Stateflow.Fields.FieldsItem`1"/> class based on a template.
+		/// </summary>
+		/// <param name="template">Template.</param>
         public FieldsItem(ITemplate<TIdentifier> template)
         {
             if (template == null)
@@ -26,6 +30,26 @@ namespace Stateflow.Fields
             _fieldData = new FieldData<TIdentifier>(this);
             _store = template.Store;
         }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Stateflow.Fields.FieldsItem`1"/> class based on a template and by passing in field data.
+		/// </summary>
+		/// <param name="template">Template.</param>
+		/// <param name="fieldData">Field data.</param>
+		/// <param name="id">Identifier.</param>
+		public FieldsItem(ITemplate<TIdentifier> template, FieldData<TIdentifier> fieldData, TIdentifier id)
+		{
+			if (fieldData == null)
+				throw new ArgumentNullException ("fieldData");
+
+			if (template == null)
+				throw new ArgumentNullException("template");
+
+			_template = template;
+			Id = id;
+			_store = template.Store;
+			_fieldData = fieldData;
+		}
 
         public TIdentifier Id { get; set; }
 
@@ -66,13 +90,13 @@ namespace Stateflow.Fields
 
         }
 
-        public object GetFieldValue(TIdentifier id, int revision)
+		public virtual object GetFieldValue(TIdentifier id, int revision)
         {
             return _fieldData.GetFieldValue(id, revision);
         }
 
 
-        public ITemplate<TIdentifier> Template
+		public virtual ITemplate<TIdentifier> Template
         {
             get
             {
@@ -80,7 +104,7 @@ namespace Stateflow.Fields
             }
         }
 
-        public bool IsReadOnly
+		public virtual bool IsReadOnly
         {
             get
             {
@@ -88,15 +112,15 @@ namespace Stateflow.Fields
             }
         }
 
-        public bool IsDraft
+		public virtual bool IsDraft
         {
             get
             {
-                throw new NotImplementedException();
+				return false;
             }
         }
 
-        public int Number
+		public virtual int Number
         {
             get
             {
@@ -109,7 +133,7 @@ namespace Stateflow.Fields
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public object this[TIdentifier id]
+		public virtual object this[TIdentifier id]
         {
             get
             {
@@ -134,7 +158,7 @@ namespace Stateflow.Fields
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public object this[string name]
+		public virtual object this[string name]
         {
             get
             {
@@ -155,7 +179,7 @@ namespace Stateflow.Fields
         }
 
         // Save the item, this will create a new revision.
-        public void Save()
+		public virtual void Save()
         {
             if (!IsDirty) return;
 
@@ -171,7 +195,7 @@ namespace Stateflow.Fields
 
       
 
-        public bool Validate()
+		public virtual bool Validate()
         {
             throw new NotImplementedException();
         }
@@ -179,7 +203,7 @@ namespace Stateflow.Fields
 
         #endregion
 
-        public FieldCollection<TIdentifier> Fields
+		public virtual FieldCollection<TIdentifier> Fields
         {
 
             get
@@ -193,7 +217,7 @@ namespace Stateflow.Fields
 
         }
 
-        public FieldData<TIdentifier> FieldData
+		public virtual FieldData<TIdentifier> FieldData
         {
             get
             {
@@ -203,7 +227,7 @@ namespace Stateflow.Fields
 
 
 
-        public bool IsDirty
+		public virtual bool IsDirty
         {
             get
             {
@@ -211,7 +235,7 @@ namespace Stateflow.Fields
             }
         }
 
-        public bool IsNew
+		public virtual  bool IsNew
         {
             get
             {
@@ -219,7 +243,7 @@ namespace Stateflow.Fields
             }
         }
 
-        public int RevisionNumber
+		public virtual int RevisionNumber
         {
             get
             {
@@ -227,7 +251,7 @@ namespace Stateflow.Fields
             }
         }
 
-        public RevisionCollection<TIdentifier> Revisions
+		public virtual RevisionCollection<TIdentifier> Revisions
         {
             get
             {

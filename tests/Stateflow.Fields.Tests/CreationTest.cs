@@ -115,7 +115,7 @@ namespace Stateflow.Fields.Tests
             var fd = new FieldDefinition<int>();
             fd.Id = 1;
 
-            var fdc = new FieldDefinitionCollection<int>();
+			var fdc = new FieldDefinitionCollection<int>(null, null);
             fdc.Add(fd);
 
             Assert.IsTrue(fdc.Count == 1);
