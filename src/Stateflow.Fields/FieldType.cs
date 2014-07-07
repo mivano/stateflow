@@ -16,6 +16,11 @@ namespace Stateflow.Fields
 		DateTime,
 		Time,
 		File,
+        Label,
+        Color,
+        EmailAddress,
+        Password,
+        Url,
 		FieldCollection
 	}
 	
