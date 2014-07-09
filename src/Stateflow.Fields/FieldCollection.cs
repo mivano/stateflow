@@ -23,7 +23,17 @@ namespace Stateflow.Fields
 
 		internal void InitialLoad(){
 			foreach (var item in _fieldDefinitions) {
-				var field = new Field<TIdentifier> (_revision, item.Value);
+				IField<TIdentifier> field;
+				if (item.Value.FieldType == FieldType.List) {
+					var fdc = item.Value as FieldListDefinition<TIdentifier>;
+					if (fdc == null)
+						throw new InvalidProgramException (string.Format("The item {0} has the field type List, but is not a FieldListDefinition.", item.Key));
+				
+					field = new FieldList<TIdentifier> (_revision, item.Value);
+				}
+				else
+					field= new Field<TIdentifier> (_revision, item.Value);
+
 				this.Add (field);
 			}
 		}

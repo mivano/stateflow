@@ -7,6 +7,7 @@ namespace Stateflow.Fields
 {
 	public delegate void ValueChangedEventHandler(object sender, Object newValue);
 
+
 	/// <summary>
 	/// A generic implementation of a field.
 	/// </summary>
@@ -45,37 +46,37 @@ namespace Stateflow.Fields
 
 		}
 
-		public bool IsDirty {
+		public virtual bool IsDirty {
 			get {
 				return FieldDefinition.IsComputed;
 			}
 		}
 
-		public bool IsEditable {
+		public virtual bool IsEditable {
 			get {
 				return FieldDefinition.IsEditable;
 			}
 		}
 
-		public string ReferenceName {
+		public virtual string ReferenceName {
 			get {
 				return FieldDefinition.ReferenceName;
 			}
 		}
 
-		public object OriginalValue {
+		public virtual object OriginalValue {
 			get {
 				return _revision.GetOriginalFieldValue (FieldDefinition);
 			}
 		}
 
-		public FieldStatus Status {
+		public virtual FieldStatus Status {
 			get {
 				return IsValid ? FieldStatus.Valid : FieldStatus.InValid;
 			}
 		}
 
-		public object Value {
+		public virtual object Value {
 			get {
 				return _revision.GetCurrentFieldValue(_fieldDefinition);
 			}
@@ -89,7 +90,7 @@ namespace Stateflow.Fields
 			}
 		}
 
-		public object DefaultValue { get{ return FieldDefinition.DefaultValue;} }
+		public virtual object DefaultValue { get{ return FieldDefinition.DefaultValue;} }
 
 		/// <summary>
 		/// Raised before the value is changed. This allows a subclasses to inspect and optionally reject by returning false.
@@ -108,23 +109,23 @@ namespace Stateflow.Fields
 		
 		}
 
-		public string Name{ get { return FieldDefinition.Name; } }
+		public virtual string Name{ get { return FieldDefinition.Name; } }
 
-		public string Description{ get { return FieldDefinition.Description; } }
+		public virtual string Description{ get { return FieldDefinition.Description; } }
 
-		public FieldType FieldType { get { return FieldDefinition.FieldType; } }
+		public virtual FieldType FieldType { get { return FieldDefinition.FieldType; } }
 
-		public IFieldOptions FieldOptions { get {  return FieldDefinition.FieldOptions;} }
+		public virtual IFieldOptions FieldOptions { get {  return FieldDefinition.FieldOptions;} }
 
-		public int Sequence { get; set; }
+		public virtual int Sequence { get; set; }
 
-		public IEnumerable<IFieldValidator<TIdentifier>> Validators { get; set; }
+		public virtual IEnumerable<IFieldValidator<TIdentifier>> Validators { get; set; }
 
-		public TIdentifier Id { get { return FieldDefinition.Id; } }
+		public virtual TIdentifier Id { get { return FieldDefinition.Id; } }
 
 		#endregion
 
-		public bool IsValid {
+		public virtual bool IsValid {
 			get {
 				if (Validators == null || Validators.Any () == false)
 					return true;

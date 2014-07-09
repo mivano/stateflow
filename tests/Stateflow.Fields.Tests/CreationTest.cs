@@ -58,7 +58,7 @@ namespace Stateflow.Fields.Tests
             var fi2 = store.LoadItem(1);
 
             Assert.AreEqual(fi2.Fields.Count, fi.Fields.Count);
-
+			Assert.AreEqual (fi2.Fields ["test"].Value, fi.Fields ["test"].Value); 
         }
 
         [Test]
@@ -180,6 +180,36 @@ namespace Stateflow.Fields.Tests
 
 
         }
+
+		[Test]
+		public void CanUseListInTemplate(){
+	
+			var store = new InMemoryDataStore<int> ();
+
+			// Create a new template for using in the list
+			var templateInList = new Template<int> (store);
+
+			templateInList.FieldDefinitions.AddRange (new [] {
+				new FieldDefinition<int>(FieldType.SingleLineText, 1, "text"),
+				new FieldDefinition<int>(FieldType.Number, 2, "number" )
+			});
+
+			// Create a new root template
+			var fit = new Template<int>(store);
+
+			// Add the templateInList as a list definition instead of a normal field definition.
+			fit.FieldDefinitions.Add (new FieldListDefinition<int>(templateInList,3, "items"));
+
+			var item = fit.CreateNew ();
+
+			var listField = item.Fields ["items"] as FieldList<int>;
+
+			Assert.IsNotNull (listField);
+			Assert.IsInstanceOf<FieldList<int>> (listField);
+			Assert.IsInstanceOf<FieldListDefinition<int>> (listField.FieldDefinition);
+
+		}
+
     }
 
 }

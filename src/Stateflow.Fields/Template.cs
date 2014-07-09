@@ -22,8 +22,7 @@ namespace Stateflow.Fields
         /// <param name="store"></param>
 		public Template (IDataStore<TIdentifier> store)
 		{
-			_store = store;
-			
+			_store = store;	
 		}
 
         /// <summary>

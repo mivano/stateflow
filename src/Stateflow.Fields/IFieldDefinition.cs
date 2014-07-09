@@ -57,5 +57,7 @@ namespace Stateflow.Fields
 		/// </summary>
 		/// <value>The meta data.</value>
 		IDictionary<string, object> MetaData { get; set;}
+
+		int Sequence { get; set; }
 	}
 }

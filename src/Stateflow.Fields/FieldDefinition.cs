@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 namespace Stateflow.Fields
 {
-    public class FieldDefinition<TIdentifier> : IFieldDefinition<TIdentifier>
+
+	public class FieldDefinition<TIdentifier> : IFieldDefinition<TIdentifier>
     {
         private IDictionary<string, object> _metaData;
         private readonly object _lock = new object();
@@ -15,35 +16,48 @@ namespace Stateflow.Fields
             IsEditable = true;
         }
 
+		public FieldDefinition (FieldType fieldType, TIdentifier id, string name): this()
+		{
+			Id = id;
+			FieldType = fieldType;
+			Name = name;
+		}
+
         #region IFieldDefinition implementation
 
-        public FieldType FieldType
+		public virtual FieldType FieldType
         {
             get;
             set;
         }
 
-        public IEnumerable AllowedValues { get; set; }
+		/// <summary>
+		/// Determines the order of the field.
+		/// </summary>
+		/// <value>The sequence.</value>
+		public virtual int Sequence { get; set;}
 
-        public bool IsComputed { get; set; }
+		public virtual IEnumerable AllowedValues { get; set; }
 
-        public bool IsEditable { get; set; }
+		public virtual bool IsComputed { get; set; }
 
-        public object DefaultValue { get; set; }
+		public virtual bool IsEditable { get; set; }
 
-        public string Name { get; set; }
+		public virtual object DefaultValue { get; set; }
 
-        public string ReferenceName { get; set; }
+		public virtual string Name { get; set; }
 
-        public string Description { get; set; }
+		public virtual string ReferenceName { get; set; }
 
-        public Type SystemType { get; set; }
+		public virtual string Description { get; set; }
 
-        public IFieldOptions FieldOptions { get; set; }
+		public virtual Type SystemType { get; set; }
 
-        public IEnumerable<IFieldValidator<TIdentifier>> Validators { get; set; }
+		public virtual IFieldOptions FieldOptions { get; set; }
 
-        public IDictionary<string, object> MetaData
+		public virtual IEnumerable<IFieldValidator<TIdentifier>> Validators { get; set; }
+
+		public virtual IDictionary<string, object> MetaData
         {
             get
             {
@@ -67,7 +81,7 @@ namespace Stateflow.Fields
         #endregion
 
         #region IIdentifiableBy implementation
-        public TIdentifier Id { get; set; }
+		public virtual TIdentifier Id { get; set; }
 
         #endregion
 

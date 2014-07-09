@@ -60,6 +60,8 @@
     <Compile Include="DataStores\InMemoryRepository.cs" />
     <Compile Include="DataStores\InMemoryDataStore.cs" />
     <Compile Include="Exceptions\TemplateNotFoundException.cs" />
+    <Compile Include="FieldListDefinition.cs" />
+    <Compile Include="FieldList.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Stateflow.Fields.nuspec" />
