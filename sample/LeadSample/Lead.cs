@@ -19,7 +19,7 @@ namespace LeadSample
 			Console.WriteLine("{0}: State changed from {1} to {2} because of trigger {3}.", DateTime.Now.ToShortTimeString(), fromState, toState, triggeredBy);
 		}
 
-		public FieldCollection<string> Fields { get; set; }
+		public IFieldsItem<string> Fields { get; set; }
 
 		public string Id
 		{

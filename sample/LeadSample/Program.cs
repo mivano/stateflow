@@ -155,10 +155,7 @@ namespace LeadSample
 			fieldsItem.SetFieldValue(field2Definition, 11000);
 			fieldsItem.Save();
 
-			lead.Fields = fieldsItem.Fields;
-
-			//var assets = lead.Fields.AddCollection("assets");
-			//assets.Add("Name", "", FieldType.SingleLineText);
+			lead.Fields = fieldsItem;
 
 			while (lead.PermittedTriggers.Any())
 			{
@@ -181,27 +178,4 @@ namespace LeadSample
 		}
 	}
 
-	public class LeadExpressionCondition : ExpressionCondition
-	{
-
-		public LeadExpressionCondition(string expression)
-			: base(expression)
-		{
-
-		}
-
-		public override bool IsAllowed(IWorkflow workflow)
-		{
-			var leadWorkflow = workflow as Lead;
-			Dictionary<string, object> fields = null;
-			if (leadWorkflow != null)
-			{
-				fields = leadWorkflow.Fields.Values
-					.Select(a => new KeyValuePair<string, object>(a.Name, a.Value))
-					.ToDictionary(a => a.Key, b => b.Value);
-			}
-			return base.Evaluate(fields);
-		}
-
-	}
 }
