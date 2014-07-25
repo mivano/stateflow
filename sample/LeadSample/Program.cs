@@ -28,7 +28,8 @@ namespace LeadSample
 					new State
 					{
 						Name = "Created",
-						DisplayName = "Lead Created"
+						DisplayName = "Lead Created",
+						ExitActions = new List<IAction> { new WorkflowStarted() }
 					},
 
 					 new State
@@ -50,7 +51,8 @@ namespace LeadSample
 					 new State
 					{
 						Name = "Closed",
-						DisplayName = "Lead is Closed"
+						DisplayName = "Lead is Closed",
+						EntryActions = new List<IAction> { new WorkflowEnded() }
 					} 
 				},
 				Triggers = new List<Trigger>
@@ -183,7 +185,6 @@ namespace LeadSample
 
 	public class LeadExpressionCondition : ExpressionCondition
 	{
-
 		public LeadExpressionCondition(string expression)
 			: base(expression)
 		{

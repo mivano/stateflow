@@ -55,7 +55,6 @@ namespace Stateflow.Workflow
                         _stateMachine.Configure(state)
                             .PermitIf(trig.Trigger, trig.TargetState, ConditionalGuard(trig.Conditions));
 
-
                 });
 
                 var ws = workflowDefinition.States.First(a => a.Name == state);
@@ -109,12 +108,12 @@ namespace Stateflow.Workflow
         /// <summary>
         /// Changes the current state to a new state.
         /// </summary>
-        /// <param name="newState">The new state.</param>
-        public virtual void ChangeState(string newState)
+		/// <param name="trigger">The new state.</param>
+        public virtual void ChangeState(string trigger)
         {
-            Enforce.ArgumentNotNull(newState, "newState");
+			Enforce.ArgumentNotNull(trigger, "newState");
 
-            _stateMachine.Fire(newState);
+			_stateMachine.Fire(trigger);
         }
 
         /// <summary>
