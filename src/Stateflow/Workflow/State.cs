@@ -36,4 +36,12 @@ namespace Stateflow.Workflow
         /// </value>
         public IList<IAction> ExitActions { get; set; }
     }
+
+	public class StartState : State
+	{
+	}
+
+	public class EndState : State
+	{
+	}
 }

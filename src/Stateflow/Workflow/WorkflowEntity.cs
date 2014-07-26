@@ -12,6 +12,7 @@ namespace Stateflow.Workflow
     /// </summary>
     public abstract class WorkflowEntity : IWorkflow
     {
+		private WorkflowDefinition _workflowDefinition;
         private StateMachine<string, string> _stateMachine;
 
         /// <summary>
@@ -21,6 +22,7 @@ namespace Stateflow.Workflow
         /// <param name="currentState">Current state of the workflow. If null, it will be first state found in the workflow definition.</param>
         protected WorkflowEntity(WorkflowDefinition workflowDefinition, string currentState)
         {
+			_workflowDefinition = workflowDefinition;
             ToStateMachine(workflowDefinition, currentState);
         }
 
@@ -31,15 +33,15 @@ namespace Stateflow.Workflow
             WorkflowState = currentState ?? workflowDefinition.Transitions.First().FromState;
             _stateMachine = new StateMachine<string, string>(() => WorkflowState, s => WorkflowState = s);
 
-            //  Get a distinct list of states with a trigger from state configuration
-            //  "State => Trigger => TargetState
+            //  Get a distinct list of states with a trigger from state configuration:
+            //  State => Trigger => TargetState
             var states = workflowDefinition.Transitions.AsQueryable()
                 .Select(x => x.FromState)
                 .Distinct()
                 .Select(x => x)
                 .ToList();
 
-            //  Assing triggers to states
+            // Assign triggers to states
             states.ForEach(state =>
             {
                 var triggers = workflowDefinition.Transitions.AsQueryable()
@@ -67,18 +69,54 @@ namespace Stateflow.Workflow
                 {
                     _stateMachine.Configure(state).OnExit(() => ExecuteActions(ws.ExitActions));
                 }
-
             });
 
             // For all the state transitions
             _stateMachine.OnTransitioned(OnTransitionAction);
-          
         }
 
         private void OnTransitionAction(StateMachine<string, string>.Transition transition)
         {
-            OnStateTransition(transition.Source, transition.Destination, transition.Trigger);
+			var states = GetTransitionStates(transition.Source, transition.Destination);
+
+			// Signal start workflow
+			if (states[0] != null && states[0] is StartState)
+			{
+				OnWorkflowStarted(transition.Source);
+			}
+
+			// Signal state transition
+			OnStateTransition(transition.Source, transition.Destination, transition.Trigger);
+
+			// Signal end workflow
+			if (states[1] != null && states[1] is EndState)
+			{
+				OnWorkflowEnded(transition.Destination);
+			}
         }
+
+		private State[] GetTransitionStates(string source, string destination)
+		{
+			var result = new State[2];
+			foreach (var state in _workflowDefinition.States)
+			{
+				if (state.Name.Equals(source, StringComparison.InvariantCultureIgnoreCase))
+				{
+					result[0] = state;
+					continue;
+				}
+				if (state.Name.Equals(destination, StringComparison.InvariantCultureIgnoreCase))
+				{
+					result[1] = state;
+					continue;
+				}
+				if (result[0] != null && result[1] != null)
+				{
+					break;
+				}
+			}
+			return result;
+		}
 
         /// <summary>
         /// Called when there is a transition of the current state to a new state for a given trigger.
@@ -90,6 +128,22 @@ namespace Stateflow.Workflow
         protected virtual void OnStateTransition(string fromState, string toState, string triggeredBy)
         {
         }
+
+		/// <summary>
+		/// Called when workflow has started, meaning it has moved from the first state to the next.
+		/// </summary>
+		/// <param name="state">State name.</param>
+		protected virtual void OnWorkflowStarted(string state)
+		{
+		}
+
+		/// <summary>
+		/// Called when workflow has ended, meaning it has moved to the final state.
+		/// </summary>
+		/// <param name="state">State name.</param>
+		protected virtual void OnWorkflowEnded(string state)
+		{
+		}
 
         private void ExecuteActions(IEnumerable<IAction> entryActions)
         {
@@ -104,14 +158,13 @@ namespace Stateflow.Workflow
             return () => conditions.Any(c => c.IsAllowed(this));
         }
 
-
         /// <summary>
         /// Changes the current state to a new state.
         /// </summary>
-		/// <param name="trigger">The new state.</param>
+		/// <param name="trigger">The trigger.</param>
         public virtual void ChangeState(string trigger)
         {
-			Enforce.ArgumentNotNull(trigger, "newState");
+			Enforce.ArgumentNotNull(trigger, "trigger");
 
 			_stateMachine.Fire(trigger);
         }
@@ -123,7 +176,7 @@ namespace Stateflow.Workflow
         /// <returns></returns>
         public virtual bool CanChangeState(string trigger)
         {
-            Enforce.ArgumentNotNull(trigger, "state");
+			Enforce.ArgumentNotNull(trigger, "trigger");
 
             return _stateMachine.CanFire(trigger);
         }

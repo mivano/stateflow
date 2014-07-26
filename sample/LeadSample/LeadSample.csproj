@@ -43,8 +43,6 @@
     <Compile Include="MailAction.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WorkflowEnded.cs" />
-    <Compile Include="WorkflowStarted.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Stateflow\Stateflow.csproj">

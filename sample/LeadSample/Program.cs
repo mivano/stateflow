@@ -16,8 +16,6 @@ namespace LeadSample
 			p.CreateStateMachine();
 		}
 
-
-
 		public void CreateStateMachine()
 		{
 			var workflowDefinition = new WorkflowDefinition
@@ -25,13 +23,11 @@ namespace LeadSample
 				Name = "Test",
 				States = new List<State>
 				{
-					new State
+					new StartState
 					{
 						Name = "Created",
 						DisplayName = "Lead Created",
-						ExitActions = new List<IAction> { new WorkflowStarted() }
 					},
-
 					 new State
 					{
 						Name = "AwaitingReview",
@@ -48,16 +44,15 @@ namespace LeadSample
 						Name = "Approved",
 						DisplayName = "Lead is Approved"
 					} ,
-					 new State
+					new EndState
 					{
 						Name = "Closed",
 						DisplayName = "Lead is Closed",
-						EntryActions = new List<IAction> { new WorkflowEnded() }
 					} 
 				},
 				Triggers = new List<Trigger>
 				{
-					 new Trigger
+					new Trigger
 					{
 						Name = "New"
 					},
@@ -82,34 +77,33 @@ namespace LeadSample
 				},
 				Transitions = new List<Transition>
 				{
-					  new Transition
+					new Transition
 					{
 						 FromState = "Created",
 						 ToState = "AwaitingReview",
 						 TriggerBy = "Review"
-					}  ,
+					},
 					new Transition
 					{
 						 FromState = "AwaitingReview",
 						 ToState = "UnderReview",
 						 TriggerBy = "Assign"
-					}  ,
-					
+					},
 					new Transition
 					{
 						 FromState = "UnderReview",
 						 ToState = "Approved",
 						 TriggerBy = "Approve"   ,
 						Conditions = new List<ICondition>{ new LeadExpressionCondition("price > 10000")}
-					} ,
-					  new Transition
+					},
+					new Transition
 					{
 						 FromState = "UnderReview",
 						 ToState = "Closed",
 						 TriggerBy = "Close"   ,
 						Conditions = new List<ICondition>{ new LeadExpressionCondition("price <= 10000")}
-					} ,
-					 new Transition
+					},
+					new Transition
 					{
 						 FromState = "Approved",
 						 ToState = "Closed",
@@ -125,7 +119,6 @@ namespace LeadSample
 			};
 
 			//var ser = wd.Serialize();
-
 			var dataStore = new InMemoryDataStore<string>();
 			var lead = new Lead(workflowDefinition, "Created")
 			{
@@ -162,6 +155,18 @@ namespace LeadSample
 			//var assets = lead.Fields.AddCollection("assets");
 			//assets.Add("Name", "", FieldType.SingleLineText);
 
+
+			// Validate workflow definition
+			//
+			if (!workflowDefinition.Validate())
+			{
+				Console.WriteLine("Invalid workflow definition! Mare sure it contains only one StartState and EndState.");
+				Console.ReadKey(true);
+				return;
+			}
+
+			// Run workflow
+			//
 			while (lead.PermittedTriggers.Any())
 			{
 
@@ -175,7 +180,6 @@ namespace LeadSample
 					break;
 
 				lead.ChangeState(nextStep);
-
 			}
 
 			Console.WriteLine("No further steps, press a key to quit");
