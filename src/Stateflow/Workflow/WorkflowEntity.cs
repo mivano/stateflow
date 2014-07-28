@@ -78,21 +78,20 @@ namespace Stateflow.Workflow
         private void OnTransitionAction(StateMachine<string, string>.Transition transition)
         {
 			var states = GetTransitionStates(transition.Source, transition.Destination);
+	        bool workflowStarted = false, workflowEnded = false;
 
 			// Signal start workflow
-			if (states[0] != null && states[0] is StartState)
-			{
-				OnWorkflowStarted(transition.Source);
+			if (states[0] is StartState) {
+				workflowStarted = true;
+			}
+
+			// Signal end workflow
+			if (states[1] is EndState) {
+				workflowEnded = true;
 			}
 
 			// Signal state transition
-			OnStateTransition(transition.Source, transition.Destination, transition.Trigger);
-
-			// Signal end workflow
-			if (states[1] != null && states[1] is EndState)
-			{
-				OnWorkflowEnded(transition.Destination);
-			}
+			OnStateTransition(transition.Source, transition.Destination, transition.Trigger, workflowStarted, workflowEnded);
         }
 
 		private State[] GetTransitionStates(string source, string destination)
@@ -125,25 +124,9 @@ namespace Stateflow.Workflow
         /// <param name="fromState">From state.</param>
         /// <param name="toState">To state.</param>
         /// <param name="triggeredBy">Transition triggered by.</param>
-        protected virtual void OnStateTransition(string fromState, string toState, string triggeredBy)
+        protected virtual void OnStateTransition(string fromState, string toState, string triggeredBy, bool workflowStarted, bool workflowEnded)
         {
         }
-
-		/// <summary>
-		/// Called when workflow has started, meaning it has moved from the first state to the next.
-		/// </summary>
-		/// <param name="state">State name.</param>
-		protected virtual void OnWorkflowStarted(string state)
-		{
-		}
-
-		/// <summary>
-		/// Called when workflow has ended, meaning it has moved to the final state.
-		/// </summary>
-		/// <param name="state">State name.</param>
-		protected virtual void OnWorkflowEnded(string state)
-		{
-		}
 
         private void ExecuteActions(IEnumerable<IAction> entryActions)
         {
