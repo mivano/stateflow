@@ -18,6 +18,12 @@ namespace LeadSample
 
         void WorkflowEngine_OnStateTransition(object sender, StateChangeEventArgs e)
         {
+			if (e.FromState is StartState)
+				Console.WriteLine ("Workflow started");
+
+			if (e.ToState is EndState)
+				Console.WriteLine ("Workflow completed");
+
             Console.WriteLine("{0}: State changed from {1} to {2} because of trigger {3}.", DateTime.Now.ToShortTimeString(), e.FromState, e.ToState, e.TriggeredBy);
         }
 

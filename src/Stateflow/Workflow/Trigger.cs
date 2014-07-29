@@ -21,5 +21,13 @@ namespace Stateflow.Workflow
         /// </value>
         public string DisplayName { get; set; }
 
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents the current <see cref="Stateflow.Workflow.Trigger"/>.
+		/// </summary>
+		/// <returns>A <see cref="System.String"/> that represents the current <see cref="Stateflow.Workflow.Trigger"/>.</returns>
+		public override string ToString()
+		{
+			return string.Format("[Trigger: Name={0}, DisplayName={1}]", Name, DisplayName);
+		}
     }
 }

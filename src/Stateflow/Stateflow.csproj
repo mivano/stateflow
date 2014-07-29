@@ -60,6 +60,7 @@
     <Compile Include="Workflow\Transition.cs" />
     <Compile Include="Workflow\Trigger.cs" />
     <Compile Include="Workflow\WorkflowDefinition.cs" />
+    <Compile Include="Workflow\WorkflowEntity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
