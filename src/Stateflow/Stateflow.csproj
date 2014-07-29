@@ -52,7 +52,7 @@
     <Compile Include="Utils\Enforce.cs" />
     <Compile Include="Workflow\IWorkflow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Workflow\WorkflowEntity.cs" />
+    <Compile Include="Workflow\WorkflowEngine.cs" />
     <None Include="Stateflow.nuspec" />
     <Compile Include="Workflow\IAction.cs" />
     <Compile Include="Workflow\ICondition.cs" />

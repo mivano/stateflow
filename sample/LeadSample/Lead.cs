@@ -6,18 +6,41 @@ using Stateflow.Fields.DataStores;
 
 namespace LeadSample
 {
-	public class Lead : WorkflowEntity, IIdentifiableBy<string>
+	public class Lead : IIdentifiableBy<string>
 	{
-		public Lead(WorkflowDefinition workflowDefinition, string currentState)
-			: base(workflowDefinition, currentState)
+	    private readonly WorkflowEngine _workflowEngine;
+
+	    public Lead(WorkflowDefinition workflowDefinition)
 		{
-			//Fields = new FieldCollection<string> ();
+            _workflowEngine = new WorkflowEngine(workflowDefinition, null);
+            _workflowEngine.OnStateTransition += WorkflowEngine_OnStateTransition;
 		}
 
-		protected override void OnStateTransition(string fromState, string toState, string triggeredBy)
-		{
-			Console.WriteLine("{0}: State changed from {1} to {2} because of trigger {3}.", DateTime.Now.ToShortTimeString(), fromState, toState, triggeredBy);
-		}
+        void WorkflowEngine_OnStateTransition(object sender, StateChangeEventArgs e)
+        {
+            Console.WriteLine("{0}: State changed from {1} to {2} because of trigger {3}.", DateTime.Now.ToShortTimeString(), e.FromState, e.ToState, e.TriggeredBy);
+        }
+
+        public virtual IEnumerable<string> PermittedTriggers
+        {
+            get { return _workflowEngine.PermittedTriggers; }
+        }
+
+        /// <summary>
+        /// Gets or sets the state of the workflow.
+        /// </summary>
+        /// <value>
+        /// The state of the workflow.
+        /// </value>
+        public virtual string WorkflowState {
+            get { return _workflowEngine.WorkflowState; }
+            set { _workflowEngine.WorkflowState = value; }
+        }
+
+	    public virtual void ChangeState(string newState)
+	    {
+	        _workflowEngine.ChangeState(newState);
+	    }
 
 		public IFieldsItem<string> Fields { get; set; }
 

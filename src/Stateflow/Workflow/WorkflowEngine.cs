@@ -6,20 +6,98 @@ using Stateless;
 
 namespace Stateflow.Workflow
 {
-
     /// <summary>
-    /// This base class can be used to add workflow capabilities to a class.
+    /// This event is raised when the state is transitioned.
     /// </summary>
-    public abstract class WorkflowEntity : IWorkflow
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="StateChangeEventArgs"/> instance containing the event data.</param>
+    public delegate void StateChangeHandler(object sender, StateChangeEventArgs e);
+                
+    /// <summary>
+    /// Contains the event arguments.
+    /// </summary>
+    public class StateChangeEventArgs : EventArgs
     {
-        private StateMachine<string, string> _stateMachine;
+        private readonly string _fromState;
+        private readonly string _toState;
+        private readonly string _triggeredBy;
+        private readonly bool _isReentry;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WorkflowEntity"/> class.
+        /// Initializes a new instance of the <see cref="StateChangeEventArgs"/> class.
+        /// </summary>
+        /// <param name="fromState">From state.</param>
+        /// <param name="toState">To state.</param>
+        /// <param name="triggeredBy">The triggered by.</param>
+        /// <param name="isReentry"></param>
+        public StateChangeEventArgs(string fromState, string toState, string triggeredBy, bool isReentry)
+        {
+            _fromState = fromState;
+            _toState = toState;
+            _triggeredBy = triggeredBy;
+            _isReentry = isReentry;
+        }
+
+
+        /// <summary>
+        /// Gets from state.
+        /// </summary>
+        /// <value>
+        /// From state.
+        /// </value>
+        public string FromState
+        {
+            get { return _fromState; }
+        }
+
+        /// <summary>
+        /// Gets to state.
+        /// </summary>
+        /// <value>
+        /// To state.
+        /// </value>
+        public string ToState
+        {
+            get { return _toState; }
+        }
+
+        /// <summary>
+        /// Gets the triggered by value.
+        /// </summary>
+        /// <value>
+        /// The triggered by.
+        /// </value>
+        public string TriggeredBy
+        {
+            get { return _triggeredBy; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether is a reentry.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [is reentry]; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsReentry
+        {
+            get { return _isReentry; }
+        }
+    }
+
+    /// <summary>
+    /// This engine class that can be used to add workflow capabilities to a class.
+    /// </summary>
+    public class WorkflowEngine : IWorkflow
+    {
+        private StateMachine<string, string> _stateMachine;
+        public event StateChangeHandler OnStateTransition;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WorkflowEngine"/> class.
         /// </summary>
         /// <param name="workflowDefinition">The workflow definition.</param>
         /// <param name="currentState">Current state of the workflow. If null, it will be first state found in the workflow definition.</param>
-        protected WorkflowEntity(WorkflowDefinition workflowDefinition, string currentState)
+        public WorkflowEngine(WorkflowDefinition workflowDefinition, string currentState)
         {
             ToStateMachine(workflowDefinition, currentState);
         }
@@ -73,25 +151,22 @@ namespace Stateflow.Workflow
 
             // For all the state transitions
             _stateMachine.OnTransitioned(OnTransitionAction);
-          
-        }
 
-        private void OnTransitionAction(StateMachine<string, string>.Transition transition)
-        {
-            OnStateTransition(transition.Source, transition.Destination, transition.Trigger);
         }
 
         /// <summary>
-        /// Called when there is a transition of the current state to a new state for a given trigger.
-        /// This allows you to build up e.g. workflow history.
+        /// When the state is transitioned.
         /// </summary>
-        /// <param name="fromState">From state.</param>
-        /// <param name="toState">To state.</param>
-        /// <param name="triggeredBy">Transition triggered by.</param>
-        protected virtual void OnStateTransition(string fromState, string toState, string triggeredBy)
+        /// <param name="transition"></param>
+        protected virtual void OnTransitionAction(StateMachine<string, string>.Transition transition)
         {
-        }
+            if (OnStateTransition != null)
+                OnStateTransition(this,
+                    new StateChangeEventArgs(transition.Source, transition.Destination, transition.Trigger,
+                        transition.IsReentry));
 
+        }
+                                                                  
         private void ExecuteActions(IEnumerable<IAction> entryActions)
         {
             foreach (var entryAction in entryActions)

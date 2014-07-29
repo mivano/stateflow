@@ -125,7 +125,7 @@ namespace LeadSample
 			//var ser = wd.Serialize();
 
 			var dataStore = new InMemoryDataStore<string>();
-			var lead = new Lead(workflowDefinition, "Created")
+			var lead = new Lead(workflowDefinition)
 			{
 				Id = Guid.NewGuid().ToString()
 			};
