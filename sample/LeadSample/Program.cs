@@ -147,7 +147,7 @@ namespace LeadSample
 			var fieldsItem = defaultTemplate.CreateNew();
 			fieldsItem.Id = lead.Id;
 			fieldsItem.SetFieldValue(field1Definition, "Toyota iQ");
-			fieldsItem.SetFieldValue(field2Definition, 11000);
+			fieldsItem.SetFieldValue(field2Definition, 9000);
 			fieldsItem.Save();
 
 			lead.Fields = fieldsItem.Fields;

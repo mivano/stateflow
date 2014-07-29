@@ -114,7 +114,7 @@ namespace Stateflow.Workflow
 					continue;
 				}
 			}
-			if (counters[0] == 1 && counters[1] == 1)
+			if (counters[0] == 1 && counters[1] >= 1)
 			{
 				return true;
 			}
