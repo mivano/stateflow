@@ -67,6 +67,7 @@ namespace Stateflow.Fields
         #endregion
 
         #region IIdentifiableBy implementation
+
         public TIdentifier Id { get; set; }
 
         #endregion
