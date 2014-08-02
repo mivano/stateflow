@@ -17,11 +17,11 @@ namespace Stateflow.Data
 			this.templateRepository = templateRepository;
 		}
 
-		public virtual IEnumerable<Template<TIdentity>> GetTemplates(){
+		public virtual IEnumerable<Template<TIdentity>> GetAll(){
 			return templateRepository.GetAll ().ToList ();
 		}
 
-		public virtual Template<TIdentity> GetTemplateyId(TIdentity id){
+		public virtual Template<TIdentity> GetById(TIdentity id){
 
 			if (id == null)
 				throw new ArgumentNullException ("id");
@@ -29,7 +29,7 @@ namespace Stateflow.Data
 			return templateRepository.Get (id);
 		}
 
-		public virtual Template<TIdentity> GetTemplateByName(string name){
+		public virtual Template<TIdentity> GetByName(string name){
 
 			if (string.IsNullOrWhiteSpace(name))
 				throw new ArgumentNullException ("name");
@@ -37,13 +37,13 @@ namespace Stateflow.Data
 			return templateRepository.GetAll ().FirstOrDefault (a => a.Name.Equals (name, StringComparison.InvariantCultureIgnoreCase));
 		}
 
-		public virtual TIdentity SaveTemplate(Template<TIdentity> template){
+		public virtual TIdentity Save(Template<TIdentity> template){
 			var identity = templateRepository.Set (template);
 
 			return identity;
 		}
 
-		public virtual Template<TIdentity> DeleteTemplate( TIdentity id){
+		public virtual Template<TIdentity> Delete( TIdentity id){
 			return templateRepository.Remove (id);
 		}
 

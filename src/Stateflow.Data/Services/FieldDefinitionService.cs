@@ -18,11 +18,11 @@ namespace Stateflow.Data
 			this.fieldDefinitionRepository = fieldDefinitionRepository;
 		}
 
-		public virtual IEnumerable<FieldDefinition<TIdentity>> GetFieldDefitions(){
+		public virtual IEnumerable<FieldDefinition<TIdentity>> GetAll(){
 			return fieldDefinitionRepository.GetAll ().ToList ();
 		}
 
-		public virtual FieldDefinition<TIdentity> GetFieldDefinitionById(TIdentity id){
+		public virtual FieldDefinition<TIdentity> GetById(TIdentity id){
 
 			if (id == null)
 				throw new ArgumentNullException ("id");
@@ -30,7 +30,7 @@ namespace Stateflow.Data
 			return fieldDefinitionRepository.Get (id);
 		}
 
-		public virtual FieldDefinition<TIdentity> GetFieldDefinitionByName(string name){
+		public virtual FieldDefinition<TIdentity> GetByName(string name){
 
 			if (string.IsNullOrWhiteSpace(name))
 				throw new ArgumentNullException ("name");
@@ -38,6 +38,15 @@ namespace Stateflow.Data
 			return fieldDefinitionRepository.GetAll ().FirstOrDefault (a => a.Name.Equals (name, StringComparison.InvariantCultureIgnoreCase));
 		}
 
+		public virtual TIdentity Save(FieldDefinition<TIdentity> fieldDefinition){
+			var identity = fieldDefinitionRepository.Set (fieldDefinition);
+
+			return identity;
+		}
+
+		public virtual FieldDefinition<TIdentity> Delete( TIdentity id){
+			return fieldDefinitionRepository.Remove (id);
+		}
 	}
 
 }

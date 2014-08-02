@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+  For more info on this file format visit http://docs.nuget.org/docs/reference/nuspec-reference.
+-->
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>stateflow.data.stre.elasticsearch</id>
+    <version>$version$</version>
+    <authors>Michiel van Oudheusden</authors>
+    <description>A wrapper for the stateless library to add conditions, persistency and actions to classes. 
+    This package adds data persistence support so you can add flexible fields to a work flow item.</description>
+    <language>en-US</language>
+    <projectUrl>http://mivano.github.io/stateflow/</projectUrl>
+    <licenseUrl>https://raw.githubusercontent.com/mivano/stateflow/master/LICENSE</licenseUrl>
+    <tags>workflow state trigger transition fields field data elasticsearch</tags>
+    <dependencies>
+    </dependencies>
+  </metadata>
+
+</package>

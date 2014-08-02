@@ -18,7 +18,7 @@ namespace Stateflow.Data
 			
 		}
 
-		public virtual Item<TIdentity> GetItemById(ItemIdentifier<TIdentity> id){
+		public virtual Item<TIdentity> GetById(ItemIdentifier<TIdentity> id){
 			if (id == null)
 				throw new ArgumentNullException ("id");
 
@@ -31,17 +31,17 @@ namespace Stateflow.Data
 			return null;
 		}
 
-		public virtual Item<TIdentity> CreateItem(TIdentity templateId, IEnumerable<FieldValue<TIdentity>> fieldValues){
+		public virtual Item<TIdentity> Create(TIdentity templateId, IEnumerable<FieldValue<TIdentity>> fieldValues){
 
 			return null;
 		}
 
-		public virtual Item<TIdentity> UpdateItem(ItemIdentifier<TIdentity> itemId, IEnumerable<FieldValue<TIdentity>> fieldValues){
+		public virtual Item<TIdentity> Update(ItemIdentifier<TIdentity> itemId, IEnumerable<FieldValue<TIdentity>> fieldValues){
 
 			return null;
 		}
 
-		public virtual Item<TIdentity> DeleteItem(ItemIdentifier<TIdentity> itemId){
+		public virtual Item<TIdentity> Delete(ItemIdentifier<TIdentity> itemId){
 
 			return null;
 		}

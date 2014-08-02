@@ -28,13 +28,26 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="nunit.framework" />
+    <Reference Include="Moq">
+      <HintPath>..\..\packages\Moq.4.2.1402.2112\lib\net40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Test.cs" />
+    <Compile Include="FieldDefinitionTests.cs" />
+    <Compile Include="FieldDefinitionServiceTests.cs" />
+    <Compile Include="ItemServiceTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Stateflow.Data\Stateflow.Data.csproj">
+      <Project>{8BD11584-312F-4F37-9255-603F0546D711}</Project>
+      <Name>Stateflow.Data</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
