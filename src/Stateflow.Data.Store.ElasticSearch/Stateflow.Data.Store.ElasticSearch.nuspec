@@ -4,7 +4,7 @@
 -->
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <id>stateflow.data.stre.elasticsearch</id>
+    <id>stateflow.data.store.elasticsearch</id>
     <version>$version$</version>
     <authors>Michiel van Oudheusden</authors>
     <description>A wrapper for the stateless library to add conditions, persistency and actions to classes. 

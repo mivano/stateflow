@@ -2,6 +2,7 @@ using NUnit.Framework;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Stateflow.Data.Tests
 {
@@ -18,11 +19,11 @@ namespace Stateflow.Data.Tests
 			f.FieldType = FieldType.Boolean;
 
 			var r = new Mock<IFieldDefinitionRepository<int>> ();
-			r.Setup (a => a.Set (It.IsAny<FieldDefinition<int>>())).Returns (1);
+			r.Setup (a => a.SetAsync (It.IsAny<FieldDefinition<int>>())).Returns (Task.FromResult(1));
 
 			var fs = new FieldDefinitionService<int> (r.Object);
 
-			var id = fs.Save (f);
+			var id = fs.SaveAsync (f).Result;
 
 			Assert.AreEqual (id, f.Id);
 

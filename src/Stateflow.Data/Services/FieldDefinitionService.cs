@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Stateflow.Data
 {
@@ -18,34 +19,33 @@ namespace Stateflow.Data
 			this.fieldDefinitionRepository = fieldDefinitionRepository;
 		}
 
-		public virtual IEnumerable<FieldDefinition<TIdentity>> GetAll(){
-			return fieldDefinitionRepository.GetAll ().ToList ();
+		public virtual Task<IQueryable<FieldDefinition<TIdentity>>> GetAll(){
+			return fieldDefinitionRepository.GetAllAsync ();
 		}
 
-		public virtual FieldDefinition<TIdentity> GetById(TIdentity id){
+		public virtual Task<FieldDefinition<TIdentity>> GetByIdAsync(TIdentity id){
 
 			if (id == null)
 				throw new ArgumentNullException ("id");
 
-			return fieldDefinitionRepository.Get (id);
+			return fieldDefinitionRepository.GetAsync (id);
 		}
 
-		public virtual FieldDefinition<TIdentity> GetByName(string name){
+		public virtual Task<FieldDefinition<TIdentity>> GetByNameAsync(string name){
 
 			if (string.IsNullOrWhiteSpace(name))
 				throw new ArgumentNullException ("name");
 
-			return fieldDefinitionRepository.GetAll ().FirstOrDefault (a => a.Name.Equals (name, StringComparison.InvariantCultureIgnoreCase));
+			return Task.FromResult( GetAll().Result.FirstOrDefault (a => a.Name.Equals (name, StringComparison.InvariantCultureIgnoreCase)));
 		}
 
-		public virtual TIdentity Save(FieldDefinition<TIdentity> fieldDefinition){
-			var identity = fieldDefinitionRepository.Set (fieldDefinition);
+		public virtual Task<TIdentity> SaveAsync(FieldDefinition<TIdentity> fieldDefinition){
+			return fieldDefinitionRepository.SetAsync (fieldDefinition);
 
-			return identity;
 		}
 
-		public virtual FieldDefinition<TIdentity> Delete( TIdentity id){
-			return fieldDefinitionRepository.Remove (id);
+		public virtual Task<FieldDefinition<TIdentity>> DeleteAsync( TIdentity id){
+			return fieldDefinitionRepository.RemoveAsync(id);
 		}
 	}
 

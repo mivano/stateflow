@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Stateflow.Data
 {
@@ -18,7 +19,7 @@ namespace Stateflow.Data
 			
 		}
 
-		public virtual Item<TIdentity> GetById(ItemIdentifier<TIdentity> id){
+		public virtual Task<Item<TIdentity>> GetByIdAsync(ItemIdentifier<TIdentity> id){
 			if (id == null)
 				throw new ArgumentNullException ("id");
 
@@ -26,22 +27,22 @@ namespace Stateflow.Data
 
 		}
 
-		public virtual QueryResult<TIdentity> Query(){
+		public virtual Task<QueryResult<TIdentity>> QueryAsync(){
 
 			return null;
 		}
 
-		public virtual Item<TIdentity> Create(TIdentity templateId, IEnumerable<FieldValue<TIdentity>> fieldValues){
+		public virtual Task<Item<TIdentity>> CreateAsync(TIdentity templateId, IEnumerable<FieldValue<TIdentity>> fieldValues){
 
 			return null;
 		}
 
-		public virtual Item<TIdentity> Update(ItemIdentifier<TIdentity> itemId, IEnumerable<FieldValue<TIdentity>> fieldValues){
+		public virtual Task<Item<TIdentity>> UpdateAsync(ItemIdentifier<TIdentity> itemId, IEnumerable<FieldValue<TIdentity>> fieldValues){
 
 			return null;
 		}
 
-		public virtual Item<TIdentity> Delete(ItemIdentifier<TIdentity> itemId){
+		public virtual Task<Item<TIdentity>> DeleteAsync(ItemIdentifier<TIdentity> itemId){
 
 			return null;
 		}
