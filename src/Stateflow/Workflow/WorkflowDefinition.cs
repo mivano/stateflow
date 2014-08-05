@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Stateflow.Utils;
 using System;
-using System.Linq;
 
 namespace Stateflow.Workflow
 {
@@ -12,6 +11,7 @@ namespace Stateflow.Workflow
 	/// </summary>
 	public class WorkflowDefinition
 	{
+
 		/// <summary>
 		/// Gets or sets the name of this workflow.
 		/// </summary>
@@ -70,9 +70,8 @@ namespace Stateflow.Workflow
 		/// <returns>A json serialization.</returns>
 		public string Serialize()
 		{
-			return JsonConvert.SerializeObject(this, new JsonSerializerSettings
-			{
-				ContractResolver = new CamelCasePropertyNamesContractResolver(),
+			return JsonConvert.SerializeObject (this, new JsonSerializerSettings {
+				ContractResolver = new CamelCasePropertyNamesContractResolver (),
 				Formatting = Formatting.Indented
 			});
 		}
@@ -84,9 +83,9 @@ namespace Stateflow.Workflow
 		/// <returns>A workflow definition.</returns>
 		public static WorkflowDefinition Deserialize(string json)
 		{
-			Enforce.ArgumentNotNull(json, "json");
+			Enforce.ArgumentNotNull (json, "json");
 
-			return JsonConvert.DeserializeObject<WorkflowDefinition>(json);
+			return JsonConvert.DeserializeObject<WorkflowDefinition> (json);
 		}
 
 		/// <summary>
@@ -101,21 +100,17 @@ namespace Stateflow.Workflow
 			// 1. StartSate and EndState are mandatory and should be declared only once.
 			//
 			var counters = new int[2] { 0, 0 };
-			foreach (var state in States)
-			{
-				if (state is StartState)
-				{
-					counters[0]++;
+			foreach (var state in States) {
+				if (state is StartState) {
+					counters [0]++;
 					continue;
 				}
-				if (state is EndState)
-				{
-					counters[1]++;
+				if (state is EndState) {
+					counters [1]++;
 					continue;
 				}
 			}
-			if (counters[0] == 1 && counters[1] >= 1)
-			{
+			if (counters [0] == 1 && counters [1] >= 1) {
 				return true;
 			}
 			return false;
