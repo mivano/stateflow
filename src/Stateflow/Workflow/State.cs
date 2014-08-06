@@ -16,12 +16,17 @@ namespace Stateflow.Workflow
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Gets or sets the display name.
+		/// Gets or sets the display name. 
 		/// </summary>
 		/// <value>
 		/// The display name.
 		/// </value>
 		public string DisplayName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the description of this state. This provides additional information about the state.
+        /// </summary>
+        public string Description { get; set; }
 
 		/// <summary>
 		/// Gets or sets the entry actions.
