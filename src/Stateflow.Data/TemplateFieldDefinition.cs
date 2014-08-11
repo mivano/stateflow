@@ -10,6 +10,17 @@ namespace Stateflow.Data
 	/// </summary>
 	public class TemplateFieldDefinition<TIdentity>{
 
+		public TemplateFieldDefinition ()
+		{
+			
+		}
+
+		public TemplateFieldDefinition (TIdentity fieldDefinition, bool isRequired = false)
+		{
+			FieldDefinition = fieldDefinition;
+			IsRequired = isRequired;
+		}
+
 		public TIdentity FieldDefinition {
 			get;
 			set;

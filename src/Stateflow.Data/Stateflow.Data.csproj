@@ -51,14 +51,18 @@
     <Compile Include="Repositories\IFieldDefinitionRepository.cs" />
     <Compile Include="Services\ItemService.cs" />
     <Compile Include="Store.cs" />
+    <Compile Include="Store\InMemory\InMemoryRepository.cs" />
+    <Compile Include="Store\InMemory\InMemoryFieldDefinitionRepository.cs" />
+    <Compile Include="Store\InMemory\InMemoryTemplateRepository.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="Stateflow.Data.nuspec" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Persistence\" />
     <Folder Include="Services\" />
     <Folder Include="Repositories\" />
+    <Folder Include="Store\" />
+    <Folder Include="Store\InMemory\" />
   </ItemGroup>
 </Project>

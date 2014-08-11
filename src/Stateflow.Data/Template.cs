@@ -10,6 +10,11 @@ namespace Stateflow.Data
 	/// </summary>
 	public class Template<TIdentity>: IIdentifiableBy<TIdentity>
 	{
+		public Template ()
+		{
+			FieldDefinitions = new List<TemplateFieldDefinition<TIdentity>> ();
+		}
+
 		#region IIdentifiableBy implementation
 
 		public TIdentity Id {

@@ -41,6 +41,7 @@
     <Compile Include="FieldDefinitionTests.cs" />
     <Compile Include="FieldDefinitionServiceTests.cs" />
     <Compile Include="ItemServiceTests.cs" />
+    <Compile Include="InMemoryTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
