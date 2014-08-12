@@ -20,7 +20,7 @@ namespace Stateflow.Workflow
 		/// <param name="workflowDefinition">Workflow definition.</param>
 		protected WorkflowEntity(WorkflowDefinition workflowDefinition)
 		{
-			_workflowEngine = new WorkflowEngine(workflowDefinition, null);
+			_workflowEngine = new WorkflowEngine(workflowDefinition, null, this);
 			_workflowEngine.OnStateTransition += WorkflowEngine_OnStateTransition;
 		}
 
@@ -82,9 +82,16 @@ namespace Stateflow.Workflow
 		/// </summary>
 		/// <value>The work flow engine.</value>
 		public WorkflowEngine WorkFlowEngine {
-			get{ return _workflowEngine; }
+			get { return _workflowEngine; }
 		}
 
+
+		/// <summary>
+		/// Provides the context workflow is bound to.
+		/// </summary>
+		public virtual object Context {
+			get { return _workflowEngine.Context; }
+		}
 	}
     
 }

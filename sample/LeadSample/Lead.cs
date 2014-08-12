@@ -12,7 +12,7 @@ namespace LeadSample
 
 	    public Lead(WorkflowDefinition workflowDefinition)
 		{
-            _workflowEngine = new WorkflowEngine(workflowDefinition, null);
+            _workflowEngine = new WorkflowEngine(workflowDefinition, null, this);
             _workflowEngine.OnStateTransition += WorkflowEngine_OnStateTransition;
 		}
 
