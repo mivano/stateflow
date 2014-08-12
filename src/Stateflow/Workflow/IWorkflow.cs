@@ -36,5 +36,10 @@ namespace Stateflow.Workflow
         /// <param name="trigger">The trigger.</param>
         /// <returns></returns>
         bool CanChangeState(string trigger);
+
+		/// <summary>
+		/// Provides the workflow context.
+		/// </summary>
+	    object Context { get; }
     }
 }
