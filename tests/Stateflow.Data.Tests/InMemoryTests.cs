@@ -70,6 +70,7 @@ namespace Stateflow.Data.Tests
 		[Test]
 		public void CanStoreItemsInMemory(){
 
+			// Build up base data
 			var fieldsService = new FieldDefinitionService<int> (new InMemoryFieldDefinitionRepository<int> ());
 			var fields = new [] {
 				new FieldDefinition<int>{ FieldType = FieldType.Amount, Id = 1, Name = "Amount" },
@@ -88,8 +89,27 @@ namespace Stateflow.Data.Tests
 
 			templatesService.SaveAsync (template);
 
+			var itemsService = new ItemService<int> (new InMemoryItemsRepository<int> ());
+			var fieldValues = new List<FieldValue<int>> ();
+			fieldValues.Add (new FieldValue<int> { 
+				FieldDefinitionId = 1,
+				Data = new FieldData<int> {
+					Value = 4.5
+				}
+			});
+			fieldValues.Add (new FieldValue<int> { 
+				FieldDefinitionId = 2,
+				Data = new FieldData<int> {
+					Value = "text"
+				}
+			});
+			var item = itemsService.CreateAsync (1, fieldValues).Result;
 
-			//var itemsService = new ItemService<int> (new InMemoryItemsRepository<int> ());
+			Assert.IsNotNull (item);
+			Assert.IsTrue (item.Identifier.Revision == 1);
+			Assert.IsTrue (item.Identifier.TemplateId == 1);
+			Assert.IsTrue (item.FieldValues.Count () == 2);
+
 
 		}
 	}

@@ -12,7 +12,7 @@ namespace Stateflow.Data
 	{
 		List<FieldValue<TIdentity>> fieldValues;
 
-		public ItemIdentifier<TIdentity> Id {
+		public ItemIdentifier<TIdentity> Identifier {
 			get;
 			set;
 		}

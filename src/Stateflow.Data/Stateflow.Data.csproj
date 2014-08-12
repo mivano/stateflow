@@ -54,6 +54,7 @@
     <Compile Include="Store\InMemory\InMemoryRepository.cs" />
     <Compile Include="Store\InMemory\InMemoryFieldDefinitionRepository.cs" />
     <Compile Include="Store\InMemory\InMemoryTemplateRepository.cs" />
+    <Compile Include="Store\InMemory\InMemoryItemsRepository.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

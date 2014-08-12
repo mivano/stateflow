@@ -13,5 +13,5 @@ namespace Stateflow.Data.Store.InMemory
 	{
 	
 	}
-	
+
 }

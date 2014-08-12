@@ -32,13 +32,52 @@ namespace Stateflow.Data
 			return null;
 		}
 
-		public virtual Task<Item<TIdentity>> CreateAsync(TIdentity templateId, IEnumerable<FieldValue<TIdentity>> fieldValues){
+		public virtual async Task<Item<TIdentity>> CreateAsync(TIdentity templateId, IEnumerable<FieldValue<TIdentity>> fieldValues){
 
-			return null;
+			// Create the new item
+			var item = new Item<TIdentity> ();
+
+			// Set the initial ID
+			var identifier = new ItemIdentifier<TIdentity>{ TemplateId = templateId, Revision = 0 };
+
+			// Set the fields
+			var fields = new List<FieldValue<TIdentity>> ();
+
+			// Get the default field definitions from the template
+			// TODO
+
+			// Merge the field values passed in
+			foreach (var field in fieldValues) {
+				var f = fields.FirstOrDefault (a => a.FieldDefinitionId.Equals(field.FieldDefinitionId));
+				if (f == null)
+					fields.Add (field);
+				else {
+					fields.Remove (f);
+					fields.Add (field);
+				}
+			}
+
+			// Validate fields
+			// TODO
+
+			// Store the data
+			identifier = await itemRepository.SaveAsync (default(TIdentity), 0, templateId, fields);
+
+			item.Identifier = identifier;
+			item.FieldValues = fields;
+
+			return item;
 		}
 
-		public virtual Task<Item<TIdentity>> UpdateAsync(ItemIdentifier<TIdentity> itemId, IEnumerable<FieldValue<TIdentity>> fieldValues){
+		public virtual  Task<Item<TIdentity>> UpdateAsync(ItemIdentifier<TIdentity> itemId, IEnumerable<FieldValue<TIdentity>> fieldValues){
 
+			// Store the data
+			//var identifier = await itemRepository.SaveAsync (itemId.Id, itemId.Revision, itemId.TemplateId, fields);
+
+			//item.Identifier = identifier;
+			//item.FieldValues = fields;
+
+			//return item;
 			return null;
 		}
 
