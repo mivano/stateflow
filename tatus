@@ -1,0 +1,232 @@
+[1mdiff --git a/sample/LeadSample/LeadSample.csproj b/sample/LeadSample/LeadSample.csproj[m
+[1mindex aeff46d..8b48001 100644[m
+[1m--- a/sample/LeadSample/LeadSample.csproj[m
+[1m+++ b/sample/LeadSample/LeadSample.csproj[m
+[36m@@ -43,6 +43,8 @@[m
+     <Compile Include="MailAction.cs" />[m
+     <Compile Include="Program.cs" />[m
+     <Compile Include="Properties\AssemblyInfo.cs" />[m
+[32m+[m[32m    <Compile Include="WorkflowEnded.cs" />[m
+[32m+[m[32m    <Compile Include="WorkflowStarted.cs" />[m
+   </ItemGroup>[m
+   <ItemGroup>[m
+     <ProjectReference Include="..\..\src\Stateflow\Stateflow.csproj">[m
+[1mdiff --git a/sample/LeadSample/Program.cs b/sample/LeadSample/Program.cs[m
+[1mindex 9bbc49d..40e438a 100644[m
+[1m--- a/sample/LeadSample/Program.cs[m
+[1m+++ b/sample/LeadSample/Program.cs[m
+[36m@@ -28,7 +28,8 @@[m [mpublic void CreateStateMachine()[m
+ 					new State[m
+ 					{[m
+ 						Name = "Created",[m
+[31m-						DisplayName = "Lead Created"[m
+[32m+[m						[32mDisplayName = "Lead Created",[m
+[32m+[m						[32mExitActions = new List<IAction> { new WorkflowStarted() }[m
+ 					},[m
+ [m
+ 					 new State[m
+[36m@@ -50,7 +51,8 @@[m [mpublic void CreateStateMachine()[m
+ 					 new State[m
+ 					{[m
+ 						Name = "Closed",[m
+[31m-						DisplayName = "Lead is Closed"[m
+[32m+[m						[32mDisplayName = "Lead is Closed",[m
+[32m+[m						[32mEntryActions = new List<IAction> { new WorkflowEnded() }[m
+ 					} [m
+ 				},[m
+ 				Triggers = new List<Trigger>[m
+[36m@@ -183,7 +185,6 @@[m [mpublic void CreateStateMachine()[m
+ [m
+ 	public class LeadExpressionCondition : ExpressionCondition[m
+ 	{[m
+[31m-[m
+ 		public LeadExpressionCondition(string expression)[m
+ 			: base(expression)[m
+ 		{[m
+[1mdiff --git a/src/Stateflow/Workflow/WorkflowDefinition.cs b/src/Stateflow/Workflow/WorkflowDefinition.cs[m
+[1mindex cc38c42..05ab540 100644[m
+[1m--- a/src/Stateflow/Workflow/WorkflowDefinition.cs[m
+[1m+++ b/src/Stateflow/Workflow/WorkflowDefinition.cs[m
+[36m@@ -6,19 +6,19 @@[m
+ [m
+ namespace Stateflow.Workflow[m
+ {[m
+[31m-    /// <summary>[m
+[31m-    /// Defines a workflow.[m
+[31m-    /// </summary>[m
+[31m-    public class WorkflowDefinition[m
+[31m-    {[m
+[32m+[m	[32m/// <summary>[m
+[32m+[m	[32m/// Defines a workflow.[m
+[32m+[m	[32m/// </summary>[m
+[32m+[m	[32mpublic class WorkflowDefinition[m
+[32m+[m	[32m{[m
+ [m
+[31m-        /// <summary>[m
+[31m-        /// Gets or sets the name of this workflow.[m
+[31m-        /// </summary>[m
+[31m-        /// <value>[m
+[31m-        /// The name.[m
+[31m-        /// </value>[m
+[31m-        public string Name { get; set; }[m
+[32m+[m		[32m/// <summary>[m
+[32m+[m		[32m/// Gets or sets the name of this workflow.[m
+[32m+[m		[32m/// </summary>[m
+[32m+[m		[32m/// <value>[m
+[32m+[m		[32m/// The name.[m
+[32m+[m		[32m/// </value>[m
+[32m+[m		[32mpublic string Name { get; set; }[m
+ [m
+ 		/// <summary>[m
+ 		///  The current version of this workflow definition[m
+[36m@@ -29,66 +29,66 @@[m [mpublic class WorkflowDefinition[m
+ 			set;[m
+ 		}[m
+ [m
+[31m-        /// <summary>[m
+[31m-        /// Gets or sets the description of this workflow[m
+[31m-        /// </summary>[m
+[31m-        /// <value>[m
+[31m-        /// The description.[m
+[31m-        /// </value>[m
+[31m-        public string Description { get; set; }[m
+[32m+[m		[32m/// <summary>[m
+[32m+[m		[32m/// Gets or sets the description of this workflow[m
+[32m+[m		[32m/// </summary>[m
+[32m+[m		[32m/// <value>[m
+[32m+[m		[32m/// The description.[m
+[32m+[m		[32m/// </value>[m
+[32m+[m		[32mpublic string Description { get; set; }[m
+ [m
+[31m-        /// <summary>[m
+[31m-        /// Gets or sets the states. States define the workflow. Like a Create state, an Assigned state etc.[m
+[31m-        /// Each state can have an entry and exit action(s).[m
+[31m-        /// </summary>[m
+[31m-        /// <value>[m
+[31m-        /// The states.[m
+[31m-        /// </value>[m
+[31m-        public IList<State> States { get; set; }[m
+[32m+[m		[32m/// <summary>[m
+[32m+[m		[32m/// Gets or sets the states. States define the workflow. Like a Create state, an Assigned state etc.[m
+[32m+[m		[32m/// Each state can have an entry and exit action(s).[m
+[32m+[m		[32m/// </summary>[m
+[32m+[m		[32m/// <value>[m
+[32m+[m		[32m/// The states.[m
+[32m+[m		[32m/// </value>[m
+[32m+[m		[32mpublic IList<State> States { get; set; }[m
+ [m
+[31m-        /// <summary>[m
+[31m-        /// Gets or sets the triggers. A trigger can be used to move from state to state. Like Rejecting, Accepting, Closing.[m
+[31m-        /// </summary>[m
+[31m-        /// <value>[m
+[31m-        /// The triggers.[m
+[31m-        /// </value>[m
+[31m-        public IList<Trigger> Triggers { get; set; }[m
+[32m+[m		[32m/// <summary>[m
+[32m+[m		[32m/// Gets or sets the triggers. A trigger can be used to move from state to state. Like Rejecting, Accepting, Closing.[m
+[32m+[m		[32m/// </summary>[m
+[32m+[m		[32m/// <value>[m
+[32m+[m		[32m/// The triggers.[m
+[32m+[m		[32m/// </value>[m
+[32m+[m		[32mpublic IList<Trigger> Triggers { get; set; }[m
+ [m
+[31m-        /// <summary>[m
+[31m-        /// Gets or sets the transitions. A transition describes from which source state to destination state the workflow can move based on a certain trigger.[m
+[31m-        /// For example; from the state Review, using accept, to the state Accepted. [m
+[31m-        /// Conditions can be used to guard the state transfer.[m
+[31m-        /// </summary>[m
+[31m-        /// <value>[m
+[31m-        /// The transitions.[m
+[31m-        /// </value>[m
+[31m-        public IList<Transition> Transitions { get; set; }[m
+[32m+[m		[32m/// <summary>[m
+[32m+[m		[32m/// Gets or sets the transitions. A transition describes from which source state to destination state the workflow can move based on a certain trigger.[m
+[32m+[m		[32m/// For example; from the state Review, using accept, to the state Accepted.[m[41m [m
+[32m+[m		[32m/// Conditions can be used to guard the state transfer.[m
+[32m+[m		[32m/// </summary>[m
+[32m+[m		[32m/// <value>[m
+[32m+[m		[32m/// The transitions.[m
+[32m+[m		[32m/// </value>[m
+[32m+[m		[32mpublic IList<Transition> Transitions { get; set; }[m
+ [m
+[31m-        /// <summary>[m
+[31m-        /// Serializes this instance to a json string value.[m
+[31m-        /// </summary>[m
+[31m-        /// <returns>A json serialization.</returns>[m
+[31m-        public string Serialize()[m
+[31m-        {[m
+[31m-            return JsonConvert.SerializeObject(this, new JsonSerializerSettings[m
+[31m-            {[m
+[31m-                ContractResolver = new CamelCasePropertyNamesContractResolver(),[m
+[31m-                Formatting = Formatting.Indented[m
+[31m-            });[m
+[31m-        }[m
+[32m+[m		[32m/// <summary>[m
+[32m+[m		[32m/// Serializes this instance to a json string value.[m
+[32m+[m		[32m/// </summary>[m
+[32m+[m		[32m/// <returns>A json serialization.</returns>[m
+[32m+[m		[32mpublic string Serialize()[m
+[32m+[m		[32m{[m
+[32m+[m			[32mreturn JsonConvert.SerializeObject(this, new JsonSerializerSettings[m
+[32m+[m			[32m{[m
+[32m+[m				[32mContractResolver = new CamelCasePropertyNamesContractResolver(),[m
+[32m+[m				[32mFormatting = Formatting.Indented[m
+[32m+[m			[32m});[m
+[32m+[m		[32m}[m
+ [m
+[31m-        /// <summary>[m
+[31m-        /// Converts the json back into a workflow definition.[m
+[31m-        /// </summary>[m
+[31m-        /// <param name="json">The json representation.</param>[m
+[31m-        /// <returns>A workflow definition.</returns>[m
+[31m-        public static WorkflowDefinition Deserialize(string json)[m
+[31m-        {[m
+[31m-            Enforce.ArgumentNotNull(json, "json");[m
+[32m+[m		[32m/// <summary>[m
+[32m+[m		[32m/// Converts the json back into a workflow definition.[m
+[32m+[m		[32m/// </summary>[m
+[32m+[m		[32m/// <param name="json">The json representation.</param>[m
+[32m+[m		[32m/// <returns>A workflow definition.</returns>[m
+[32m+[m		[32mpublic static WorkflowDefinition Deserialize(string json)[m
+[32m+[m		[32m{[m
+[32m+[m			[32mEnforce.ArgumentNotNull(json, "json");[m
+ [m
+[31m-            return JsonConvert.DeserializeObject<WorkflowDefinition>(json);[m
+[31m-        }[m
+[32m+[m			[32mreturn JsonConvert.DeserializeObject<WorkflowDefinition>(json);[m
+[32m+[m		[32m}[m
+ [m
+ [m
+[31m-    }[m
+[32m+[m	[32m}[m
+ }[m
+\ No newline at end of file[m
+[1mdiff --git a/src/Stateflow/Workflow/WorkflowEntity.cs b/src/Stateflow/Workflow/WorkflowEntity.cs[m
+[1mindex 910d788..2a85f54 100644[m
+[1m--- a/src/Stateflow/Workflow/WorkflowEntity.cs[m
+[1m+++ b/src/Stateflow/Workflow/WorkflowEntity.cs[m
+[36m@@ -55,7 +55,6 @@[m [mprivate void ToStateMachine(WorkflowDefinition workflowDefinition, string curren[m
+                         _stateMachine.Configure(state)[m
+                             .PermitIf(trig.Trigger, trig.TargetState, ConditionalGuard(trig.Conditions));[m
+ [m
+[31m-[m
+                 });[m
+ [m
+                 var ws = workflowDefinition.States.First(a => a.Name == state);[m
+[36m@@ -109,12 +108,12 @@[m [mprivate Func<bool> ConditionalGuard(IEnumerable<ICondition> conditions)[m
+         /// <summary>[m
+         /// Changes the current state to a new state.[m
+         /// </summary>[m
+[31m-        /// <param name="newState">The new state.</param>[m
+[31m-        public virtual void ChangeState(string newState)[m
+[32m+[m		[32m/// <param name="trigger">The new state.</param>[m
+[32m+[m[32m        public virtual void ChangeState(string trigger)[m
+         {[m
+[31m-            Enforce.ArgumentNotNull(newState, "newState");[m
+[32m+[m			[32mEnforce.ArgumentNotNull(trigger, "newState");[m
+ [m
+[31m-            _stateMachine.Fire(newState);[m
+[32m+[m			[32m_stateMachine.Fire(trigger);[m
+         }[m
+ [m
+         /// <summary>[m
