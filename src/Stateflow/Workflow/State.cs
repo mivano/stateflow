@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 
 namespace Stateflow.Workflow
 {
@@ -34,7 +35,7 @@ namespace Stateflow.Workflow
 		/// <value>
 		/// The entry actions.
 		/// </value>
-		public IList<IAction> EntryActions { get; set; }
+		public IAction EntryAction { get; set; }
 
 		/// <summary>
 		/// Gets or sets the exit actions.
@@ -42,7 +43,52 @@ namespace Stateflow.Workflow
 		/// <value>
 		/// The exit actions.
 		/// </value>
-		public IList<IAction> ExitActions { get; set; }
+		public IAction ExitAction { get; set; }
+
+		public static bool operator ==(State a, State b) { return (a.Equals(b)); }
+
+		public static bool operator !=(State a, State b) { return !(a.Equals(b)); }
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj))
+			{
+				return false;
+			}
+			if (ReferenceEquals(this, obj))
+			{
+				return true;
+			}
+			if (obj.GetType() != typeof (State))
+			{
+				return false;
+			}
+
+			return Equals((State) obj);
+		}
+
+		public bool Equals(State other)
+		{
+			if (ReferenceEquals(null, other))
+			{
+				return false;
+			}
+			if (ReferenceEquals(this, other))
+			{
+				return true;
+			}
+
+			return Equals(other.Name, Name);
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				return ((Name != null ? Name.GetHashCode() : 0)*397);
+			}
+		}
+
 
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents the current <see cref="Stateflow.Workflow.State"/>.
@@ -67,4 +113,7 @@ namespace Stateflow.Workflow
 	public class EndState : State
 	{
 	}
+
+
+	
 }

@@ -41,11 +41,11 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\packages\Newtonsoft.Json.6.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="Stateless, Version=2.4.0.1, Culture=neutral, PublicKeyToken=93038f0927583c9a">
       <HintPath>..\..\packages\Stateless.2.4.0\lib\Stateless.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.4\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +61,11 @@
     <Compile Include="Workflow\Trigger.cs" />
     <Compile Include="Workflow\WorkflowDefinition.cs" />
     <Compile Include="Workflow\WorkflowEntity.cs" />
+    <Compile Include="Workflow\StateChangeEventArgs.cs" />
+    <Compile Include="Exceptions\WorkflowActionException.cs" />
+    <Compile Include="Actions\AggregateAction.cs" />
+    <Compile Include="Conditions\DelegateCondition.cs" />
+    <Compile Include="Conditions\CombinedConditions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -81,4 +86,9 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
+    <Folder Include="Actions\" />
+    <Folder Include="Conditions\" />
+  </ItemGroup>
 </Project>

@@ -27,7 +27,7 @@ namespace LeadSample
             Console.WriteLine("{0}: State changed from {1} to {2} because of trigger {3}.", DateTime.Now.ToShortTimeString(), e.FromState, e.ToState, e.TriggeredBy);
         }
 
-        public virtual IEnumerable<string> PermittedTriggers
+        public virtual IEnumerable<Trigger> PermittedTriggers
         {
             get { return _workflowEngine.PermittedTriggers; }
         }
@@ -38,9 +38,8 @@ namespace LeadSample
         /// <value>
         /// The state of the workflow.
         /// </value>
-        public virtual string WorkflowState {
-            get { return _workflowEngine.WorkflowState; }
-            set { _workflowEngine.WorkflowState = value; }
+        public virtual State CurrentState {
+			get { return _workflowEngine.CurrentState; }
         }
 
 	    public virtual void ChangeState(string newState)

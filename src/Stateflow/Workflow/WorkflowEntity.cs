@@ -38,12 +38,14 @@ namespace Stateflow.Workflow
 		/// <param name="isReentry">If set to <c>true</c> is reentry.</param>
 		protected abstract void OnStateTransition(State source, State destination, Trigger triggeredBy, bool isReentry);
 
+
+
 		/// <summary>
 		/// Determines whether this workflow can change its state based on the trigger.
 		/// </summary>
 		/// <param name="trigger">The trigger.</param>
 		/// <returns></returns>
-		public bool CanChangeState(string trigger)
+		public bool CanChangeState(Trigger trigger)
 		{
 			return _workflowEngine.CanChangeState (trigger);
 		}
@@ -52,7 +54,7 @@ namespace Stateflow.Workflow
 		/// Gets the permitted triggers from this step.
 		/// </summary>
 		/// <value>The permitted triggers.</value>
-		public virtual IEnumerable<string> PermittedTriggers
+		public virtual IEnumerable<Trigger> PermittedTriggers
 		{
 			get { return _workflowEngine.PermittedTriggers; }
 		}
@@ -63,18 +65,22 @@ namespace Stateflow.Workflow
 		/// <value>
 		/// The state of the workflow.
 		/// </value>
-		public virtual string WorkflowState {
-			get { return _workflowEngine.WorkflowState; }
-			set { _workflowEngine.WorkflowState = value; }
+		public virtual State CurrentState {
+			get { return _workflowEngine.CurrentState; }
 		}
 
 		/// <summary>
 		/// Change to a new state.
 		/// </summary>
-		/// <param name="newState">New state.</param>
-		public virtual void ChangeState(string newState)
+		/// <param name="trigger">New state.</param>
+		public virtual void ChangeState(Trigger trigger)
 		{
-			_workflowEngine.ChangeState(newState);
+			_workflowEngine.ChangeState(trigger);
+		}
+
+		public void ChangeState(string trigger)
+		{
+			_workflowEngine.ChangeState(trigger);
 		}
 
 		/// <summary>
@@ -92,6 +98,8 @@ namespace Stateflow.Workflow
 		public virtual object Context {
 			get { return _workflowEngine.Context; }
 		}
+
+	
 	}
     
 }

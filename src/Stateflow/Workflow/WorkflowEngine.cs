@@ -6,84 +6,7 @@ using Stateless;
 
 namespace Stateflow.Workflow
 {
-
-	/// <summary>
-	/// This event is raised when the state is transitioned.
-	/// </summary>
-	/// <param name="sender">The sender.</param>
-	/// <param name="e">The <see cref="StateChangeEventArgs"/> instance containing the event data.</param>
-	public delegate void StateChangeHandler(object sender, StateChangeEventArgs e);
 				
-	/// <summary>
-	/// Contains the event arguments.
-	/// </summary>
-	public class StateChangeEventArgs : EventArgs
-	{
-		private readonly State _fromState;
-		private readonly State _toState;
-		private readonly Trigger _triggeredBy;
-		private readonly bool _isReentry;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="StateChangeEventArgs"/> class.
-		/// </summary>
-		/// <param name="fromState">From state.</param>
-		/// <param name="toState">To state.</param>
-		/// <param name="triggeredBy">The triggered by.</param>
-		/// <param name="isReentry"></param>
-		public StateChangeEventArgs(State fromState, State toState, Trigger triggeredBy, bool isReentry)
-		{
-			_fromState = fromState;
-			_toState = toState;
-			_triggeredBy = triggeredBy;
-			_isReentry = isReentry;
-		}
-
-
-		/// <summary>
-		/// Gets from state.
-		/// </summary>
-		/// <value>
-		/// From state.
-		/// </value>
-		public State FromState
-		{
-			get { return _fromState; }
-		}
-
-		/// <summary>
-		/// Gets to state.
-		/// </summary>
-		/// <value>
-		/// To state.
-		/// </value>
-		public State ToState
-		{
-			get { return _toState; }
-		}
-
-		/// <summary>
-		/// Gets the triggered by value.
-		/// </summary>
-		/// <value>
-		/// The triggered by.
-		/// </value>
-		public Trigger TriggeredBy
-		{
-			get { return _triggeredBy; }
-		}
-
-		/// <summary>
-		/// Gets a value indicating whether is a reentry.
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if [is reentry]; otherwise, <c>false</c>.
-		/// </value>
-		public bool IsReentry
-		{
-			get { return _isReentry; }
-		}
-	}
 
 	/// <summary>
 	/// This engine class that can be used to add workflow capabilities to a class.
@@ -95,9 +18,28 @@ namespace Stateflow.Workflow
 		/// </summary>
 		public event StateChangeHandler OnStateTransition;
 
-		private StateMachine<string, string> _stateMachine;
+		private StateMachine<State, Trigger> _stateMachine;
 		private WorkflowDefinition _workflowDefinition;
 		private readonly object _workflowContext;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Stateflow.Workflow.WorkflowEngine"/> class.
+		/// </summary>
+		/// <param name="workflowDefinition">Workflow definition.</param>
+		public WorkflowEngine (WorkflowDefinition workflowDefinition): this(workflowDefinition, null)
+		{
+			
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Stateflow.Workflow.WorkflowEngine"/> class.
+		/// </summary>
+		/// <param name="workflowDefinition">Workflow definition.</param>
+		/// <param name="currentState">Current state.</param>
+		public WorkflowEngine (WorkflowDefinition workflowDefinition, State currentState): this(workflowDefinition, currentState, null)
+		{
+			
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="WorkflowEngine"/> class.
@@ -105,67 +47,63 @@ namespace Stateflow.Workflow
 		/// <param name="workflowDefinition">The workflow definition.</param>
 		/// <param name="currentState">Current state of the workflow. If null, it will be first state found in the workflow definition.</param>
 		/// <param name="workflowContext">The context that the workflow engine is bound to.</param>
-		public WorkflowEngine(WorkflowDefinition workflowDefinition, string currentState, object workflowContext)
+		public WorkflowEngine (WorkflowDefinition workflowDefinition, State currentState, object workflowContext)
 		{
 			_workflowContext = workflowContext;
-			ToStateMachine(workflowDefinition, currentState);
+			ToStateMachine (workflowDefinition, currentState);
 		}
 
-		private void ToStateMachine(WorkflowDefinition workflowDefinition, string currentState)
+		private void ToStateMachine(WorkflowDefinition workflowDefinition, State currentState)
 		{
-			Enforce.ArgumentNotNull(workflowDefinition, "workflowDefinition");
+			Enforce.ArgumentNotNull (workflowDefinition, "workflowDefinition");
 
 			_workflowDefinition = workflowDefinition;
 
-			WorkflowState = currentState ?? workflowDefinition.Transitions.First().FromState;
-			_stateMachine = new StateMachine<string, string>(() => WorkflowState, s => WorkflowState = s);
+			CurrentState = currentState ?? workflowDefinition.Transitions.First ().FromState;
+			_stateMachine = new StateMachine<State, Trigger> (() => CurrentState, s => CurrentState = s);
 
 			//  Get a distinct list of states with a trigger from state configuration
 			//  "State => Trigger => TargetState
-			var states = workflowDefinition.Transitions.AsQueryable()
-				.Select(x => x.FromState)
-				.Distinct()
-				.Select(x => x)
-				.ToList();
+			var states = workflowDefinition.Transitions.AsQueryable ()
+				.Select (x => x.FromState)
+				.Distinct ()
+				.Select (x => x)
+				.ToList ();
 
 			//  Assign triggers to states
-			states.ForEach(state =>
-			{
-				var triggers = workflowDefinition.Transitions.AsQueryable()
-					.Where(config => config.FromState == state)
-					.Select(config => new { 
+			states.ForEach (state => {
+				var triggers = workflowDefinition.Transitions.AsQueryable ()
+					.Where (config => config.FromState == state)
+					.Select (config => new { 
 							Trigger = config.TriggerBy, 
 							TargetState = config.ToState, 
-							Conditions = config.Conditions 
+							Condition = config.Condition 
 						})
-					.ToList();
+					.ToList ();
 
-				triggers.ForEach(trig =>
-				{
-					if (trig.Conditions == null || trig.Conditions.Any() == false)
-						_stateMachine.Configure(state).Permit(trig.Trigger, trig.TargetState);
+				triggers.ForEach (trig => {
+					if (trig.Condition == null)
+						_stateMachine.Configure (state).Permit (trig.Trigger, trig.TargetState);
 					else
-						_stateMachine.Configure(state)
-							.PermitIf(trig.Trigger, trig.TargetState, ConditionalGuard(trig.Conditions));
+						_stateMachine.Configure (state)
+							.PermitIf (trig.Trigger, trig.TargetState, ConditionalGuard (trig.Condition));
 
 
 				});
 
-				var ws = workflowDefinition.States.First(a => a.Name == state);
-				if (ws.EntryActions != null)
-				{
-					_stateMachine.Configure(state).OnEntry(() => ExecuteActions(ws.EntryActions));
+				var ws =state;
+				if (ws.EntryAction != null) {
+					_stateMachine.Configure (state).OnEntry (() => ExecuteAction (ws.EntryAction));
 				}
 
-				if (ws.ExitActions != null)
-				{
-					_stateMachine.Configure(state).OnExit(() => ExecuteActions(ws.ExitActions));
+				if (ws.ExitAction != null) {
+					_stateMachine.Configure (state).OnExit (() => ExecuteAction (ws.ExitAction));
 				}
 
 			});
 
 			// For all the state transitions
-			_stateMachine.OnTransitioned(OnTransitionAction);
+			_stateMachine.OnTransitioned (OnTransitionAction);
 
 		}
 
@@ -173,55 +111,65 @@ namespace Stateflow.Workflow
 		/// When the state is transitioned.
 		/// </summary>
 		/// <param name="transition"></param>
-		protected virtual void OnTransitionAction(StateMachine<string, string>.Transition transition)
+		protected virtual void OnTransitionAction(StateMachine<State, Trigger>.Transition transition)
 		{
-			if (OnStateTransition != null)
-			{
+			if (OnStateTransition != null) {
 
 				// Find the states
-				var sourceState =_workflowDefinition.States.FirstOrDefault(a=>a.Name.Equals(transition.Source, StringComparison.InvariantCultureIgnoreCase));  
-				var destinationState =_workflowDefinition.States.FirstOrDefault(a=>a.Name.Equals(transition.Destination, StringComparison.InvariantCultureIgnoreCase));  
+				var sourceState = transition.Source;  
+				var destinationState = transition.Destination;  
 
-				if (sourceState==null)
-					throw new InvalidOperationException(string.Format("Unable to find the source state {0} in the list of available states.", transition.Source));
+				if (sourceState == null)
+					throw new InvalidOperationException (string.Format ("Unable to find the source state {0} in the list of available states.", transition.Source));
 
-				if (destinationState==null)
-					throw new InvalidOperationException(string.Format("Unable to find the destination state {0} in the list of available states.", transition.Destination));
+				if (destinationState == null)
+					throw new InvalidOperationException (string.Format ("Unable to find the destination state {0} in the list of available states.", transition.Destination));
 
 				// Find the trigger
-				var trigger = _workflowDefinition.Triggers.FirstOrDefault(a=>a.Name.Equals(transition.Trigger,  StringComparison.InvariantCultureIgnoreCase));
+				var trigger = transition.Trigger;
 
-				if (trigger==null)
-					throw new InvalidOperationException(string.Format("Unable to find the trigger {0} in the list of available triggers.", transition.Trigger));
+				if (trigger == null)
+					throw new InvalidOperationException (string.Format ("Unable to find the trigger {0} in the list of available triggers.", transition.Trigger));
 
 
 				OnStateTransition (this, new StateChangeEventArgs (sourceState, destinationState, trigger, transition.IsReentry));
 			}
 		}
-																  
-		private void ExecuteActions(IEnumerable<IAction> entryActions)
+
+		private void ExecuteAction(IAction entryAction)
 		{
-			foreach (var entryAction in entryActions)
-			{
-				entryAction.Execute(this);
+			entryAction.Execute (this);
+				}
+
+		private Func<bool> ConditionalGuard(ICondition condition)
+		{
+			return () => condition.IsAllowed (this);
+		}
+
+		/// <summary>
+		/// Changes the current state to a new state using the name of the trigger.
+		/// </summary>
+		/// <param name="trigger">Trigger.</param>
+		public virtual void ChangeState(string trigger)
+		{
+			Enforce.ArgumentNotNull (trigger, "trigger");
+
+			Trigger t;
+
+			if (_workflowDefinition.Triggers.TryGetValue (trigger, out t)) {
+				ChangeState (t);
 			}
 		}
-
-		private Func<bool> ConditionalGuard(IEnumerable<ICondition> conditions)
-		{
-			return () => conditions.Any(c => c.IsAllowed(this));
-		}
-
 
 		/// <summary>
 		/// Changes the current state to a new state.
 		/// </summary>
 		/// <param name="trigger">The new state/trigger.</param>
-		public virtual void ChangeState(string trigger)
+		public virtual void ChangeState(Trigger trigger)
 		{
-			Enforce.ArgumentNotNull(trigger, "trigger");
+			Enforce.ArgumentNotNull (trigger, "trigger");
 
-			_stateMachine.Fire(trigger);
+			_stateMachine.Fire (trigger);
 		}
 
 		/// <summary>
@@ -229,11 +177,11 @@ namespace Stateflow.Workflow
 		/// </summary>
 		/// <param name="trigger">The new state/trigger.</param>
 		/// <returns></returns>
-		public virtual bool CanChangeState(string trigger)
+		public virtual bool CanChangeState(Trigger trigger)
 		{
-			Enforce.ArgumentNotNull(trigger, "trigger");
+			Enforce.ArgumentNotNull (trigger, "trigger");
 
-			return _stateMachine.CanFire(trigger);
+			return _stateMachine.CanFire (trigger);
 		}
 
 		/// <summary>
@@ -242,8 +190,7 @@ namespace Stateflow.Workflow
 		/// <value>
 		/// The permitted triggers.
 		/// </value>
-		public virtual IEnumerable<string> PermittedTriggers
-		{
+		public virtual IEnumerable<Trigger> PermittedTriggers {
 			get { return _stateMachine.PermittedTriggers; }
 		}
 
@@ -253,14 +200,13 @@ namespace Stateflow.Workflow
 		/// <value>
 		/// The state of the workflow.
 		/// </value>
-		public virtual string WorkflowState { get; set; }
+		public virtual State CurrentState { get; set; }
 
 
 		/// <summary>
 		/// The context that the workflow engine is bound to.
 		/// </summary>
-		public virtual object Context
-		{
+		public virtual object Context {
 			get { return _workflowContext; }
 		}
 	}

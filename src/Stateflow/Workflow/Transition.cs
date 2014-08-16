@@ -13,27 +13,36 @@ namespace Stateflow.Workflow
         /// <value>
         /// From state.
         /// </value>
-        public string FromState { get; set; }
+        public State FromState { get; set; }
+
         /// <summary>
         /// Gets or sets the destination state.
         /// </summary>
         /// <value>
         /// To state.
         /// </value>
-        public string ToState { get; set; }
+        public State ToState { get; set; }
+
         /// <summary>
         /// Gets or sets the trigger used to invoke this transition.
         /// </summary>
         /// <value>
         /// The trigger by.
         /// </value>
-        public string TriggerBy { get; set; }
+        public Trigger TriggerBy { get; set; }
+
         /// <summary>
         /// Gets or sets the conditions which should be evaluated to true.
         /// </summary>
         /// <value>
         /// The conditions.
         /// </value>
-        public IList<ICondition> Conditions { get; set; }
+        public ICondition Condition { get; set; }
+
+		/// <summary>
+		/// Gets or sets the actions that needs to be executed when the transition occurs.
+		/// </summary>
+		/// <value>The actions.</value>
+		public IAction Action {get;set;}
     }
 }

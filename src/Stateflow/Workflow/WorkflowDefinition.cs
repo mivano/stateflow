@@ -44,7 +44,7 @@ namespace Stateflow.Workflow
 		/// <value>
 		/// The states.
 		/// </value>
-		public IList<State> States { get; set; }
+		public IDictionary<string, State> States { get; set; }
 
 		/// <summary>
 		/// Gets or sets the triggers. A trigger can be used to move from state to state. Like Rejecting, Accepting, Closing.
@@ -52,7 +52,7 @@ namespace Stateflow.Workflow
 		/// <value>
 		/// The triggers.
 		/// </value>
-		public IList<Trigger> Triggers { get; set; }
+		public IDictionary<string, Trigger> Triggers { get; set; }
 
 		/// <summary>
 		/// Gets or sets the transitions. A transition describes from which source state to destination state the workflow can move based on a certain trigger.

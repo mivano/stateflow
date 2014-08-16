@@ -147,7 +147,7 @@ namespace LeadSample
 
 			while (lead.PermittedTriggers.Any ()) {
 
-				Console.WriteLine ("Current workflow state: {0}", lead.WorkflowState);
+				Console.WriteLine ("Current workflow state: {0}", lead.CurrentState);
 				Console.WriteLine ("  next available steps: {0}", String.Join (", ", lead.PermittedTriggers.ToArray ()));
 
 				Console.WriteLine ("Enter the new state name:");
