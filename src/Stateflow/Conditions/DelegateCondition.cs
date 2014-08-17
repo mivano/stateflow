@@ -4,11 +4,11 @@ using System;
 namespace Stateflow.Workflow.Conditions
 {
 
-	public class DelegateCondition : ICondition
+	public class DelegateCondition<TIdentifier> : ICondition<TIdentifier>
 	{
-		readonly Func<IWorkflow, bool> _isAllowed;
+		readonly Func<IWorkflow<TIdentifier>, bool> _isAllowed;
 
-		public DelegateCondition(Func<IWorkflow, bool> isAllowed)
+		public DelegateCondition(Func<IWorkflow<TIdentifier>, bool> isAllowed)
 		{
 			if (isAllowed == null) throw new ArgumentNullException("isAllowed");
 			_isAllowed = isAllowed;
@@ -16,7 +16,7 @@ namespace Stateflow.Workflow.Conditions
 
 		#region ICondition implementation
 
-		public bool IsAllowed(IWorkflow workflow)
+		public bool IsAllowed(IWorkflow<TIdentifier> workflow)
 		{
 			if (workflow == null) throw new ArgumentNullException("workflow");
 			return _isAllowed(workflow);

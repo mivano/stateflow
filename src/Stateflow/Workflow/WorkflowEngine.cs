@@ -11,22 +11,23 @@ namespace Stateflow.Workflow
 	/// <summary>
 	/// This engine class that can be used to add workflow capabilities to a class.
 	/// </summary>
-	public class WorkflowEngine : IWorkflow
+	public class WorkflowEngine<TIdentifier> : IWorkflow<TIdentifier>
 	{
 		/// <summary>
 		/// This event is raised when a state transition.
 		/// </summary>
-		public event StateChangeHandler OnStateTransition;
+		public event StateChangeHandler<TIdentifier> OnStateTransition;
 
-		private StateMachine<State, Trigger> _stateMachine;
-		private WorkflowDefinition _workflowDefinition;
+		private StateMachine<State<TIdentifier>, Trigger<TIdentifier>> _stateMachine;
+		private WorkflowDefinition<TIdentifier> _workflowDefinition;
 		private readonly object _workflowContext;
 
+
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Stateflow.Workflow.WorkflowEngine"/> class.
+		/// Initializes a new instance of the <see cref="Stateflow.Workflow.WorkflowEngine`1"/> class.
 		/// </summary>
 		/// <param name="workflowDefinition">Workflow definition.</param>
-		public WorkflowEngine (WorkflowDefinition workflowDefinition): this(workflowDefinition, null)
+		public WorkflowEngine (WorkflowDefinition<TIdentifier> workflowDefinition): this(workflowDefinition, null)
 		{
 			
 		}
@@ -36,7 +37,7 @@ namespace Stateflow.Workflow
 		/// </summary>
 		/// <param name="workflowDefinition">Workflow definition.</param>
 		/// <param name="currentState">Current state.</param>
-		public WorkflowEngine (WorkflowDefinition workflowDefinition, State currentState): this(workflowDefinition, currentState, null)
+		public WorkflowEngine (WorkflowDefinition<TIdentifier> workflowDefinition, State<TIdentifier> currentState): this(workflowDefinition, currentState, null)
 		{
 			
 		}
@@ -47,20 +48,20 @@ namespace Stateflow.Workflow
 		/// <param name="workflowDefinition">The workflow definition.</param>
 		/// <param name="currentState">Current state of the workflow. If null, it will be first state found in the workflow definition.</param>
 		/// <param name="workflowContext">The context that the workflow engine is bound to.</param>
-		public WorkflowEngine (WorkflowDefinition workflowDefinition, State currentState, object workflowContext)
+		public WorkflowEngine (WorkflowDefinition<TIdentifier> workflowDefinition, State<TIdentifier> currentState, object workflowContext)
 		{
 			_workflowContext = workflowContext;
 			ToStateMachine (workflowDefinition, currentState);
 		}
 
-		private void ToStateMachine(WorkflowDefinition workflowDefinition, State currentState)
+		private void ToStateMachine(WorkflowDefinition<TIdentifier> workflowDefinition, State<TIdentifier> currentState)
 		{
 			Enforce.ArgumentNotNull (workflowDefinition, "workflowDefinition");
 
 			_workflowDefinition = workflowDefinition;
 
 			CurrentState = currentState ?? workflowDefinition.Transitions.First ().FromState;
-			_stateMachine = new StateMachine<State, Trigger> (() => CurrentState, s => CurrentState = s);
+			_stateMachine = new StateMachine<State<TIdentifier>, Trigger<TIdentifier>> (() => CurrentState, s => CurrentState = s);
 
 			//  Get a distinct list of states with a trigger from state configuration
 			//  "State => Trigger => TargetState
@@ -111,7 +112,7 @@ namespace Stateflow.Workflow
 		/// When the state is transitioned.
 		/// </summary>
 		/// <param name="transition"></param>
-		protected virtual void OnTransitionAction(StateMachine<State, Trigger>.Transition transition)
+		protected virtual void OnTransitionAction(StateMachine<State<TIdentifier>, Trigger<TIdentifier>>.Transition transition)
 		{
 			if (OnStateTransition != null) {
 
@@ -132,29 +133,28 @@ namespace Stateflow.Workflow
 					throw new InvalidOperationException (string.Format ("Unable to find the trigger {0} in the list of available triggers.", transition.Trigger));
 
 
-				OnStateTransition (this, new StateChangeEventArgs (sourceState, destinationState, trigger, transition.IsReentry));
+				OnStateTransition (this, new StateChangeEventArgs<TIdentifier> (sourceState, destinationState, trigger, transition.IsReentry));
 			}
 		}
 
-		private void ExecuteAction(IAction entryAction)
+		private void ExecuteAction(IAction<TIdentifier> entryAction)
 		{
 			entryAction.Execute (this);
 				}
 
-		private Func<bool> ConditionalGuard(ICondition condition)
+		private Func<bool> ConditionalGuard(ICondition<TIdentifier> condition)
 		{
 			return () => condition.IsAllowed (this);
 		}
 
 		/// <summary>
-		/// Changes the current state to a new state using the name of the trigger.
+		/// Changes the current state to a new state using the identifier of the trigger.
 		/// </summary>
 		/// <param name="trigger">Trigger.</param>
-		public virtual void ChangeState(string trigger)
+		public virtual void ChangeState(TIdentifier trigger)
 		{
-			Enforce.ArgumentNotNull (trigger, "trigger");
 
-			Trigger t;
+			Trigger<TIdentifier> t;
 
 			if (_workflowDefinition.Triggers.TryGetValue (trigger, out t)) {
 				ChangeState (t);
@@ -165,7 +165,7 @@ namespace Stateflow.Workflow
 		/// Changes the current state to a new state.
 		/// </summary>
 		/// <param name="trigger">The new state/trigger.</param>
-		public virtual void ChangeState(Trigger trigger)
+		public virtual void ChangeState(Trigger<TIdentifier> trigger)
 		{
 			Enforce.ArgumentNotNull (trigger, "trigger");
 
@@ -177,7 +177,7 @@ namespace Stateflow.Workflow
 		/// </summary>
 		/// <param name="trigger">The new state/trigger.</param>
 		/// <returns></returns>
-		public virtual bool CanChangeState(Trigger trigger)
+		public virtual bool CanChangeState(Trigger<TIdentifier> trigger)
 		{
 			Enforce.ArgumentNotNull (trigger, "trigger");
 
@@ -190,7 +190,7 @@ namespace Stateflow.Workflow
 		/// <value>
 		/// The permitted triggers.
 		/// </value>
-		public virtual IEnumerable<Trigger> PermittedTriggers {
+		public virtual IEnumerable<Trigger<TIdentifier>> PermittedTriggers {
 			get { return _stateMachine.PermittedTriggers; }
 		}
 
@@ -200,7 +200,7 @@ namespace Stateflow.Workflow
 		/// <value>
 		/// The state of the workflow.
 		/// </value>
-		public virtual State CurrentState { get; set; }
+		public virtual State<TIdentifier> CurrentState { get; set; }
 
 
 		/// <summary>

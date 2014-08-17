@@ -10,21 +10,21 @@ namespace Stateflow.Workflow
 	/// Use the workflow entity base class to implement workflow on sub classes. 
 	/// You can also use the WorkflowEngine directly inside your code.
 	/// </summary>
-	public abstract class WorkflowEntity: IWorkflow
+	public abstract class WorkflowEntity<TIdentifier>: IWorkflow<TIdentifier>
 	{
-		private readonly WorkflowEngine _workflowEngine;
+		private readonly WorkflowEngine<TIdentifier> _workflowEngine;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Stateflow.Workflow.WorkflowEntity"/> class.
 		/// </summary>
 		/// <param name="workflowDefinition">Workflow definition.</param>
-		protected WorkflowEntity(WorkflowDefinition workflowDefinition)
+		protected WorkflowEntity(WorkflowDefinition<TIdentifier> workflowDefinition)
 		{
-			_workflowEngine = new WorkflowEngine(workflowDefinition, null, this);
+			_workflowEngine = new WorkflowEngine<TIdentifier>(workflowDefinition, null, this);
 			_workflowEngine.OnStateTransition += WorkflowEngine_OnStateTransition;
 		}
 
-		void WorkflowEngine_OnStateTransition(object sender, StateChangeEventArgs e)
+		void WorkflowEngine_OnStateTransition(object sender, StateChangeEventArgs<TIdentifier> e)
 		{
 			OnStateTransition (e.FromState, e.ToState, e.TriggeredBy, e.IsReentry);
 		}
@@ -36,7 +36,7 @@ namespace Stateflow.Workflow
 		/// <param name="destination">Destination.</param>
 		/// <param name="triggeredBy">Triggered by.</param>
 		/// <param name="isReentry">If set to <c>true</c> is reentry.</param>
-		protected abstract void OnStateTransition(State source, State destination, Trigger triggeredBy, bool isReentry);
+		protected abstract void OnStateTransition(State<TIdentifier> source, State<TIdentifier> destination, Trigger<TIdentifier> triggeredBy, bool isReentry);
 
 
 
@@ -45,7 +45,7 @@ namespace Stateflow.Workflow
 		/// </summary>
 		/// <param name="trigger">The trigger.</param>
 		/// <returns></returns>
-		public bool CanChangeState(Trigger trigger)
+		public bool CanChangeState(Trigger<TIdentifier> trigger)
 		{
 			return _workflowEngine.CanChangeState (trigger);
 		}
@@ -54,7 +54,7 @@ namespace Stateflow.Workflow
 		/// Gets the permitted triggers from this step.
 		/// </summary>
 		/// <value>The permitted triggers.</value>
-		public virtual IEnumerable<Trigger> PermittedTriggers
+		public virtual IEnumerable<Trigger<TIdentifier>> PermittedTriggers
 		{
 			get { return _workflowEngine.PermittedTriggers; }
 		}
@@ -65,7 +65,7 @@ namespace Stateflow.Workflow
 		/// <value>
 		/// The state of the workflow.
 		/// </value>
-		public virtual State CurrentState {
+		public virtual State<TIdentifier> CurrentState {
 			get { return _workflowEngine.CurrentState; }
 		}
 
@@ -73,12 +73,16 @@ namespace Stateflow.Workflow
 		/// Change to a new state.
 		/// </summary>
 		/// <param name="trigger">New state.</param>
-		public virtual void ChangeState(Trigger trigger)
+		public virtual void ChangeState(Trigger<TIdentifier> trigger)
 		{
 			_workflowEngine.ChangeState(trigger);
 		}
 
-		public void ChangeState(string trigger)
+		/// <summary>
+		/// Changes the current state to a new state.
+		/// </summary>
+		/// <param name="trigger">The trigger to that force the move to a new state.</param>
+		public void ChangeState(TIdentifier trigger)
 		{
 			_workflowEngine.ChangeState(trigger);
 		}
@@ -87,7 +91,7 @@ namespace Stateflow.Workflow
 		/// Gets the underlying work flow engine.
 		/// </summary>
 		/// <value>The work flow engine.</value>
-		public WorkflowEngine WorkFlowEngine {
+		public WorkflowEngine<TIdentifier> WorkFlowEngine {
 			get { return _workflowEngine; }
 		}
 

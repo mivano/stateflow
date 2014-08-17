@@ -5,20 +5,20 @@ namespace Stateflow.Workflow
     /// <summary>
     /// Workflow 
     /// </summary>
-    public interface IWorkflow
+	public interface IWorkflow<TIdentifier>
     {
 
         /// <summary>
         /// Changes the current state to a new state.
         /// </summary>
 		/// <param name="trigger">The trigger to that force the move to a new state.</param>
-        void ChangeState(string trigger);
+		void ChangeState(TIdentifier trigger);
 
 		/// <summary>
 		/// Changes the current state to a new state.
 		/// </summary>
 		/// <param name="trigger">The trigger to that force the move to a new state.</param>
-		void ChangeState(Trigger trigger);
+		void ChangeState(Trigger<TIdentifier> trigger);
 
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace Stateflow.Workflow
         /// <value>
         /// The permitted triggers.
         /// </value>
-        IEnumerable<Trigger> PermittedTriggers { get; }
+		IEnumerable<Trigger<TIdentifier>> PermittedTriggers { get; }
 
         /// <summary>
         /// Gets or sets the state of the workflow.
@@ -35,14 +35,14 @@ namespace Stateflow.Workflow
         /// <value>
         /// The state of the workflow.
         /// </value>
-        State CurrentState { get; }
+		State<TIdentifier> CurrentState { get; }
 
         /// <summary>
         /// Determines whether this workflow can change its state based on the trigger.
         /// </summary>
         /// <param name="trigger">The trigger.</param>
         /// <returns></returns>
-        bool CanChangeState(Trigger trigger);
+		bool CanChangeState(Trigger<TIdentifier> trigger);
 
 		/// <summary>
 		/// Provides the workflow context.

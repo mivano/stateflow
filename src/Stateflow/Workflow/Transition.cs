@@ -5,15 +5,49 @@ namespace Stateflow.Workflow
     /// <summary>
     /// A transition moves, using a trigger, from one state to another state.
     /// </summary>
-    public class Transition
+	public class Transition<TIdentifier>: IIdentifiableBy<TIdentifier>
     {
+		#region IIdentifiableBy implementation
+
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>The identifier.</value>
+		public TIdentifier Id {
+			get;
+			set;
+		}
+
+		#endregion
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Stateflow.Workflow.Transition`1"/> class.
+		/// </summary>
+		public Transition ()
+		{
+			
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Stateflow.Workflow.Transition`1"/> class.
+		/// </summary>
+		/// <param name="fromState">From state.</param>
+		/// <param name="toState">To state.</param>
+		/// <param name="triggeredBy">Triggered by.</param>
+		public Transition (State<TIdentifier> fromState, State<TIdentifier> toState, Trigger<TIdentifier> triggeredBy)
+		{
+			FromState = fromState;
+			ToState = toState;
+			TriggerBy = triggeredBy;
+		}
+
         /// <summary>
         /// Gets or sets source state.
         /// </summary>
         /// <value>
         /// From state.
         /// </value>
-        public State FromState { get; set; }
+		public State<TIdentifier> FromState { get; set; }
 
         /// <summary>
         /// Gets or sets the destination state.
@@ -21,7 +55,7 @@ namespace Stateflow.Workflow
         /// <value>
         /// To state.
         /// </value>
-        public State ToState { get; set; }
+		public State<TIdentifier> ToState { get; set; }
 
         /// <summary>
         /// Gets or sets the trigger used to invoke this transition.
@@ -29,7 +63,7 @@ namespace Stateflow.Workflow
         /// <value>
         /// The trigger by.
         /// </value>
-        public Trigger TriggerBy { get; set; }
+		public Trigger<TIdentifier> TriggerBy { get; set; }
 
         /// <summary>
         /// Gets or sets the conditions which should be evaluated to true.
@@ -37,12 +71,12 @@ namespace Stateflow.Workflow
         /// <value>
         /// The conditions.
         /// </value>
-        public ICondition Condition { get; set; }
+		public ICondition<TIdentifier> Condition { get; set; }
 
 		/// <summary>
 		/// Gets or sets the actions that needs to be executed when the transition occurs.
 		/// </summary>
 		/// <value>The actions.</value>
-		public IAction Action {get;set;}
+		public IAction<TIdentifier> Action {get;set;}
     }
 }

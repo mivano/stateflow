@@ -12,17 +12,17 @@ namespace Stateflow.Workflow
 	/// </summary>
 	/// <param name="sender">The sender.</param>
 	/// <param name="e">The <see cref="StateChangeEventArgs"/> instance containing the event data.</param>
-	public delegate void StateChangeHandler(object sender, StateChangeEventArgs e);
+	public delegate void StateChangeHandler<TIdentifier>(object sender, StateChangeEventArgs<TIdentifier> e);
 				
 
 	/// <summary>
 	/// Contains the event arguments.
 	/// </summary>
-	public class StateChangeEventArgs : EventArgs
+	public class StateChangeEventArgs<TIdentifier> : EventArgs
 	{
-		private readonly State _fromState;
-		private readonly State _toState;
-		private readonly Trigger _triggeredBy;
+		private readonly State<TIdentifier> _fromState;
+		private readonly State<TIdentifier> _toState;
+		private readonly Trigger<TIdentifier> _triggeredBy;
 		private readonly bool _isReentry;
 
 		/// <summary>
@@ -32,7 +32,7 @@ namespace Stateflow.Workflow
 		/// <param name="toState">To state.</param>
 		/// <param name="triggeredBy">The triggered by.</param>
 		/// <param name="isReentry"></param>
-		public StateChangeEventArgs(State fromState, State toState, Trigger triggeredBy, bool isReentry)
+		public StateChangeEventArgs(State<TIdentifier> fromState, State<TIdentifier> toState, Trigger<TIdentifier> triggeredBy, bool isReentry)
 		{
 			_fromState = fromState;
 			_toState = toState;
@@ -46,7 +46,7 @@ namespace Stateflow.Workflow
 		/// <value>
 		/// From state.
 		/// </value>
-		public State FromState
+		public State<TIdentifier> FromState
 		{
 			get { return _fromState; }
 		}
@@ -57,7 +57,7 @@ namespace Stateflow.Workflow
 		/// <value>
 		/// To state.
 		/// </value>
-		public State ToState
+		public State<TIdentifier> ToState
 		{
 			get { return _toState; }
 		}
@@ -68,7 +68,7 @@ namespace Stateflow.Workflow
 		/// <value>
 		/// The triggered by.
 		/// </value>
-		public Trigger TriggeredBy
+		public Trigger<TIdentifier> TriggeredBy
 		{
 			get { return _triggeredBy; }
 		}
