@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 
 namespace Stateflow.Workflow
 {
@@ -34,11 +35,16 @@ namespace Stateflow.Workflow
 		/// <param name="fromState">From state.</param>
 		/// <param name="toState">To state.</param>
 		/// <param name="triggeredBy">Triggered by.</param>
-		public Transition (State<TIdentifier> fromState, State<TIdentifier> toState, Trigger<TIdentifier> triggeredBy)
+		/// <param name = "isReentrant">Indicates if this transistion is reentrant</param>
+		/// <param name = "condition">The condition that needs to evaluate to try before this trigger is allowed to move to the next state.</param>
+		public Transition (State<TIdentifier> fromState, State<TIdentifier> toState, Trigger<TIdentifier> triggeredBy, bool isReentrant = false, ICondition<TIdentifier> condition=null)
 		{
 			FromState = fromState;
 			ToState = toState;
 			TriggerBy = triggeredBy;
+			Condition = condition;
+
+			IsReentrant = isReentrant;
 		}
 
         /// <summary>
@@ -73,10 +79,23 @@ namespace Stateflow.Workflow
         /// </value>
 		public ICondition<TIdentifier> Condition { get; set; }
 
+		bool isReentrant;
+		
 		/// <summary>
-		/// Gets or sets the actions that needs to be executed when the transition occurs.
+		/// Marks if this state transition is reentrant. 
 		/// </summary>
-		/// <value>The actions.</value>
-		public IAction<TIdentifier> Action {get;set;}
+		/// <value><c>true</c> if this instance is reentry; otherwise, <c>false</c>.</value>
+		public bool IsReentrant {
+			get {
+				return isReentrant;
+			}
+			set {
+				if (value == true) {
+					if (FromState.Equals (ToState) == false)
+						throw new InvalidOperationException (string.Format("If a transition needs to be reentrant, then the from and to state of trigger {0} to {1} needs to be the same and not point to {2}. ", TriggerBy.Id, FromState.Id, ToState.Id));
+				}
+				isReentrant = value;
+			}
+		}
     }
 }

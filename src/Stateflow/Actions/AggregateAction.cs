@@ -28,13 +28,14 @@ namespace Stateflow.Workflow.Actions
 		/// Executes the action.
 		/// </summary>
 		/// <param name="workflow">The workflow.</param>
-		public void Execute(IWorkflow<TIdentifier> workflow)
+		/// <param name = "transition">The transition that took place.</param>
+		public void Execute(IWorkflow<TIdentifier> workflow,  StateChangeEventArgs<TIdentifier> transition)
 		{
 			foreach (var action in _actions)
 			{
 				try
 				{
-					action.Execute(workflow);
+					action.Execute(workflow, transition);
 				}
 				catch (Exception ex)
 				{

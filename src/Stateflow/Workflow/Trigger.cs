@@ -5,6 +5,8 @@ namespace Stateflow.Workflow
     /// </summary>
 	public class Trigger<TIdentifier>: IIdentifiableBy<TIdentifier>
     {
+	
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Stateflow.Workflow.Trigger`1"/> class.
 		/// </summary>

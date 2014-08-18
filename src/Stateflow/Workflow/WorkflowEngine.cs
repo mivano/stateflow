@@ -18,6 +18,11 @@ namespace Stateflow.Workflow
 		/// </summary>
 		public event StateChangeHandler<TIdentifier> OnStateTransition;
 
+		/// <summary>
+		/// Occurs when a trigger is unhandled.
+		/// </summary>
+		public event UnhandledTriggerHandler<TIdentifier> OnTriggerUnhandled;
+
 		private StateMachine<State<TIdentifier>, Trigger<TIdentifier>> _stateMachine;
 		private WorkflowDefinition<TIdentifier> _workflowDefinition;
 		private readonly object _workflowContext;
@@ -27,7 +32,7 @@ namespace Stateflow.Workflow
 		/// Initializes a new instance of the <see cref="Stateflow.Workflow.WorkflowEngine`1"/> class.
 		/// </summary>
 		/// <param name="workflowDefinition">Workflow definition.</param>
-		public WorkflowEngine (WorkflowDefinition<TIdentifier> workflowDefinition): this(workflowDefinition, null)
+		public WorkflowEngine (WorkflowDefinition<TIdentifier> workflowDefinition) : this (workflowDefinition, null)
 		{
 			
 		}
@@ -37,7 +42,7 @@ namespace Stateflow.Workflow
 		/// </summary>
 		/// <param name="workflowDefinition">Workflow definition.</param>
 		/// <param name="currentState">Current state.</param>
-		public WorkflowEngine (WorkflowDefinition<TIdentifier> workflowDefinition, State<TIdentifier> currentState): this(workflowDefinition, currentState, null)
+		public WorkflowEngine (WorkflowDefinition<TIdentifier> workflowDefinition, State<TIdentifier> currentState) : this (workflowDefinition, currentState, null)
 		{
 			
 		}
@@ -78,34 +83,59 @@ namespace Stateflow.Workflow
 					.Select (config => new { 
 							Trigger = config.TriggerBy, 
 							TargetState = config.ToState, 
-							Condition = config.Condition 
+							Condition = config.Condition,
+							IsReentrant = config.IsReentrant
 						})
 					.ToList ();
 
+				var stateConfig = _stateMachine.Configure(state);
+
 				triggers.ForEach (trig => {
 					if (trig.Condition == null)
-						_stateMachine.Configure (state).Permit (trig.Trigger, trig.TargetState);
+					{
+						if (trig.IsReentrant)
+							stateConfig.PermitReentry(trig.Trigger);
+						else
+						stateConfig.Permit (trig.Trigger, trig.TargetState);
+					}
 					else
-						_stateMachine.Configure (state)
-							.PermitIf (trig.Trigger, trig.TargetState, ConditionalGuard (trig.Condition));
-
+						stateConfig.PermitIf (trig.Trigger, trig.TargetState, ConditionalGuard (trig.Condition));
 
 				});
 
-				var ws =state;
-				if (ws.EntryAction != null) {
-					_stateMachine.Configure (state).OnEntry (() => ExecuteAction (ws.EntryAction));
+				if (state.SuperState!=null)
+					stateConfig.SubstateOf(state.SuperState);
+
+				if (state.EntryAction != null) {
+					stateConfig.OnEntry (t => ExecuteAction (t, state.EntryAction));
 				}
 
-				if (ws.ExitAction != null) {
-					_stateMachine.Configure (state).OnExit (() => ExecuteAction (ws.ExitAction));
+				if (state.ExitAction != null) {
+					stateConfig.OnExit(t => ExecuteAction (t, state.ExitAction));
 				}
 
 			});
 
+
+
+			// Handle exceptions
+			_stateMachine.OnUnhandledTrigger (OnUnhandledTrigger);
+
 			// For all the state transitions
 			_stateMachine.OnTransitioned (OnTransitionAction);
 
+		}
+
+		/// <summary>
+		/// Raises the unhandled trigger event.
+		/// </summary>
+		/// <param name="state">State.</param>
+		/// <param name="trigger">Trigger.</param>
+		protected virtual void OnUnhandledTrigger(State<TIdentifier> state, Trigger<TIdentifier> trigger)
+		{
+			if (OnTriggerUnhandled != null) {
+				OnTriggerUnhandled (this, new UnhandledTriggerEventArgs<TIdentifier> (state, trigger));
+			}
 		}
 
 		/// <summary>
@@ -137,10 +167,18 @@ namespace Stateflow.Workflow
 			}
 		}
 
-		private void ExecuteAction(IAction<TIdentifier> entryAction)
+		private void ExecuteAction(StateMachine<State<TIdentifier>, Trigger<TIdentifier>>.Transition transition, IAction<TIdentifier> entryAction)
 		{
-			entryAction.Execute (this);
-				}
+			if (entryAction == null)
+				return;
+
+			// Convert transition to a more generic class so there is no need for a dependency on Stateless
+			StateChangeEventArgs<TIdentifier> e = null;
+			if (transition != null)
+				e = new StateChangeEventArgs<TIdentifier> (transition.Source, transition.Destination, transition.Trigger, transition.IsReentry);
+
+			entryAction.Execute (this, e);
+		}
 
 		private Func<bool> ConditionalGuard(ICondition<TIdentifier> condition)
 		{

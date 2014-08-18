@@ -20,6 +20,12 @@ namespace Stateflow.Workflow
 			this.Add (trigger.Id, trigger);
 		}
 
+		public void AddRange(IEnumerable<Trigger<TIdentifier>> triggers){
+			foreach (var item in triggers) {
+				Add (item);
+			}
+		}
 	}
+
 	
 }

@@ -1,3 +1,4 @@
+
 namespace Stateflow.Workflow
 {
     /// <summary>
@@ -9,6 +10,7 @@ namespace Stateflow.Workflow
         /// Executes the action.
         /// </summary>
         /// <param name="workflow">The workflow.</param>
-		void Execute(IWorkflow<TIdentifier> workflow);
+		/// <param name = "transition">The actual transition that took place.</param>
+		void Execute(IWorkflow<TIdentifier> workflow,StateChangeEventArgs<TIdentifier> transition);
     }
 }

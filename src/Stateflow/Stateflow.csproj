@@ -70,6 +70,8 @@
     <Compile Include="IIdentifiableBy.cs" />
     <Compile Include="Workflow\StateCollection.cs" />
     <Compile Include="Workflow\TriggerCollection.cs" />
+    <Compile Include="Workflow\TransitionCollection.cs" />
+    <Compile Include="Workflow\UnhandledTriggerEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

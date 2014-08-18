@@ -47,6 +47,15 @@ namespace Stateflow.Workflow
 		public string Description { get; set; }
 
 		/// <summary>
+		/// Gets or sets the super state.
+		/// </summary>
+		/// <value>The state of the super.</value>
+		public State<TIdentifier> SuperState {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// Gets or sets the entry action that will be executed when the state is entered.
 		/// </summary>
 		/// <value>

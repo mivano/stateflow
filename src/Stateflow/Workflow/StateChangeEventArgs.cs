@@ -15,6 +15,8 @@ namespace Stateflow.Workflow
 	public delegate void StateChangeHandler<TIdentifier>(object sender, StateChangeEventArgs<TIdentifier> e);
 				
 
+
+
 	/// <summary>
 	/// Contains the event arguments.
 	/// </summary>

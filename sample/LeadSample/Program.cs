@@ -20,90 +20,81 @@ namespace LeadSample
 
 		public void CreateStateMachine()
 		{
-			var workflowDefinition = new WorkflowDefinition {
-				Name = "Test",
-				States = new List<State> {
-					new StartState {
-						Name = "Created",
-						DisplayName = "Lead Created"
-					},
+			var workflowDefinition = new WorkflowDefinition<string> ("name");
 
-					new State {
-						Name = "AwaitingReview",
-						DisplayName = "Ready for Review"
-					},
-					new State {
-						Name = "UnderReview",
-						DisplayName = "Lead under Review",
-						EntryActions = new List<IAction>{ new MailAction () }
-					},
-					new State {
-						Name = "Approved",
-						DisplayName = "Lead is Approved"
-					},
-					new EndState {
-						Name = "Closed",
-						DisplayName = "Lead is Closed"
-					} 
-				},
-				Triggers = new List<Trigger> {
-					new Trigger {
-						Name = "New"
-					},
-					new Trigger {
-						Name = "Review"
-					},
-					new Trigger {
-						Name = "Assign"
-					},
+			workflowDefinition.States.Add (
+				new StartState<string> ("Created", new MailAction ()) {
+					DisplayName = "Lead Created"
+				});
 
-					new Trigger {
-						Name = "Approve"
-					}
-					,
-					new Trigger {
-						Name = "Reject"
-					},
-					new Trigger {
-						Name = "Close"
-					}
+			workflowDefinition.States.Add (
+				new State<string> ("AwaitingReview") {
+					DisplayName = "Ready for Review"
+				});
+			workflowDefinition.States.Add (
+				new State<string> ("UnderReview", new MailAction ()) {
+					DisplayName = "Lead under Review"
+				});
+
+			workflowDefinition.States.Add (new State<string> ("Approved") {
+				DisplayName = "Lead is Approved"
+			});
+
+			workflowDefinition.States.Add (new EndState<string> ("Closed", new MailAction()) {
+				DisplayName = "Lead is Closed"
+			});
+
+			workflowDefinition.Triggers.AddRange (new List<Trigger<string>> {
+				new Trigger<string> ("New"),
+				new Trigger<string> ("Review"),
+				new Trigger<string> ("Assign"),
+				new Trigger<string> ("Approve"),
+				new Trigger<string> ("Reject"),
+				new Trigger<string> ("Close")
+			});
+
+			workflowDefinition.Transitions.AddRange (new List<Transition<string>> {
+				new Transition<String> {
+					FromState = workflowDefinition.States ["Created"],
+					ToState = workflowDefinition.States ["AwaitingReview"],
+					TriggerBy = workflowDefinition.Triggers ["Review"]
 				},
-				Transitions = new List<Transition> {
-					new Transition {
-						FromState = "Created",
-						ToState = "AwaitingReview",
-						TriggerBy = "Review"
-					},
-					new Transition {
-						FromState = "AwaitingReview",
-						ToState = "UnderReview",
-						TriggerBy = "Assign"
-					},
-					
-					new Transition {
-						FromState = "UnderReview",
-						ToState = "Approved",
-						TriggerBy = "Approve",
-						//Conditions = new List<ICondition>{ new LeadExpressionCondition("price > 10000")}
-					},
-					new Transition {
-						FromState = "UnderReview",
-						ToState = "Closed",
-						TriggerBy = "Close",
-						//Conditions = new List<ICondition>{ new LeadExpressionCondition("price <= 10000")}
-					},
-					new Transition {
-						FromState = "Approved",
-						ToState = "Closed",
-						TriggerBy = "Close"
-					},
-					new Transition {
-						FromState = "UnderReview",
-						ToState = "AwaitingReview",
-						TriggerBy = "Reject"
-					}
+				new Transition<String> {
+					FromState = workflowDefinition.States ["AwaitingReview"],
+					ToState = workflowDefinition.States ["UnderReview"],
+					TriggerBy = workflowDefinition.Triggers ["Assign"]
+				},
+
+				new Transition<String> {
+					FromState = workflowDefinition.States ["UnderReview"],
+					ToState = workflowDefinition.States ["UnderReview"],
+					TriggerBy = workflowDefinition.Triggers ["Assign"],
+					IsReentrant = true
+				},
+				new Transition<String> {
+					FromState = workflowDefinition.States ["UnderReview"],
+					ToState = workflowDefinition.States ["Approved"],
+					TriggerBy = workflowDefinition.Triggers ["Approve"],
+					//Conditions = new List<ICondition>{ new LeadExpressionCondition("price > 10000")}
+				},
+				new Transition<String> {
+					FromState = workflowDefinition.States ["UnderReview"],
+					ToState = workflowDefinition.States ["Closed"],
+					TriggerBy = workflowDefinition.Triggers ["Close"],
+					//Conditions = new List<ICondition>{ new LeadExpressionCondition("price <= 10000")}
+				},
+				new Transition<String> {
+					FromState = workflowDefinition.States ["Approved"],
+					ToState = workflowDefinition.States ["Closed"],
+					TriggerBy = workflowDefinition.Triggers ["Close"]
+				},
+				new Transition<String> {
+					FromState = workflowDefinition.States ["UnderReview"],
+					ToState = workflowDefinition.States ["AwaitingReview"],
+					TriggerBy = workflowDefinition.Triggers ["Reject"]
 				}
-			};
+			}
+			);
 
 			//var ser = wd.Serialize();
 
@@ -139,7 +130,7 @@ namespace LeadSample
 
 			// Validate workflow definition
 			//
-			if (!workflowDefinition.Validate ()) {
+			if (!workflowDefinition.IsValid ()) {
 				Console.WriteLine ("Invalid workflow definition! Make sure it contains only one StartState and EndState.");
 				Console.ReadKey (true);
 				return;
@@ -148,7 +139,8 @@ namespace LeadSample
 			while (lead.PermittedTriggers.Any ()) {
 
 				Console.WriteLine ("Current workflow state: {0}", lead.CurrentState);
-				Console.WriteLine ("  next available steps: {0}", String.Join (", ", lead.PermittedTriggers.ToArray ()));
+				Console.WriteLine ("  next available steps: {0}", String.Join (", ", lead.PermittedTriggers
+					.Select(a=>string.Format("{0}",a.Id)).ToArray ()));
 
 				Console.WriteLine ("Enter the new state name:");
 				var nextStep = Console.ReadLine ();

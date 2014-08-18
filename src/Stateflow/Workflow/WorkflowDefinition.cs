@@ -21,7 +21,7 @@ namespace Stateflow.Workflow
 			Id = id;
 			States = new StateCollection<TIdentifier>();
 			Triggers = new TriggerCollection<TIdentifier>();
-			Transitions = new List<Transition<TIdentifier>> ();
+			Transitions = new TransitionCollection<TIdentifier>();
 		}
 
 		/// <summary>
@@ -75,7 +75,7 @@ namespace Stateflow.Workflow
 		/// <value>
 		/// The transitions.
 		/// </value>
-		public IList<Transition<TIdentifier>> Transitions { get; set; }
+		public TransitionCollection<TIdentifier> Transitions { get; set; }
 
 		/// <summary>
 		/// Serializes this instance to a json string value.
@@ -110,7 +110,7 @@ namespace Stateflow.Workflow
 		/// <returns>True if valid, otherwise false.</returns>
 		public bool IsValid()
 		{
-			// 1. StartSate and EndState are mandatory and should be declared only once.
+			// 1. StartState and EndState are mandatory and should be declared only once.
 			//
 			var counters = new int[2] { 0, 0 };
 			foreach (var state in States.Values) {
