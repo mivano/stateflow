@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Stateflow.Expressions
 {
-    public class ExpressionCondition : ICondition
+	public class ExpressionCondition<TIdentifier> : ICondition<TIdentifier>
     {
         public string Expression { get; set; }
 
@@ -18,7 +18,7 @@ namespace Stateflow.Expressions
             Expression = expression;
         }
 
-        public virtual bool IsAllowed(IWorkflow workflow)
+		public virtual bool IsAllowed(IWorkflow<TIdentifier> workflow)
         {
 
 			return Evaluate (null);

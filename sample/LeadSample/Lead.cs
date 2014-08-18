@@ -8,26 +8,26 @@ namespace LeadSample
 {
 	public class Lead : IIdentifiableBy<string>
 	{
-	    private readonly WorkflowEngine _workflowEngine;
+		private readonly WorkflowEngine<string> _workflowEngine;
 
-	    public Lead(WorkflowDefinition workflowDefinition)
+		public Lead(WorkflowDefinition<string> workflowDefinition)
 		{
-            _workflowEngine = new WorkflowEngine(workflowDefinition, null, this);
+			_workflowEngine = new WorkflowEngine<string>(workflowDefinition, null, this);
             _workflowEngine.OnStateTransition += WorkflowEngine_OnStateTransition;
 		}
 
-        void WorkflowEngine_OnStateTransition(object sender, StateChangeEventArgs e)
+		void WorkflowEngine_OnStateTransition(object sender, StateChangeEventArgs<string> e)
         {
-			if (e.FromState is StartState)
+			if (e.FromState is StartState<string>)
 				Console.WriteLine ("Workflow started");
 
-			if (e.ToState is EndState)
+			if (e.ToState is EndState<string>)
 				Console.WriteLine ("Workflow completed");
 
             Console.WriteLine("{0}: State changed from {1} to {2} because of trigger {3}.", DateTime.Now.ToShortTimeString(), e.FromState, e.ToState, e.TriggeredBy);
         }
 
-        public virtual IEnumerable<string> PermittedTriggers
+		public virtual IEnumerable<Trigger<string>> PermittedTriggers
         {
             get { return _workflowEngine.PermittedTriggers; }
         }
@@ -38,9 +38,8 @@ namespace LeadSample
         /// <value>
         /// The state of the workflow.
         /// </value>
-        public virtual string WorkflowState {
-            get { return _workflowEngine.WorkflowState; }
-            set { _workflowEngine.WorkflowState = value; }
+		public virtual State<string> CurrentState {
+			get { return _workflowEngine.CurrentState; }
         }
 
 	    public virtual void ChangeState(string newState)

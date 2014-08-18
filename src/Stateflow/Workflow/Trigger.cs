@@ -3,15 +3,26 @@ namespace Stateflow.Workflow
     /// <summary>
     /// A trigger
     /// </summary>
-    public class Trigger
+	public class Trigger<TIdentifier>: IIdentifiableBy<TIdentifier>
     {
+	
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Stateflow.Workflow.Trigger`1"/> class.
+		/// </summary>
+		/// <param name="id">Identifier.</param>
+		public Trigger (TIdentifier id)
+		{
+			Id = id;
+		}
+
         /// <summary>
-        /// Gets or sets the name.
+        /// Gets or sets the id.
         /// </summary>
         /// <value>
-        /// The name.
+        /// The Identifier.
         /// </value>
-        public string Name { get; set; }
+		public TIdentifier Id { get; set; }
 
         /// <summary>
         /// Gets or sets the display name. Use this for example for buttons.
@@ -32,7 +43,7 @@ namespace Stateflow.Workflow
 		/// <returns>A <see cref="System.String"/> that represents the current <see cref="Stateflow.Workflow.Trigger"/>.</returns>
 		public override string ToString()
 		{
-			return string.Format("[Trigger: Name={0}, DisplayName={1}]", Name, DisplayName);
+			return string.Format("[Trigger: Id={0}, DisplayName={1}]", Id, DisplayName);
 		}
     }
 }

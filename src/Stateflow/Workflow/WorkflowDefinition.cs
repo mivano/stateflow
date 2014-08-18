@@ -6,20 +6,33 @@ using System;
 
 namespace Stateflow.Workflow
 {
+
+
 	/// <summary>
 	/// Defines a workflow.
 	/// </summary>
-	public class WorkflowDefinition
+	public class WorkflowDefinition<TIdentifier>: IIdentifiableBy<TIdentifier>
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Stateflow.Workflow.WorkflowDefinition`1"/> class.
+		/// </summary>
+		public WorkflowDefinition (TIdentifier id)
+		{
+			Id = id;
+			States = new StateCollection<TIdentifier>();
+			Triggers = new TriggerCollection<TIdentifier>();
+			Transitions = new TransitionCollection<TIdentifier>();
+		}
 
 		/// <summary>
-		/// Gets or sets the name of this workflow.
+		/// Gets or sets the id of this workflow.
 		/// </summary>
 		/// <value>
-		/// The name.
+		/// The Identifier.
 		/// </value>
-		public string Name { get; set; }
+		public TIdentifier Id { get; set; }
 
+	
 		/// <summary>
 		///  The current version of this workflow definition
 		/// </summary>
@@ -44,7 +57,7 @@ namespace Stateflow.Workflow
 		/// <value>
 		/// The states.
 		/// </value>
-		public IList<State> States { get; set; }
+		public StateCollection<TIdentifier> States { get; set; }
 
 		/// <summary>
 		/// Gets or sets the triggers. A trigger can be used to move from state to state. Like Rejecting, Accepting, Closing.
@@ -52,7 +65,7 @@ namespace Stateflow.Workflow
 		/// <value>
 		/// The triggers.
 		/// </value>
-		public IList<Trigger> Triggers { get; set; }
+		public TriggerCollection<TIdentifier> Triggers { get; set; }
 
 		/// <summary>
 		/// Gets or sets the transitions. A transition describes from which source state to destination state the workflow can move based on a certain trigger.
@@ -62,7 +75,7 @@ namespace Stateflow.Workflow
 		/// <value>
 		/// The transitions.
 		/// </value>
-		public IList<Transition> Transitions { get; set; }
+		public TransitionCollection<TIdentifier> Transitions { get; set; }
 
 		/// <summary>
 		/// Serializes this instance to a json string value.
@@ -81,11 +94,11 @@ namespace Stateflow.Workflow
 		/// </summary>
 		/// <param name="json">The json representation.</param>
 		/// <returns>A workflow definition.</returns>
-		public static WorkflowDefinition Deserialize(string json)
+		public static WorkflowDefinition<TIdentifier> Deserialize(string json)
 		{
 			Enforce.ArgumentNotNull (json, "json");
 
-			return JsonConvert.DeserializeObject<WorkflowDefinition> (json);
+			return JsonConvert.DeserializeObject<WorkflowDefinition<TIdentifier>> (json);
 		}
 
 		/// <summary>
@@ -95,17 +108,19 @@ namespace Stateflow.Workflow
 		/// To be used before the definition is being saved.
 		/// </remarks>
 		/// <returns>True if valid, otherwise false.</returns>
-		public bool Validate()
+		public bool IsValid()
 		{
-			// 1. StartSate and EndState are mandatory and should be declared only once.
+			// 1. StartState and EndState are mandatory and should be declared only once.
 			//
 			var counters = new int[2] { 0, 0 };
-			foreach (var state in States) {
-				if (state is StartState) {
+			foreach (var state in States.Values) {
+				if (state.GetType().GetGenericTypeDefinition() == typeof(StartState<>))
+				 {
 					counters [0]++;
 					continue;
 				}
-				if (state is EndState) {
+				if (state.GetType().GetGenericTypeDefinition() == typeof(EndState<>))
+				{
 					counters [1]++;
 					continue;
 				}

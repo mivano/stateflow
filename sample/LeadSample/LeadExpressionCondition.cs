@@ -9,7 +9,7 @@ using Stateflow.Fields.DataStores;
 namespace LeadSample
 {
 
-	public class LeadExpressionCondition : ExpressionCondition
+	public class LeadExpressionCondition<TIdentifier> : ExpressionCondition<TIdentifier>
 	{
 
 		public LeadExpressionCondition(string expression)
@@ -18,7 +18,7 @@ namespace LeadSample
 
 		}
 
-		public override bool IsAllowed(IWorkflow workflow)
+		public override bool IsAllowed(IWorkflow<TIdentifier> workflow)
 		{
 			var leadWorkflow = workflow as Lead;
 			Dictionary<string, object> fields = null;
